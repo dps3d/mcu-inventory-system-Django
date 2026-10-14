@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Головна &bull; Лабораторний склад{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="header-titles">
+        <h1 class="page-title">Склад компонентів та мікроконтролерів</h1>
+        <p class="page-subtitle">Централізована система обліку інвентарю, розпіновок та специфікацій проєктів</p>
+    </div>
+    <div class="header-badges">
+        <span class="status-indicator">
+            <span class="pulse-dot"></span> MariaDB: mcu_inventory
+        </span>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    <div class="panel">
+        <div class="panel-header">
+            <span class="panel-icon">📦</span>
+            <div>
+                <h2 class="panel-title">Каталог деталей</h2>
+                <p class="panel-desc">Мікроконтролери, модулі, сенсори та пасивні елементи</p>
+            </div>
+        </div>
+        <div class="panel-body">
+            <p>Довідковий перегляд технічних параметрів, даташитів та розпіновки (Pinout).</p>
+            <div class="panel-meta">
+                <span class="pill pill-neutral">Pinout Builder</span>
+                <span class="pill pill-neutral">Datasheets</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-header">
+            <span class="panel-icon">🏭</span>
+            <div>
+                <h2 class="panel-title">Складський облік</h2>
+                <p class="panel-desc">Комірки зберігання та контроль залишків</p>
+            </div>
+        </div>
+        <div class="panel-body">
+            <p>Управління вільними та зарезервованими залишками, колірні індикатори комірок та операції «Взяти / Покласти».</p>
+            <div class="panel-meta">
+                <span class="pill pill-neutral">Колірні пігулки</span>
+                <span class="pill pill-neutral">Комірки</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-header">
+            <span class="panel-icon">🛠️</span>
+            <div>
+                <h2 class="panel-title">Проєкти та BOM</h2>
+                <p class="panel-desc">Специфікації та калькулятор збірки</p>
+            </div>
+        </div>
+        <div class="panel-body">
+            <p>Двопанельний конструктор BOM, перевірка готовності компонентів до збірки (Build Readiness Check) та резервування.</p>
+            <div class="panel-meta">
+                <span class="pill pill-neutral">BOM Builder</span>
+                <span class="pill pill-neutral">Калькулятор збірки</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
