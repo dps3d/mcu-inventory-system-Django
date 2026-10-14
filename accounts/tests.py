@@ -59,3 +59,29 @@ class AccountsModerationTests(TestCase):
         }, follow=True)
 
         self.assertTrue(response_approved.context['user'].is_authenticated)
+
+    def test_admin_account_status_badge_no_typeerror(self):
+        """Перевірка: бейдж статусу в адмінці генерується без TypeError (format_html)"""
+        from django.contrib.admin.sites import AdminSite
+        from accounts.admin import CustomUserAdmin
+
+        admin_instance = CustomUserAdmin(User, AdminSite())
+        active_user = User(username='active_guy', is_active=True)
+        inactive_user = User(username='pending_guy', is_active=False)
+
+        badge_active = admin_instance.account_status_badge(active_user)
+        badge_inactive = admin_instance.account_status_badge(inactive_user)
+
+        self.assertIn("Активний", badge_active)
+        self.assertIn("Очікує схвалення", badge_inactive)
+
+    def test_db_health_context_processor(self):
+        """Перевірка: контекстний процесор health check повертає db_healthy=True при робочій БД"""
+        from config.context_processors import db_health_status
+        from django.test import RequestFactory
+
+        request = RequestFactory().get('/')
+        status = db_health_status(request)
+        self.assertIn('db_healthy', status)
+        self.assertTrue(status['db_healthy'])
+

@@ -13,10 +13,6 @@
         <!-- Minimal Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-top">
-                <div class="db-chip">
-                    <span class="db-status-dot"></span>
-                    <span class="db-name">mcu_inventory</span>
-                </div>
             </div>
 
             <nav class="sidebar-menu">
@@ -111,7 +107,15 @@
                     <kbd class="shortcut-key">Ctrl K</kbd>
                 </div>
                 <div class="topbar-right">
-                    <span class="status-pill ready">Система активна</span>
+                    {% if db_healthy %}
+                    <span class="status-pill ready" title="З'єднання з MariaDB встановлено успішно">
+                        <span class="status-dot"></span> БД активна
+                    </span>
+                    {% else %}
+                    <span class="status-pill danger" title="Помилка з'єднання з MariaDB">
+                        <span class="status-dot"></span> БД офлайн
+                    </span>
+                    {% endif %}
                 </div>
             </header>
             {% endblock topbar %}

@@ -24,10 +24,12 @@ class CustomUserAdmin(BaseUserAdmin):
     def account_status_badge(self, obj):
         if obj.is_active:
             return format_html(
-                '<span style="background: rgba(139, 179, 129, 0.2); color: #2d7a22; font-weight: 600; padding: 2px 8px; border-radius: 9999px; font-size: 11px;">Активний</span>'
+                '<span style="background: rgba(139, 179, 129, 0.2); color: #2d7a22; font-weight: 600; padding: 2px 8px; border-radius: 9999px; font-size: 11px;">{}</span>',
+                "Активний"
             )
         return format_html(
-            '<span style="background: rgba(194, 155, 56, 0.2); color: #9c6c0a; font-weight: 600; padding: 2px 8px; border-radius: 9999px; font-size: 11px;">Очікує схвалення</span>'
+            '<span style="background: rgba(194, 155, 56, 0.2); color: #9c6c0a; font-weight: 600; padding: 2px 8px; border-radius: 9999px; font-size: 11px;">{}</span>',
+            "Очікує схвалення"
         )
     account_status_badge.short_description = "Статус модерації"
 

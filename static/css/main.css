@@ -323,15 +323,31 @@ body {
 }
 
 .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
     font-size: 12px;
-    padding: 5px 12px;
+    padding: 4px 12px;
     border-radius: 9999px;
     font-weight: 500;
+}
+
+.status-pill .status-dot {
+    width: 6.5px;
+    height: 6.5px;
+    border-radius: 50%;
+    background-color: currentColor;
+    display: inline-block;
 }
 
 .status-pill.ready {
     background: rgba(139, 179, 129, 0.15);
     color: #9ec991;
+}
+
+.status-pill.danger {
+    background: rgba(220, 70, 70, 0.15);
+    color: #e07a7a;
 }
 
 /* Content Scrollable */
