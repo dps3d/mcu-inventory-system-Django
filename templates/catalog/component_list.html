@@ -13,7 +13,7 @@
         <div class="catalog-header-actions">
             {% if user.is_staff %}
             <a href="{% url 'catalog:create' %}" class="btn btn-primary">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
                     <line x1="12" y1="5" x2="12" y2="19"></line>
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
@@ -28,7 +28,7 @@
         <div class="filter-row">
             <!-- Search Query -->
             <div class="filter-field search-field">
-                <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg width="16" height="16" class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
@@ -86,7 +86,7 @@
             <!-- View Switcher -->
             <div class="view-switcher">
                 <button type="submit" name="view" value="grid" class="view-btn {% if view_mode != 'table' %}active{% endif %}" title="Вигляд сіткою">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="3" width="7" height="7"></rect>
                         <rect x="14" y="3" width="7" height="7"></rect>
                         <rect x="14" y="14" width="7" height="7"></rect>
@@ -94,7 +94,7 @@
                     </svg>
                 </button>
                 <button type="submit" name="view" value="table" class="view-btn {% if view_mode == 'table' %}active{% endif %}" title="Вигляд таблицею">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="8" y1="6" x2="21" y2="6"></line>
                         <line x1="8" y1="12" x2="21" y2="12"></line>
                         <line x1="8" y1="18" x2="21" y2="18"></line>
@@ -159,8 +159,8 @@
                             <td class="text-muted">{{ comp.min_threshold }} шт</td>
                             <td>
                                 {% if comp.datasheet_url %}
-                                <a href="{{ comp.datasheet_url }}" target="_blank" class="table-icon-link" title="Відкрити документацію">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <a href="{{ comp.datasheet_url }}" target="_blank" rel="noopener noreferrer" class="table-icon-link" title="Відкрити документацію">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                         <polyline points="14 2 14 8 20 8"></polyline>
                                         <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -202,7 +202,7 @@
                         <img src="{{ comp.image_url }}" alt="{{ comp.part_number }}" class="card-img" loading="lazy">
                         {% else %}
                         <div class="card-ic-placeholder">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="ic-svg">
+                            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="ic-svg">
                                 <rect x="5" y="4" width="14" height="16" rx="2"></rect>
                                 <line x1="2" y1="8" x2="5" y2="8"></line>
                                 <line x1="2" y1="12" x2="5" y2="12"></line>
@@ -243,8 +243,8 @@
 
                         <div class="card-links">
                             {% if comp.datasheet_url %}
-                            <a href="{{ comp.datasheet_url }}" target="_blank" class="card-icon-action" title="Datasheet PDF">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <a href="{{ comp.datasheet_url }}" target="_blank" rel="noopener noreferrer" class="card-icon-action" title="Datasheet PDF">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                     <polyline points="14 2 14 8 20 8"></polyline>
                                 </svg>
@@ -252,7 +252,7 @@
                             {% endif %}
                             <a href="{% url 'catalog:detail' comp.component_id %}" class="card-open-btn">
                                 <span>Деталі</span>
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="9 18 15 12 9 6"></polyline>
                                 </svg>
                             </a>
@@ -299,7 +299,7 @@
     {% else %}
         <!-- Empty State -->
         <div class="empty-state-box">
-            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <svg width="48" height="48" class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>

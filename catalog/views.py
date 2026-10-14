@@ -6,6 +6,7 @@ from django.db.models import Sum, Q, F
 from django.db.models.functions import Coalesce
 from .models import Components, Categories, ComponentPinouts
 from .forms import ComponentForm
+from .constants import STANDARD_PACKAGES
 
 
 def is_staff_check(user):
@@ -77,15 +78,16 @@ def component_list(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    # Довідники для фільтрів
-    categories = Categories.objects.all()
-    packages = (
+    # Довідники для фільтрів (з оптимізацією select_related для запобігання N+1)
+    categories = Categories.objects.select_related('parent').all()
+    db_packages = list(
         Components.objects.exclude(package_type__isnull=True)
         .exclude(package_type__exact='')
         .values_list('package_type', flat=True)
         .distinct()
-        .order_by('package_type')
     )
+    # Об'єднуємо наявні в базі корпуси та популярні стандартні для швидкої фільтрації
+    packages = sorted(set(db_packages + STANDARD_PACKAGES[:16]))
 
     context = {
         'page_obj': page_obj,
@@ -164,6 +166,7 @@ def component_create(request):
         'form': form,
         'action_title': 'Додавання нового компонента',
         'submit_label': 'Створити компонент',
+        'standard_packages': STANDARD_PACKAGES,
     })
 
 
@@ -189,6 +192,7 @@ def component_edit(request, pk):
         'component': component,
         'action_title': f"Редагування «{component.part_number}»",
         'submit_label': 'Зберегти зміни',
+        'standard_packages': STANDARD_PACKAGES,
     })
 
 
@@ -309,6 +313,7 @@ def pinout_builder(request, pk):
 
     return render(request, 'catalog/pinout_builder.html', {
         'component': component,
+        'existing_pins': existing_pins,
         'existing_pins_json': json.dumps(existing_pins),
         'signal_choices': [c[0] for c in ComponentPinouts.SIGNAL_TYPES],
         'left_pins': left_pins,

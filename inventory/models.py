@@ -24,12 +24,20 @@ class StorageLocations(models.Model):
         - 1 категорія: пігулка кольору категорії.
         - 2 категорії: спокійний змішаний відтінок.
         - 3+ категорій: автоматична сіра пігулка 'Різне'.
+        Оптимізовано для запобігання N+1 через підтримку prefetch_related('stocks__component__category').
         """
-        cat_ids = list(
-            self.stocks.filter(quantity_on_hand__gt=0)
-            .values_list('component__category_id', 'component__category__name')
-            .distinct()
-        )
+        if hasattr(self, '_prefetched_objects_cache') and 'stocks' in self._prefetched_objects_cache:
+            cats = set()
+            for s in self.stocks.all():
+                if s.quantity_on_hand > 0 and s.component_id and s.component and s.component.category_id:
+                    cats.add((s.component.category_id, s.component.category.name))
+            cat_ids = list(cats)
+        else:
+            cat_ids = list(
+                self.stocks.filter(quantity_on_hand__gt=0)
+                .values_list('component__category_id', 'component__category__name')
+                .distinct()
+            )
         count = len(cat_ids)
         if count == 0:
             return {'type': 'empty', 'label': 'Порожня', 'css_class': 'pill-empty'}

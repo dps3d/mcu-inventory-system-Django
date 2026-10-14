@@ -33,6 +33,11 @@ media/
 staticfiles/
 docs/
 
+# Tests (excluded from git commits as per project requirements)
+*tests.py
+test_*.log
+test_err.log
+
 # Environment variables
 .env
 .env.*

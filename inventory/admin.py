@@ -13,6 +13,10 @@ class StorageLocationsAdmin(admin.ModelAdmin):
     search_fields = ('box_number', 'cell_code', 'shelf')
     list_filter = ('box_number', 'shelf')
 
+    def get_queryset(self, request):
+        # Запобігання N+1 запитам для обчислення category_pill_badge
+        return super().get_queryset(request).prefetch_related('stocks__component__category')
+
     def category_pill_badge(self, obj):
         pill = obj.get_category_pill()
         return f"{pill['label']} ({pill['type']})"
@@ -24,6 +28,7 @@ class InventoryStocksAdmin(admin.ModelAdmin):
     list_display = ('stock_id', 'component', 'location', 'quantity_on_hand', 'quantity_reserved', 'available_stock', 'unit_price')
     list_filter = ('location__box_number', 'component__category')
     search_fields = ('component__part_number', 'location__cell_code')
+    list_select_related = ('component', 'location', 'component__category')
 
     def available_stock(self, obj):
         return obj.free_stock
@@ -35,6 +40,7 @@ class StockTransactionsAdmin(admin.ModelAdmin):
     list_display = ('transaction_id', 'stock', 'transaction_type', 'quantity_change', 'reference_id', 'created_at')
     list_filter = ('transaction_type', 'created_at')
     search_fields = ('stock__component__part_number', 'notes')
+    list_select_related = ('stock', 'stock__component', 'stock__location')
 
 
 @admin.register(Suppliers)
@@ -48,6 +54,7 @@ class OrdersAdmin(admin.ModelAdmin):
     list_display = ('order_id', 'supplier', 'tracking_number', 'status', 'order_date', 'expected_delivery')
     list_filter = ('status', 'order_date')
     search_fields = ('tracking_number', 'supplier__name')
+    list_select_related = ('supplier',)
     inlines = [OrderItemsInline]
 
 
@@ -56,3 +63,4 @@ class OrderItemsAdmin(admin.ModelAdmin):
     list_display = ('order_item_id', 'order', 'component', 'quantity_ordered', 'unit_price')
     list_filter = ('order__status',)
     search_fields = ('component__part_number', 'order__tracking_number')
+    list_select_related = ('order', 'order__supplier', 'component', 'component__category')

@@ -19,7 +19,7 @@
                 Скасувати
             </a>
             <button type="button" id="savePinoutBtn" class="btn btn-primary">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
                     <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
                     <polyline points="17 21 17 13 7 13 7 21"></polyline>
                     <polyline points="7 3 7 8 15 8"></polyline>
@@ -168,12 +168,14 @@
 {% endblock %}
 
 {% block extra_js %}
+{{ signal_choices|json_script:"signalChoicesData" }}
+{{ existing_pins|json_script:"existingPinsData" }}
 <script>
-// Available signal choices
-const SIGNAL_CHOICES = {{ signal_choices|safe }};
+// Available signal choices (loaded securely via json_script to prevent XSS)
+const SIGNAL_CHOICES = JSON.parse(document.getElementById('signalChoicesData').textContent);
 
 // Initial state from server
-let pins = {{ existing_pins_json|safe }};
+let pins = JSON.parse(document.getElementById('existingPinsData').textContent);
 
 // Switch tab between left and right pins
 function switchSideTab(side) {
@@ -183,7 +185,7 @@ function switchSideTab(side) {
     document.getElementById('rightPinsPanel').classList.toggle('active', side === 'right');
 }
 
-// Render tables and live schematic
+// Render tables and live schematic securely without innerHTML injection of user inputs
 function renderBuilder() {
     const leftTableBody = document.getElementById('leftPinsTableBody');
     const rightTableBody = document.getElementById('rightPinsTableBody');
@@ -202,27 +204,69 @@ function renderBuilder() {
         const isLeft = pin.side === 'left';
         if (isLeft) leftCount++; else rightCount++;
 
-        // 1. Table Row
+        // 1. Table Row (DOM construction with value properties for XSS safety)
         const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>
-                <input type="number" class="builder-num-input" value="${pin.pin_number}" min="1" max="128" onchange="updatePin(${index}, 'pin_number', this.value)">
-            </td>
-            <td>
-                <input type="text" class="builder-text-input" value="${escapeHtml(pin.pin_label)}" placeholder="VCC, PA0..." oninput="updatePin(${index}, 'pin_label', this.value)">
-            </td>
-            <td>
-                <select class="builder-select-input signal-select-${pin.signal_type.toLowerCase()}" onchange="updatePin(${index}, 'signal_type', this.value)">
-                    ${SIGNAL_CHOICES.map(s => `<option value="${s}" ${s === pin.signal_type ? 'selected' : ''}>${s}</option>`).join('')}
-                </select>
-            </td>
-            <td>
-                <input type="text" class="builder-text-input" value="${escapeHtml(pin.description || '')}" placeholder="Альтернативні функції (I2C1_SCL...)" oninput="updatePin(${index}, 'description', this.value)">
-            </td>
-            <td>
-                <button type="button" class="pin-delete-btn" onclick="removePin(${index})" title="Видалити пін">&times;</button>
-            </td>
-        `;
+
+        // TD 1: Pin Number
+        const tdNum = document.createElement('td');
+        const numInput = document.createElement('input');
+        numInput.type = 'number';
+        numInput.className = 'builder-num-input';
+        numInput.value = pin.pin_number;
+        numInput.min = '1';
+        numInput.max = '128';
+        numInput.addEventListener('change', (e) => updatePin(index, 'pin_number', e.target.value));
+        tdNum.appendChild(numInput);
+
+        // TD 2: Pin Label
+        const tdLabel = document.createElement('td');
+        const labelInput = document.createElement('input');
+        labelInput.type = 'text';
+        labelInput.className = 'builder-text-input';
+        labelInput.value = pin.pin_label || '';
+        labelInput.placeholder = 'VCC, PA0...';
+        labelInput.addEventListener('input', (e) => updatePin(index, 'pin_label', e.target.value));
+        tdLabel.appendChild(labelInput);
+
+        // TD 3: Signal Type Select
+        const tdSig = document.createElement('td');
+        const sigSelect = document.createElement('select');
+        sigSelect.className = `builder-select-input signal-select-${encodeURIComponent((pin.signal_type || 'gpio').toLowerCase())}`;
+        SIGNAL_CHOICES.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s;
+            opt.textContent = s;
+            if (s === pin.signal_type) opt.selected = true;
+            sigSelect.appendChild(opt);
+        });
+        sigSelect.addEventListener('change', (e) => updatePin(index, 'signal_type', e.target.value));
+        tdSig.appendChild(sigSelect);
+
+        // TD 4: Description
+        const tdDesc = document.createElement('td');
+        const descInput = document.createElement('input');
+        descInput.type = 'text';
+        descInput.className = 'builder-text-input';
+        descInput.value = pin.description || '';
+        descInput.placeholder = 'Альтернативні функції (I2C1_SCL...)';
+        descInput.addEventListener('input', (e) => updatePin(index, 'description', e.target.value));
+        tdDesc.appendChild(descInput);
+
+        // TD 5: Delete Button
+        const tdDel = document.createElement('td');
+        const delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.className = 'pin-delete-btn';
+        delBtn.innerHTML = '&times;';
+        delBtn.title = 'Видалити пін';
+        delBtn.addEventListener('click', () => removePin(index));
+        tdDel.appendChild(delBtn);
+
+        tr.appendChild(tdNum);
+        tr.appendChild(tdLabel);
+        tr.appendChild(tdSig);
+        tr.appendChild(tdDesc);
+        tr.appendChild(tdDel);
 
         if (isLeft) {
             leftTableBody.appendChild(tr);
@@ -230,23 +274,30 @@ function renderBuilder() {
             rightTableBody.appendChild(tr);
         }
 
-        // 2. Live Schematic Pin
+        // 2. Live Schematic Pin (DOM construction using textContent to prevent script injection)
         const livePin = document.createElement('div');
         livePin.className = `interactive-pin-row ${isLeft ? 'pin-left-side' : 'pin-right-side'}`;
 
+        const tagSpan = document.createElement('span');
+        tagSpan.className = `pin-label-tag signal-type-${encodeURIComponent((pin.signal_type || 'gpio').toLowerCase())}`;
+        tagSpan.textContent = pin.pin_label || '?';
+
+        const idxBadge = document.createElement('span');
+        idxBadge.className = 'pin-idx-badge';
+        idxBadge.textContent = pin.pin_number;
+
+        const metalLeg = document.createElement('span');
+        metalLeg.className = 'pin-metal-leg';
+
         if (isLeft) {
-            livePin.innerHTML = `
-                <span class="pin-label-tag signal-type-${pin.signal_type.toLowerCase()}">${escapeHtml(pin.pin_label || '?')}</span>
-                <span class="pin-idx-badge">${pin.pin_number}</span>
-                <span class="pin-metal-leg"></span>
-            `;
+            livePin.appendChild(tagSpan);
+            livePin.appendChild(idxBadge);
+            livePin.appendChild(metalLeg);
             liveLeft.appendChild(livePin);
         } else {
-            livePin.innerHTML = `
-                <span class="pin-metal-leg"></span>
-                <span class="pin-idx-badge">${pin.pin_number}</span>
-                <span class="pin-label-tag signal-type-${pin.signal_type.toLowerCase()}">${escapeHtml(pin.pin_label || '?')}</span>
-            `;
+            livePin.appendChild(metalLeg);
+            livePin.appendChild(idxBadge);
+            livePin.appendChild(tagSpan);
             liveRight.appendChild(livePin);
         }
     });
@@ -342,11 +393,13 @@ function applyPreset(totalPins) {
 }
 
 function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
     return String(str)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 // Save Pinout

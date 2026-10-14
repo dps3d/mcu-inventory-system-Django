@@ -53,6 +53,11 @@
                             {{ form.package_type.label }}
                         </label>
                         {{ form.package_type }}
+                        <datalist id="standardPackagesList">
+                            {% for pkg in standard_packages %}
+                            <option value="{{ pkg }}"></option>
+                            {% endfor %}
+                        </datalist>
                         {% if form.package_type.errors %}
                         <span class="field-error">{{ form.package_type.errors.0 }}</span>
                         {% endif %}
