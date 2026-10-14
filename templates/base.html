@@ -53,6 +53,14 @@
                     </svg>
                     <span>Проєкти та BOM</span>
                 </a>
+                {% if user.is_staff %}
+                <a href="/admin/auth/user/?is_active__exact=0" target="_blank" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>Модерація заявок</span>
+                </a>
+                {% endif %}
             </nav>
 
             <div class="sidebar-bottom">
@@ -61,7 +69,7 @@
                     <div class="user-avatar">{{ user.username|slice:":1"|upper }}</div>
                     <div class="user-meta">
                         <div class="user-name">{{ user.username }}</div>
-                        <div class="user-role">Лаборант</div>
+                        <div class="user-role">{% if user.is_superuser %}Адміністратор{% elif user.is_staff %}Викладач{% else %}Лаборант{% endif %}</div>
                     </div>
                     <form action="{% url 'accounts:logout' %}" method="post" class="logout-form">
                         {% csrf_token %}
@@ -81,8 +89,8 @@
                         <span class="guest-hint">Тільки перегляд</span>
                     </div>
                     <div class="guest-actions">
-                        <a href="#login" class="btn-action">Вхід</a>
-                        <a href="#register" class="btn-action primary">Реєстрація</a>
+                        <a href="{% url 'accounts:login' %}" class="btn-action">Вхід</a>
+                        <a href="{% url 'accounts:register' %}" class="btn-action primary">Реєстрація</a>
                     </div>
                 </div>
                 {% endif %}
@@ -92,6 +100,7 @@
         <!-- Main Workspace Viewport -->
         <div class="workspace-area">
             <!-- Command Topbar -->
+            {% block topbar %}
             <header class="topbar">
                 <div class="search-command-bar">
                     <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -105,6 +114,8 @@
                     <span class="status-pill ready">Система активна</span>
                 </div>
             </header>
+            {% endblock topbar %}
+
 
             {% if messages %}
             <div class="messages-wrap">

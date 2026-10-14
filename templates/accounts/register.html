@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Реєстрація користувача &bull; MCU Inventory{% endblock %}
+
+{% block topbar %}{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1 class="auth-title">Створення облікового запису</h1>
+            <p class="auth-subtitle">Запит на доступ до лабораторного складу та інженерних модулів</p>
+        </div>
+
+        <div class="moderation-notice">
+            <svg class="notice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <div>
+                <strong>Увага:</strong> Після надсилання форми акаунт створюється в стані <code>is_active = False</code>. Доступ буде активовано після перевірки та підтвердження адміністратором у Django Admin.
+            </div>
+        </div>
+
+        <form method="post" class="auth-form" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="form-errors">
+                {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                    <span class="field-error">{{ form.first_name.errors.0 }}</span>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}
+                    <span class="field-error">{{ form.last_name.errors.0 }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                <span class="field-error">{{ form.username.errors.0 }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                <span class="field-error">{{ form.email.errors.0 }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                    <span class="field-error">{{ form.password.errors.0 }}</span>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.password_confirm.id_for_label }}">{{ form.password_confirm.label }}</label>
+                    {{ form.password_confirm }}
+                    {% if form.password_confirm.errors %}
+                    <span class="field-error">{{ form.password_confirm.errors.0 }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">
+                Надіслати заявку на реєстрацію
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <span>Вже маєте обліковий запис?</span>
+            <a href="{% url 'accounts:login' %}" class="auth-link">Увійти</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Вхід до системи &bull; MCU Inventory{% endblock %}
+
+{% block topbar %}{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1 class="auth-title">Вхід для співробітників</h1>
+            <p class="auth-subtitle">Авторизований доступ для лаборантів та інженерів</p>
+        </div>
+
+        <form method="post" class="auth-form" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+
+            {% if form.non_field_errors %}
+            <div class="form-errors">
+                {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                <span class="field-error">{{ form.username.errors.0 }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+                {{ form.password }}
+                {% if form.password.errors %}
+                <span class="field-error">{{ form.password.errors.0 }}</span>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn-submit">
+                Увійти до системи
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <span>Ще не маєте доступу?</span>
+            <a href="{% url 'accounts:register' %}" class="auth-link">Подати заявку на реєстрацію</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
