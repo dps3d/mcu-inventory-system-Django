@@ -85,3 +85,53 @@ class AccountsModerationTests(TestCase):
         self.assertIn('db_healthy', status)
         self.assertTrue(status['db_healthy'])
 
+    def test_admin_user_changelist_and_change_view(self):
+        """Перевірка: сторінка списку користувачів та форма редагування відкриваються без помилок"""
+        admin_user = User.objects.create_superuser(
+            username='super_test',
+            email='super@lab.edu',
+            password='SuperPassword123!'
+        )
+        self.client.force_login(admin_user)
+
+        # 1. Список користувачів
+        resp_list = self.client.get('/admin/auth/user/')
+        self.assertEqual(resp_list.status_code, 200)
+
+        # 2. Форма редагування конкретного користувача
+        resp_change = self.client.get(f'/admin/auth/user/{admin_user.id}/change/')
+        self.assertEqual(resp_change.status_code, 200)
+
+    def test_admin_top_button_rendered_for_staff(self):
+        """Перевірка: кнопка переходу в адмінку зліва зверху відображається для staff і прихована для гостей"""
+        # Гість не бачить кнопку
+        resp_guest = self.client.get('/')
+        self.assertNotContains(resp_guest, 'admin-top-btn')
+
+        # Адміністратор / персонал бачить кнопку
+        admin_user = User.objects.create_superuser(
+            username='staff_test',
+            email='staff@lab.edu',
+            password='StaffPassword123!'
+        )
+        self.client.force_login(admin_user)
+        resp_admin = self.client.get('/')
+        self.assertContains(resp_admin, 'admin-top-btn')
+        self.assertContains(resp_admin, '/admin/')
+
+    def test_passwords_are_securely_hashed(self):
+        """Перевірка: паролі в базі даних зберігаються виключно у захешованому вигляді (PBKDF2 SHA256)"""
+        raw_password = 'MySecretLabPassword2026!'
+        user = User.objects.create_user(
+            username='hash_test_user',
+            password=raw_password
+        )
+        # Сирий пароль ніде не збережено
+        self.assertNotEqual(user.password, raw_password)
+        # Повинен починатися з pbkdf2_sha256 або іншого алгоритму хешування Django
+        self.assertTrue(user.password.startswith('pbkdf2_sha256$'))
+        # Перевірка пароля працює коректно
+        self.assertTrue(user.check_password(raw_password))
+        self.assertFalse(user.check_password('WrongPassword!'))
+
+

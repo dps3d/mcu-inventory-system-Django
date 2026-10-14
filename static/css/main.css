@@ -72,7 +72,49 @@ body {
 }
 
 .sidebar-top {
-    margin-bottom: 2rem;
+    margin-bottom: 1.75rem;
+    min-height: 34px;
+}
+
+.admin-top-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 7px 11px;
+    background: var(--bg-surface);
+    border: 1px solid rgba(86, 84, 73, 0.4);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+}
+
+.admin-top-btn:hover {
+    background: var(--bg-surface-hover);
+    border-color: var(--accent-olive);
+    color: var(--text-primary);
+}
+
+.admin-btn-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-top-btn .admin-icon {
+    width: 15px;
+    height: 15px;
+    color: var(--accent-olive-light);
+}
+
+.admin-top-btn .external-icon {
+    width: 12px;
+    height: 12px;
+    color: var(--text-muted);
+    opacity: 0.7;
 }
 
 .db-chip {

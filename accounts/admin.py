@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 
 
 admin.site.unregister(User)
@@ -23,13 +23,11 @@ class CustomUserAdmin(BaseUserAdmin):
 
     def account_status_badge(self, obj):
         if obj.is_active:
-            return format_html(
-                '<span style="background: rgba(139, 179, 129, 0.2); color: #2d7a22; font-weight: 600; padding: 2px 8px; border-radius: 9999px; font-size: 11px;">{}</span>',
-                "Активний"
+            return mark_safe(
+                '<span style="background: rgba(139, 179, 129, 0.2); color: #2d7a22; font-weight: 600; padding: 2px 8px; border-radius: 9999px; font-size: 11px;">Активний</span>'
             )
-        return format_html(
-            '<span style="background: rgba(194, 155, 56, 0.2); color: #9c6c0a; font-weight: 600; padding: 2px 8px; border-radius: 9999px; font-size: 11px;">{}</span>',
-            "Очікує схвалення"
+        return mark_safe(
+            '<span style="background: rgba(194, 155, 56, 0.2); color: #9c6c0a; font-weight: 600; padding: 2px 8px; border-radius: 9999px; font-size: 11px;">Очікує схвалення</span>'
         )
     account_status_badge.short_description = "Статус модерації"
 
