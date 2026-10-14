@@ -1,70 +1,85 @@
 {% extends 'base.html' %}
 
-{% block title %}Головна &bull; Лабораторний склад{% endblock %}
+{% block title %}MCU Inventory System{% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <div class="header-titles">
-        <h1 class="page-title">Склад компонентів та мікроконтролерів</h1>
-        <p class="page-subtitle">Централізована система обліку інвентарю, розпіновок та специфікацій проєктів</p>
-    </div>
-    <div class="header-badges">
-        <span class="status-indicator">
-            <span class="pulse-dot"></span> MariaDB: mcu_inventory
-        </span>
-    </div>
+<div class="workspace-hero">
+    <h1 class="hero-title">Лабораторний облік компонентів</h1>
+    <p class="hero-subtitle">Інвентар мікроконтролерів, інтерактивні розпіновки та калькулятор збірок</p>
 </div>
 
-<div class="dashboard-grid">
-    <div class="panel">
-        <div class="panel-header">
-            <span class="panel-icon">📦</span>
-            <div>
-                <h2 class="panel-title">Каталог деталей</h2>
-                <p class="panel-desc">Мікроконтролери, модулі, сенсори та пасивні елементи</p>
-            </div>
+<!-- Primary Modules (Spacious 3-Column Grid) -->
+<div class="modules-grid">
+    <a href="#catalog" class="module-card">
+        <div class="module-icon-wrap">
+            <svg class="module-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
         </div>
-        <div class="panel-body">
-            <p>Довідковий перегляд технічних параметрів, даташитів та розпіновки (Pinout).</p>
-            <div class="panel-meta">
-                <span class="pill pill-neutral">Pinout Builder</span>
-                <span class="pill pill-neutral">Datasheets</span>
-            </div>
+        <div class="module-content">
+            <h2 class="module-title">Каталог деталей</h2>
+            <p class="module-desc">База мікросхем, сенсорів та пасивних компонентів. Технічні описи, даташити та конструктор розпіновок (Pinout Builder).</p>
         </div>
-    </div>
+        <div class="module-footer">
+            <span class="module-tag">Pinout Viewer</span>
+            <span class="module-arrow">&rarr;</span>
+        </div>
+    </a>
 
-    <div class="panel">
-        <div class="panel-header">
-            <span class="panel-icon">🏭</span>
-            <div>
-                <h2 class="panel-title">Складський облік</h2>
-                <p class="panel-desc">Комірки зберігання та контроль залишків</p>
-            </div>
+    <a href="#inventory" class="module-card">
+        <div class="module-icon-wrap">
+            <svg class="module-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                <line x1="12" y1="11" x2="12" y2="17"></line>
+                <line x1="9" y1="14" x2="15" y2="14"></line>
+            </svg>
         </div>
-        <div class="panel-body">
-            <p>Управління вільними та зарезервованими залишками, колірні індикатори комірок та операції «Взяти / Покласти».</p>
-            <div class="panel-meta">
-                <span class="pill pill-neutral">Колірні пігулки</span>
-                <span class="pill pill-neutral">Комірки</span>
-            </div>
+        <div class="module-content">
+            <h2 class="module-title">Складський облік</h2>
+            <p class="module-desc">Управління комірками та органайзерами. Колірні пігулки для категорій, швидкі операції «Взяти / Покласти» та контроль дефіциту.</p>
         </div>
-    </div>
+        <div class="module-footer">
+            <span class="module-tag">Колірні комірки</span>
+            <span class="module-arrow">&rarr;</span>
+        </div>
+    </a>
 
-    <div class="panel">
-        <div class="panel-header">
-            <span class="panel-icon">🛠️</span>
-            <div>
-                <h2 class="panel-title">Проєкти та BOM</h2>
-                <p class="panel-desc">Специфікації та калькулятор збірки</p>
-            </div>
+    <a href="#projects" class="module-card">
+        <div class="module-icon-wrap">
+            <svg class="module-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
         </div>
-        <div class="panel-body">
-            <p>Двопанельний конструктор BOM, перевірка готовності компонентів до збірки (Build Readiness Check) та резервування.</p>
-            <div class="panel-meta">
-                <span class="pill pill-neutral">BOM Builder</span>
-                <span class="pill pill-neutral">Калькулятор збірки</span>
-            </div>
+        <div class="module-content">
+            <h2 class="module-title">Проєкти та BOM</h2>
+            <p class="module-desc">Двопанельний конструктор специфікацій, калькулятор готовності до збірки (Build Readiness) та резервування деталей інженером.</p>
         </div>
+        <div class="module-footer">
+            <span class="module-tag">BOM Калькулятор</span>
+            <span class="module-arrow">&rarr;</span>
+        </div>
+    </a>
+</div>
+
+<!-- Compact Status Strip -->
+<div class="system-status-strip">
+    <div class="status-item">
+        <span class="status-indicator-dot"></span>
+        <span class="status-text">База даних: <strong>mcu_inventory</strong> (11 таблиць)</span>
+    </div>
+    <div class="status-item">
+        <span class="status-muted">Режим доступу:</span>
+        <span class="status-tag">Модерація (is_active = False)</span>
+    </div>
+    <div class="status-item">
+        <span class="status-muted">Складські операції:</span>
+        <span class="status-tag">Вільні / Зарезервовані</span>
     </div>
 </div>
 {% endblock %}
