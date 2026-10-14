@@ -73,14 +73,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 3. Ctrl+K Search Shortcut
+    // 3. Ctrl+K Search Shortcut & Enter Search Navigation
     const searchInput = document.getElementById('globalSearchInput');
     document.addEventListener('keydown', (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
             e.preventDefault();
-            if (searchInput) searchInput.focus();
+            if (searchInput) {
+                searchInput.focus();
+                searchInput.select();
+            }
         }
     });
+
+    if (searchInput) {
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const q = searchInput.value.trim();
+                window.location.href = `/catalog/${q ? '?q=' + encodeURIComponent(q) : ''}`;
+            }
+        });
+    }
 
     // 4. Auto-dismiss alerts
     const toasts = document.querySelectorAll('.toast-message');

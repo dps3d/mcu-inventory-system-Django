@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ action_title }} &bull; Каталог деталей{% endblock %}
+
+{% block content %}
+<div class="form-page-container">
+    <div class="form-header-bar">
+        <a href="{% if component %}{% url 'catalog:detail' component.component_id %}{% else %}{% url 'catalog:list' %}{% endif %}" class="btn btn-secondary">
+            &larr; Назад
+        </a>
+        <h1 class="form-title">{{ action_title }}</h1>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="editor-card" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="form-errors-banner">
+            {% for err in form.non_field_errors %}
+            <p>{{ err }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="form-grid-layout">
+            <!-- Left Column: Primary Identifiers -->
+            <div class="form-section">
+                <h3 class="section-title">Ідентифікація та параметри</h3>
+
+                <div class="form-group">
+                    <label for="{{ form.part_number.id_for_label }}" class="form-label">
+                        {{ form.part_number.label }} <span class="required-star">*</span>
+                    </label>
+                    {{ form.part_number }}
+                    {% if form.part_number.errors %}
+                    <span class="field-error">{{ form.part_number.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.category.id_for_label }}" class="form-label">
+                        {{ form.category.label }} <span class="required-star">*</span>
+                    </label>
+                    {{ form.category }}
+                    {% if form.category.errors %}
+                    <span class="field-error">{{ form.category.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="{{ form.package_type.id_for_label }}" class="form-label">
+                            {{ form.package_type.label }}
+                        </label>
+                        {{ form.package_type }}
+                        {% if form.package_type.errors %}
+                        <span class="field-error">{{ form.package_type.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.value_nominal.id_for_label }}" class="form-label">
+                            {{ form.value_nominal.label }}
+                        </label>
+                        {{ form.value_nominal }}
+                        {% if form.value_nominal.errors %}
+                        <span class="field-error">{{ form.value_nominal.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.min_threshold.id_for_label }}" class="form-label">
+                        {{ form.min_threshold.label }}
+                    </label>
+                    {{ form.min_threshold }}
+                    <span class="field-help">Якщо залишок на складі впаде нижче цього значення, деталь позначатиметься як дефіцитна.</span>
+                    {% if form.min_threshold.errors %}
+                    <span class="field-error">{{ form.min_threshold.errors.0 }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Right Column: Docs, Image & Specifications -->
+            <div class="form-section">
+                <h3 class="section-title">Документація та зображення</h3>
+
+                <div class="form-group">
+                    <label for="{{ form.datasheet_url.id_for_label }}" class="form-label">
+                        {{ form.datasheet_url.label }}
+                    </label>
+                    {{ form.datasheet_url }}
+                    {% if form.datasheet_url.errors %}
+                    <span class="field-error">{{ form.datasheet_url.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.image_file.id_for_label }}" class="form-label">
+                        {{ form.image_file.label }}
+                    </label>
+                    {{ form.image_file }}
+                    {% if component and component.image_file %}
+                    <span class="current-file-hint">Поточний файл: <a href="{{ component.image_file.url }}" target="_blank">{{ component.image_file.name }}</a></span>
+                    {% endif %}
+                    {% if form.image_file.errors %}
+                    <span class="field-error">{{ form.image_file.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.image_path.id_for_label }}" class="form-label">
+                        {{ form.image_path.label }}
+                    </label>
+                    {{ form.image_path }}
+                    {% if form.image_path.errors %}
+                    <span class="field-error">{{ form.image_path.errors.0 }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.specifications.id_for_label }}" class="form-label">
+                        {{ form.specifications.label }}
+                    </label>
+                    {{ form.specifications }}
+                    {% if form.specifications.errors %}
+                    <span class="field-error">{{ form.specifications.errors.0 }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-footer-actions">
+            <a href="{% if component %}{% url 'catalog:detail' component.component_id %}{% else %}{% url 'catalog:list' %}{% endif %}" class="btn btn-secondary">
+                Скасувати
+            </a>
+            <button type="submit" class="btn btn-primary">
+                {{ submit_label }}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

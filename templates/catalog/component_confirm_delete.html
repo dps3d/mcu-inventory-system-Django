@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Видалення компонента &bull; MCU Inventory{% endblock %}
+
+{% block content %}
+<div class="confirm-delete-container">
+    <div class="confirm-delete-card">
+        <div class="delete-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="delete-warn-icon">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+        </div>
+
+        <h1 class="delete-title">Видалити деталь з каталогу?</h1>
+        <p class="delete-description">
+            Ви збираєтесь видалити компонент <strong>«{{ component.part_number }}»</strong> ({{ component.category.name }}, {{ component.package_type|default:"без корпусу" }}).
+        </p>
+
+        <div class="delete-warning-box">
+            <p>Увага: видалення буде заблоковано, якщо цей компонент вже має пов'язані складські залишки або замовлення.</p>
+        </div>
+
+        <form method="post" class="delete-actions-form">
+            {% csrf_token %}
+            <a href="{% url 'catalog:detail' component.component_id %}" class="btn btn-secondary">
+                Скасувати
+            </a>
+            <button type="submit" class="btn btn-danger">
+                Підтвердити видалення
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

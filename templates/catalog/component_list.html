@@ -1,0 +1,317 @@
+{% extends 'base.html' %}
+
+{% block title %}Каталог компонентів &bull; MCU Inventory{% endblock %}
+
+{% block content %}
+<div class="catalog-page">
+    <!-- Header with Actions -->
+    <div class="catalog-header">
+        <div class="catalog-header-text">
+            <h1 class="catalog-title">Каталог деталей</h1>
+            <p class="catalog-subtitle">База мікросхем, датчиків, пасивних компонентів та модулів лабораторії (знайдено: {{ total_count }})</p>
+        </div>
+        <div class="catalog-header-actions">
+            {% if user.is_staff %}
+            <a href="{% url 'catalog:create' %}" class="btn btn-primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Додати деталь</span>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <form method="get" class="catalog-filter-bar">
+        <div class="filter-row">
+            <!-- Search Query -->
+            <div class="filter-field search-field">
+                <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" name="q" value="{{ search_query }}" placeholder="Пошук (STM32, DIP-28, 10k, датчик...)" class="filter-input">
+                {% if search_query %}
+                <a href="{% url 'catalog:list' %}" class="clear-search-btn" title="Очистити">&times;</a>
+                {% endif %}
+            </div>
+
+            <!-- Category Filter -->
+            <div class="filter-field">
+                <select name="category" class="filter-select" onchange="this.form.submit()">
+                    <option value="">Всі категорії</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.category_id }}" {% if selected_category == cat.category_id|stringformat:"s" %}selected{% endif %}>
+                        {{ cat.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Package Type Filter -->
+            <div class="filter-field">
+                <select name="package" class="filter-select" onchange="this.form.submit()">
+                    <option value="">Всі корпуси</option>
+                    {% for pkg in packages %}
+                    <option value="{{ pkg }}" {% if selected_package == pkg %}selected{% endif %}>
+                        {{ pkg }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Stock Status Filter -->
+            <div class="filter-field">
+                <select name="status" class="filter-select" onchange="this.form.submit()">
+                    <option value="">Будь-яка наявність</option>
+                    <option value="in_stock" {% if selected_status == 'in_stock' %}selected{% endif %}>В наявності (>0)</option>
+                    <option value="low_stock" {% if selected_status == 'low_stock' %}selected{% endif %}>Закінчується (&le; порогу)</option>
+                    <option value="out_of_stock" {% if selected_status == 'out_of_stock' %}selected{% endif %}>Немає на складі (0)</option>
+                </select>
+            </div>
+
+            <!-- Sorting -->
+            <div class="filter-field">
+                <select name="sort" class="filter-select" onchange="this.form.submit()">
+                    <option value="name_asc" {% if selected_sort == 'name_asc' %}selected{% endif %}>Маркування (А &rarr; Я)</option>
+                    <option value="name_desc" {% if selected_sort == 'name_desc' %}selected{% endif %}>Маркування (Я &rarr; А)</option>
+                    <option value="stock_desc" {% if selected_sort == 'stock_desc' %}selected{% endif %}>Залишок (Спадання)</option>
+                    <option value="stock_asc" {% if selected_sort == 'stock_asc' %}selected{% endif %}>Залишок (Зростання)</option>
+                    <option value="newest" {% if selected_sort == 'newest' %}selected{% endif %}>Спочатку нові</option>
+                </select>
+            </div>
+
+            <!-- View Switcher -->
+            <div class="view-switcher">
+                <button type="submit" name="view" value="grid" class="view-btn {% if view_mode != 'table' %}active{% endif %}" title="Вигляд сіткою">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                </button>
+                <button type="submit" name="view" value="table" class="view-btn {% if view_mode == 'table' %}active{% endif %}" title="Вигляд таблицею">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        {% if search_query or selected_category or selected_package or selected_status %}
+        <div class="active-filters-row">
+            <span class="active-filters-label">Активні фільтри:</span>
+            {% if search_query %}<span class="filter-chip">Пошук: «{{ search_query }}»</span>{% endif %}
+            {% if selected_category %}<span class="filter-chip">Категорія обрана</span>{% endif %}
+            {% if selected_package %}<span class="filter-chip">Корпус: {{ selected_package }}</span>{% endif %}
+            {% if selected_status %}<span class="filter-chip">Фільтр наявності</span>{% endif %}
+            <a href="{% url 'catalog:list' %}?view={{ view_mode }}" class="reset-filters-link">Скинути всі</a>
+        </div>
+        {% endif %}
+    </form>
+
+    <!-- Component Content -->
+    {% if components %}
+        {% if view_mode == 'table' %}
+            <!-- Compact Table View -->
+            <div class="catalog-table-wrap">
+                <table class="catalog-table">
+                    <thead>
+                        <tr>
+                            <th>Маркування / Парт-номер</th>
+                            <th>Категорія</th>
+                            <th>Корпус</th>
+                            <th>Номінал / Конфіг</th>
+                            <th>Вільний залишок</th>
+                            <th>Поріг</th>
+                            <th>Datasheet</th>
+                            <th>Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for comp in components %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'catalog:detail' comp.component_id %}" class="table-part-link">
+                                    <strong>{{ comp.part_number }}</strong>
+                                </a>
+                            </td>
+                            <td><span class="category-badge">{{ comp.category.name }}</span></td>
+                            <td><span class="package-badge">{{ comp.package_type|default:"—" }}</span></td>
+                            <td>{{ comp.value_nominal|default:"—" }}</td>
+                            <td>
+                                {% if comp.total_on_hand <= 0 %}
+                                    <span class="stock-pill stock-none">Немає (0 шт)</span>
+                                {% elif comp.min_threshold and comp.total_on_hand <= comp.min_threshold %}
+                                    <span class="stock-pill stock-low">Закінчується: {{ comp.total_free }} шт</span>
+                                {% else %}
+                                    <span class="stock-pill stock-ok">{{ comp.total_free }} шт</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-muted">{{ comp.min_threshold }} шт</td>
+                            <td>
+                                {% if comp.datasheet_url %}
+                                <a href="{{ comp.datasheet_url }}" target="_blank" class="table-icon-link" title="Відкрити документацію">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    </svg>
+                                    PDF
+                                </a>
+                                {% else %}
+                                <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="table-actions">
+                                    <a href="{% url 'catalog:detail' comp.component_id %}" class="btn-subtle" title="Деталі">Огляд</a>
+                                    {% if user.is_staff %}
+                                    <a href="{% url 'catalog:edit' comp.component_id %}" class="btn-subtle" title="Редагувати">Ред.</a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <!-- Modern Responsive Grid View -->
+            <div class="components-grid">
+                {% for comp in components %}
+                <div class="component-card">
+                    <div class="card-top-meta">
+                        <span class="category-badge">{{ comp.category.name }}</span>
+                        {% if comp.package_type %}
+                        <span class="package-badge">{{ comp.package_type }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-visual-area">
+                        {% if comp.image_url %}
+                        <img src="{{ comp.image_url }}" alt="{{ comp.part_number }}" class="card-img" loading="lazy">
+                        {% else %}
+                        <div class="card-ic-placeholder">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="ic-svg">
+                                <rect x="5" y="4" width="14" height="16" rx="2"></rect>
+                                <line x1="2" y1="8" x2="5" y2="8"></line>
+                                <line x1="2" y1="12" x2="5" y2="12"></line>
+                                <line x1="2" y1="16" x2="5" y2="16"></line>
+                                <line x1="19" y1="8" x2="22" y2="8"></line>
+                                <line x1="19" y1="12" x2="22" y2="12"></line>
+                                <line x1="19" y1="16" x2="22" y2="16"></line>
+                                <circle cx="9" cy="7" r="1" fill="currentColor"></circle>
+                            </svg>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-body">
+                        <a href="{% url 'catalog:detail' comp.component_id %}" class="card-title-link">
+                            <h3 class="card-part-title">{{ comp.part_number }}</h3>
+                        </a>
+                        {% if comp.value_nominal %}
+                        <div class="card-nominal">{{ comp.value_nominal }}</div>
+                        {% endif %}
+                        <p class="card-specs-text">{{ comp.specifications|default:"Технічний опис відсутній"|truncatechars:90 }}</p>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="card-stock-info">
+                            {% if comp.total_on_hand <= 0 %}
+                                <span class="stock-pill stock-none">Немає</span>
+                            {% elif comp.min_threshold and comp.total_on_hand <= comp.min_threshold %}
+                                <span class="stock-pill stock-low" title="Фактичний: {{ comp.total_on_hand }} шт, вільний: {{ comp.total_free }} шт">
+                                    {{ comp.total_free }} шт
+                                </span>
+                            {% else %}
+                                <span class="stock-pill stock-ok" title="Вільний залишок: {{ comp.total_free }} шт">
+                                    {{ comp.total_free }} шт
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <div class="card-links">
+                            {% if comp.datasheet_url %}
+                            <a href="{{ comp.datasheet_url }}" target="_blank" class="card-icon-action" title="Datasheet PDF">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                </svg>
+                            </a>
+                            {% endif %}
+                            <a href="{% url 'catalog:detail' comp.component_id %}" class="card-open-btn">
+                                <span>Деталі</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="pagination-bar">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}&q={{ search_query }}&category={{ selected_category }}&package={{ selected_package }}&status={{ selected_status }}&sort={{ selected_sort }}&view={{ view_mode }}" class="pagination-btn">
+                &larr; Попередня
+            </a>
+            {% else %}
+            <span class="pagination-btn disabled">&larr; Попередня</span>
+            {% endif %}
+
+            <div class="pagination-pages">
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="page-number active">{{ num }}</span>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a href="?page={{ num }}&q={{ search_query }}&category={{ selected_category }}&package={{ selected_package }}&status={{ selected_status }}&sort={{ selected_sort }}&view={{ view_mode }}" class="page-number">
+                            {{ num }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&q={{ search_query }}&category={{ selected_category }}&package={{ selected_package }}&status={{ selected_status }}&sort={{ selected_sort }}&view={{ view_mode }}" class="pagination-btn">
+                Наступна &rarr;
+            </a>
+            {% else %}
+            <span class="pagination-btn disabled">Наступна &rarr;</span>
+            {% endif %}
+        </div>
+        {% endif %}
+
+    {% else %}
+        <!-- Empty State -->
+        <div class="empty-state-box">
+            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <h2 class="empty-title">Компонентів не знайдено</h2>
+            <p class="empty-desc">За вказаними параметрами або пошуковим запитом деталей не виявлено. Спробуйте змінити фільтри або очистити пошук.</p>
+            <div class="empty-actions">
+                <a href="{% url 'catalog:list' %}" class="btn btn-secondary">Скинути пошук та фільтри</a>
+                {% if user.is_staff %}
+                <a href="{% url 'catalog:create' %}" class="btn btn-primary">Створити нову деталь</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
