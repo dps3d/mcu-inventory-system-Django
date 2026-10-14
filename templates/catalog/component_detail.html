@@ -22,6 +22,16 @@
                 </svg>
                 <span>До каталогу</span>
             </a>
+            <a href="{% url 'catalog:pinout_view' component.component_id %}" class="btn btn-secondary" title="Відкрити інтерактивну розпіновку">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+                    <rect x="6" y="4" width="12" height="16" rx="2"></rect>
+                    <line x1="2" y1="8" x2="6" y2="8"></line>
+                    <line x1="2" y1="12" x2="6" y2="12"></line>
+                    <line x1="18" y1="8" x2="22" y2="8"></line>
+                    <line x1="18" y1="12" x2="22" y2="12"></line>
+                </svg>
+                <span>Розпіновка (Pinout)</span>
+            </a>
             {% if user.is_staff %}
             <a href="{% url 'catalog:edit' component.component_id %}" class="btn btn-secondary">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
@@ -219,19 +229,28 @@
                 {% endif %}
             </div>
 
-            <!-- Pinout Teaser Card (Connects to next module Pinout Builder) -->
+            <!-- Pinout Teaser Card -->
             <div class="detail-card pinout-teaser-card">
                 <div class="card-header-row">
                     <div>
                         <h3 class="card-section-title">Розпіновка компонента (Pinout)</h3>
                         <p class="text-sm text-muted">
                             {% if has_pinouts %}
-                            Сконфігуровано пінів: {{ pinouts.count }} (Ліва: {{ left_pins|length }}, Права: {{ right_pins|length }})
+                            Сконфігуровано пінів: {{ pinouts.count }} (Ліва сторона: {{ left_pins|length }}, Права сторона: {{ right_pins|length }})
                             {% else %}
-                            Розпіновка для цього корпусу ще не налаштована.
+                            Розпіновка для цього корпусу ще не налаштована в системі.
                             {% endif %}
                         </p>
                     </div>
+                    {% if user.is_staff %}
+                    <a href="{% url 'catalog:pinout_builder' component.component_id %}" class="btn btn-secondary btn-sm">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+                            <path d="M12 20h9"></path>
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                        </svg>
+                        <span>Конструктор Pinout</span>
+                    </a>
+                    {% endif %}
                 </div>
 
                 {% if has_pinouts %}
@@ -259,6 +278,12 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="pinout-actions-row">
+                    <a href="{% url 'catalog:pinout_view' component.component_id %}" class="btn btn-primary">
+                        <span>Відкрити інтерактивний Pinout Viewer &rarr;</span>
+                    </a>
+                </div>
                 {% else %}
                 <div class="pinout-empty-state">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="pinout-teaser-icon">
@@ -270,7 +295,12 @@
                         <line x1="18" y1="12" x2="22" y2="12"></line>
                         <line x1="18" y1="16" x2="22" y2="16"></line>
                     </svg>
-                    <p class="text-sm text-muted">Інтерактивна розпіновка буде доступна у наступному розділі (Pinout Builder).</p>
+                    <p class="text-sm text-muted">Виводи для цього чіпа ще не налаштовані.</p>
+                    {% if user.is_staff %}
+                    <a href="{% url 'catalog:pinout_builder' component.component_id %}" class="btn btn-primary btn-sm" style="margin-top: 10px;">
+                        + Налаштувати виводи в Pinout Builder
+                    </a>
+                    {% endif %}
                 </div>
                 {% endif %}
             </div>

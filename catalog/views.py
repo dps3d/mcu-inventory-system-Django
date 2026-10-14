@@ -216,3 +216,159 @@ def component_delete(request, pk):
     return render(request, 'catalog/component_confirm_delete.html', {
         'component': component,
     })
+
+
+def pinout_view(request, pk):
+    """
+    Публічний інтерактивний візуалізатор розпіновки (Pinout Viewer).
+    """
+    component = get_object_or_404(
+        Components.objects.select_related('category'),
+        pk=pk
+    )
+    pinouts = component.pinouts.all().order_by('side', 'pin_number')
+    left_pins = [p for p in pinouts if p.side == 'left']
+    right_pins = [p for p in pinouts if p.side == 'right']
+
+    # Сигнали та підрахунок для фільтрації
+    signal_counts = {}
+    for p in pinouts:
+        signal_counts[p.signal_type] = signal_counts.get(p.signal_type, 0) + 1
+
+    return render(request, 'catalog/pinout_view.html', {
+        'component': component,
+        'pinouts': pinouts,
+        'left_pins': left_pins,
+        'right_pins': right_pins,
+        'signal_counts': signal_counts,
+        'has_pinouts': pinouts.exists(),
+    })
+
+
+@login_required
+@user_passes_test(is_staff_check)
+def pinout_builder(request, pk):
+    """
+    Конструктор розпіновок (Pinout Builder) для персоналу:
+    динамічне додавання, редагування, генерація пресетів та збереження пінів.
+    """
+    import json
+    from django.db import transaction
+
+    component = get_object_or_404(Components, pk=pk)
+
+    if request.method == 'POST':
+        pins_data_raw = request.POST.get('pins_json', '[]')
+        try:
+            pins_data = json.loads(pins_data_raw)
+            with transaction.atomic():
+                # Видаляємо старі піни та створюємо нові
+                ComponentPinouts.objects.filter(component=component).delete()
+                new_pins = []
+                for p in pins_data:
+                    side = p.get('side', 'left')
+                    if side not in ['left', 'right']:
+                        side = 'left'
+                    pin_number = int(p.get('pin_number', 1))
+                    pin_label = str(p.get('pin_label', '')).strip()
+                    signal_type = str(p.get('signal_type', 'GPIO')).strip()
+                    description = str(p.get('description', '')).strip()
+
+                    if pin_label:
+                        new_pins.append(ComponentPinouts(
+                            component=component,
+                            side=side,
+                            pin_number=pin_number,
+                            pin_label=pin_label,
+                            signal_type=signal_type,
+                            description=description,
+                        ))
+
+                ComponentPinouts.objects.bulk_create(new_pins)
+                messages.success(request, f"Розпіновку для «{component.part_number}» успішно збережено ({len(new_pins)} пінів).")
+                return redirect('catalog:pinout_view', pk=component.pk)
+
+        except Exception as e:
+            messages.error(request, f"Помилка при збереженні розпіновки: {str(e)}")
+
+    pinouts = component.pinouts.all().order_by('side', 'pin_number')
+    left_pins = [p for p in pinouts if p.side == 'left']
+    right_pins = [p for p in pinouts if p.side == 'right']
+
+    # Серіалізуємо поточні піни для клієнтського JS конструктора
+    existing_pins = [
+        {
+            'side': p.side,
+            'pin_number': p.pin_number,
+            'pin_label': p.pin_label,
+            'signal_type': p.signal_type,
+            'description': p.description or '',
+        }
+        for p in pinouts
+    ]
+
+    return render(request, 'catalog/pinout_builder.html', {
+        'component': component,
+        'existing_pins_json': json.dumps(existing_pins),
+        'signal_choices': [c[0] for c in ComponentPinouts.SIGNAL_TYPES],
+        'left_pins': left_pins,
+        'right_pins': right_pins,
+    })
+
+
+@login_required
+@user_passes_test(is_staff_check)
+def pinout_save_api(request, pk):
+    """
+    AJAX API для швидкого збереження розпіновки без перезавантаження сторінки.
+    """
+    import json
+    from django.http import JsonResponse
+    from django.db import transaction
+
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Тільки POST запити дозволені'}, status=405)
+
+    component = get_object_or_404(Components, pk=pk)
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+        if isinstance(data, list):
+            pins = data
+        elif isinstance(data, dict):
+            pins = data.get('pins', [])
+        else:
+            pins = []
+
+        with transaction.atomic():
+            ComponentPinouts.objects.filter(component=component).delete()
+            new_pins = []
+            for p in pins:
+                side = p.get('side', 'left')
+                if side not in ['left', 'right']:
+                    side = 'left'
+                pin_number = int(p.get('pin_number', 1))
+                pin_label = str(p.get('pin_label', '')).strip()
+                signal_type = str(p.get('signal_type', 'GPIO')).strip()
+                description = str(p.get('description', '')).strip()
+
+                if pin_label:
+                    new_pins.append(ComponentPinouts(
+                        component=component,
+                        side=side,
+                        pin_number=pin_number,
+                        pin_label=pin_label,
+                        signal_type=signal_type,
+                        description=description,
+                    ))
+
+            ComponentPinouts.objects.bulk_create(new_pins)
+
+        return JsonResponse({
+            'success': True,
+            'count': len(new_pins),
+            'saved_count': len(new_pins),
+            'message': f'Успішно збережено {len(new_pins)} виводів'
+        })
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+

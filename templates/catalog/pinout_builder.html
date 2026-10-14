@@ -1,0 +1,396 @@
+{% extends 'base.html' %}
+
+{% block title %}Конструктор розпіновки: {{ component.part_number }} &bull; Pinout Builder{% endblock %}
+
+{% block content %}
+<div class="pinout-builder-page">
+    <!-- Header Navigation -->
+    <div class="detail-header-nav">
+        <nav class="detail-breadcrumbs">
+            <a href="{% url 'catalog:list' %}">Каталог деталей</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="{% url 'catalog:detail' component.component_id %}">{{ component.part_number }}</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">Конструктор розпіновки (Pinout Builder)</span>
+        </nav>
+
+        <div class="detail-header-actions">
+            <a href="{% url 'catalog:pinout_view' component.component_id %}" class="btn btn-secondary">
+                Скасувати
+            </a>
+            <button type="button" id="savePinoutBtn" class="btn btn-primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                    <polyline points="7 3 7 8 15 8"></polyline>
+                </svg>
+                <span>Зберегти розпіновку</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Title Banner -->
+    <div class="detail-banner">
+        <div class="detail-banner-info">
+            <div class="banner-badges">
+                <span class="category-badge">{{ component.category.name }}</span>
+                {% if component.package_type %}
+                <span class="package-badge">{{ component.package_type }}</span>
+                {% endif %}
+                <span class="package-badge" id="liveTotalCount">Пінів: 0</span>
+            </div>
+            <h1 class="detail-title">Конструктор Pinout: {{ component.part_number }}</h1>
+            <p class="catalog-subtitle">Налаштуйте виводи для обох сторін мікросхеми, використовуючи швидкі шаблони або індивідуальне додавання</p>
+        </div>
+    </div>
+
+    <!-- Presets Toolbar -->
+    <div class="builder-presets-bar">
+        <span class="presets-label">Швидкі шаблони:</span>
+        <button type="button" class="preset-btn" onclick="applyPreset(8)">DIP-8 (4+4)</button>
+        <button type="button" class="preset-btn" onclick="applyPreset(14)">DIP-14 (7+7)</button>
+        <button type="button" class="preset-btn" onclick="applyPreset(16)">DIP-16 (8+8)</button>
+        <button type="button" class="preset-btn" onclick="applyPreset(20)">DIP-20 (10+10)</button>
+        <button type="button" class="preset-btn" onclick="applyPreset(28)">DIP-28 (14+14)</button>
+        <button type="button" class="preset-btn" onclick="applyPreset(32)">QFP-32 (16+16)</button>
+        <button type="button" class="preset-btn text-danger" onclick="clearAllPins()">Очистити все</button>
+    </div>
+
+    <!-- Hidden Form for standard POST fallback -->
+    <form id="pinoutForm" method="post" action="{% url 'catalog:pinout_builder' component.component_id %}">
+        {% csrf_token %}
+        <input type="hidden" name="pins_json" id="pinsJsonInput" value="[]">
+    </form>
+
+    <!-- Main Dual-Column Builder Workspace -->
+    <div class="builder-workspace-grid">
+        <!-- Left Pane: Tabs / Pin Editors Table -->
+        <div class="builder-editor-pane">
+            <div class="side-tabs-header">
+                <button type="button" class="side-tab active" id="tabLeftBtn" onclick="switchSideTab('left')">
+                    Ліва сторона (<span id="leftCountDisplay">0</span>)
+                </button>
+                <button type="button" class="side-tab" id="tabRightBtn" onclick="switchSideTab('right')">
+                    Права сторона (<span id="rightCountDisplay">0</span>)
+                </button>
+            </div>
+
+            <!-- Left Pins Panel -->
+            <div class="side-panel active" id="leftPinsPanel">
+                <div class="panel-action-bar">
+                    <span class="panel-action-hint">Виводи 1..N рахуються зліва зверху донизу</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="addPin('left')">
+                        + Додати лівий вивід
+                    </button>
+                </div>
+                <div class="pins-editor-table-wrap">
+                    <table class="pins-editor-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">№</th>
+                                <th style="width: 120px;">Назва (Label) *</th>
+                                <th style="width: 130px;">Тип сигналу</th>
+                                <th>Опис / Альтернативна функція</th>
+                                <th style="width: 40px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="leftPinsTableBody">
+                            <!-- Injected by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Right Pins Panel -->
+            <div class="side-panel" id="rightPinsPanel">
+                <div class="panel-action-bar">
+                    <span class="panel-action-hint">Виводи справа за стандартом DIP рахуються знизу догори</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="addPin('right')">
+                        + Додати правий вивід
+                    </button>
+                </div>
+                <div class="pins-editor-table-wrap">
+                    <table class="pins-editor-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">№</th>
+                                <th style="width: 120px;">Назва (Label) *</th>
+                                <th style="width: 130px;">Тип сигналу</th>
+                                <th>Опис / Альтернативна функція</th>
+                                <th style="width: 40px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="rightPinsTableBody">
+                            <!-- Injected by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Pane: Realtime Interactive Preview -->
+        <div class="builder-preview-pane">
+            <div class="preview-header">
+                <span class="preview-tag">Живий попередній перегляд</span>
+                <span class="preview-hint">Оновлюється миттєво під час вводу</span>
+            </div>
+
+            <div class="live-chip-container">
+                <div class="chip-schematic-wrap live-schematic">
+                    <!-- Left Live Pins -->
+                    <div class="pins-column pins-left" id="liveLeftPins">
+                        <!-- Dynamic -->
+                    </div>
+
+                    <!-- Center IC Body -->
+                    <div class="chip-center-ic">
+                        <div class="chip-top-notch"></div>
+                        <div class="chip-dot-pin1"></div>
+                        <div class="chip-ic-label-wrap">
+                            <span class="chip-ic-name">{{ component.part_number }}</span>
+                            <span class="chip-ic-sub">{{ component.package_type|default:"IC Package" }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Right Live Pins -->
+                    <div class="pins-column pins-right" id="liveRightPins">
+                        <!-- Dynamic -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="builder-help-tip">
+                <p><strong>Порада:</strong> За стандартом мікросхем (DIP) нумерація пінів іде проти годинникової стрілки: з 1-го до N/2 по лівій стороні зверху вниз, і від N/2+1 до N по правій стороні знизу вгору.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Available signal choices
+const SIGNAL_CHOICES = {{ signal_choices|safe }};
+
+// Initial state from server
+let pins = {{ existing_pins_json|safe }};
+
+// Switch tab between left and right pins
+function switchSideTab(side) {
+    document.getElementById('tabLeftBtn').classList.toggle('active', side === 'left');
+    document.getElementById('tabRightBtn').classList.toggle('active', side === 'right');
+    document.getElementById('leftPinsPanel').classList.toggle('active', side === 'left');
+    document.getElementById('rightPinsPanel').classList.toggle('active', side === 'right');
+}
+
+// Render tables and live schematic
+function renderBuilder() {
+    const leftTableBody = document.getElementById('leftPinsTableBody');
+    const rightTableBody = document.getElementById('rightPinsTableBody');
+    const liveLeft = document.getElementById('liveLeftPins');
+    const liveRight = document.getElementById('liveRightPins');
+
+    leftTableBody.innerHTML = '';
+    rightTableBody.innerHTML = '';
+    liveLeft.innerHTML = '';
+    liveRight.innerHTML = '';
+
+    let leftCount = 0;
+    let rightCount = 0;
+
+    pins.forEach((pin, index) => {
+        const isLeft = pin.side === 'left';
+        if (isLeft) leftCount++; else rightCount++;
+
+        // 1. Table Row
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>
+                <input type="number" class="builder-num-input" value="${pin.pin_number}" min="1" max="128" onchange="updatePin(${index}, 'pin_number', this.value)">
+            </td>
+            <td>
+                <input type="text" class="builder-text-input" value="${escapeHtml(pin.pin_label)}" placeholder="VCC, PA0..." oninput="updatePin(${index}, 'pin_label', this.value)">
+            </td>
+            <td>
+                <select class="builder-select-input signal-select-${pin.signal_type.toLowerCase()}" onchange="updatePin(${index}, 'signal_type', this.value)">
+                    ${SIGNAL_CHOICES.map(s => `<option value="${s}" ${s === pin.signal_type ? 'selected' : ''}>${s}</option>`).join('')}
+                </select>
+            </td>
+            <td>
+                <input type="text" class="builder-text-input" value="${escapeHtml(pin.description || '')}" placeholder="Альтернативні функції (I2C1_SCL...)" oninput="updatePin(${index}, 'description', this.value)">
+            </td>
+            <td>
+                <button type="button" class="pin-delete-btn" onclick="removePin(${index})" title="Видалити пін">&times;</button>
+            </td>
+        `;
+
+        if (isLeft) {
+            leftTableBody.appendChild(tr);
+        } else {
+            rightTableBody.appendChild(tr);
+        }
+
+        // 2. Live Schematic Pin
+        const livePin = document.createElement('div');
+        livePin.className = `interactive-pin-row ${isLeft ? 'pin-left-side' : 'pin-right-side'}`;
+
+        if (isLeft) {
+            livePin.innerHTML = `
+                <span class="pin-label-tag signal-type-${pin.signal_type.toLowerCase()}">${escapeHtml(pin.pin_label || '?')}</span>
+                <span class="pin-idx-badge">${pin.pin_number}</span>
+                <span class="pin-metal-leg"></span>
+            `;
+            liveLeft.appendChild(livePin);
+        } else {
+            livePin.innerHTML = `
+                <span class="pin-metal-leg"></span>
+                <span class="pin-idx-badge">${pin.pin_number}</span>
+                <span class="pin-label-tag signal-type-${pin.signal_type.toLowerCase()}">${escapeHtml(pin.pin_label || '?')}</span>
+            `;
+            liveRight.appendChild(livePin);
+        }
+    });
+
+    document.getElementById('leftCountDisplay').textContent = leftCount;
+    document.getElementById('rightCountDisplay').textContent = rightCount;
+    document.getElementById('liveTotalCount').textContent = `Пінів: ${pins.length}`;
+}
+
+function updatePin(index, key, value) {
+    if (key === 'pin_number') {
+        pins[index][key] = parseInt(value, 10) || 1;
+    } else {
+        pins[index][key] = value;
+    }
+    // Update live schematic
+    renderBuilder();
+}
+
+function addPin(side) {
+    const sidePins = pins.filter(p => p.side === side);
+    let nextNum = 1;
+    if (pins.length > 0) {
+        nextNum = Math.max(...pins.map(p => p.pin_number)) + 1;
+    }
+
+    pins.push({
+        side: side,
+        pin_number: nextNum,
+        pin_label: `P${nextNum}`,
+        signal_type: 'GPIO',
+        description: '',
+    });
+    renderBuilder();
+}
+
+function removePin(index) {
+    pins.splice(index, 1);
+    renderBuilder();
+}
+
+function clearAllPins() {
+    if (confirm("Очистити всі створені виводи?")) {
+        pins = [];
+        renderBuilder();
+    }
+}
+
+// Presets Generator (e.g. 8, 14, 16, 20, 28, 32 pins)
+function applyPreset(totalPins) {
+    if (pins.length > 0 && !confirm(`Створити стандартну розпіновку на ${totalPins} пінів? Поточні дані будуть замінені.`)) {
+        return;
+    }
+
+    const half = totalPins / 2;
+    const newPins = [];
+
+    // Left side: 1 to half
+    for (let i = 1; i <= half; i++) {
+        let label = `P${i}`;
+        let type = 'GPIO';
+        let desc = '';
+
+        if (i === 1) { label = 'VCC'; type = 'Power'; desc = 'Напруга живлення VDD/VCC'; }
+        else if (i === half) { label = 'GND'; type = 'Ground'; desc = 'Загальний мінус (Земля)'; }
+
+        newPins.push({
+            side: 'left',
+            pin_number: i,
+            pin_label: label,
+            signal_type: type,
+            description: desc,
+        });
+    }
+
+    // Right side: half+1 to total (counted bottom to top by default in DIP)
+    for (let i = totalPins; i > half; i--) {
+        let label = `P${i}`;
+        let type = 'GPIO';
+        let desc = '';
+
+        newPins.push({
+            side: 'right',
+            pin_number: i,
+            pin_label: label,
+            signal_type: type,
+            description: desc,
+        });
+    }
+
+    pins = newPins;
+    renderBuilder();
+}
+
+function escapeHtml(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+// Save Pinout
+document.getElementById('savePinoutBtn').addEventListener('click', async () => {
+    // Validate
+    for (const p of pins) {
+        if (!p.pin_label || !p.pin_label.trim()) {
+            alert(`Помилка: вкажіть назву для піна #${p.pin_number}`);
+            return;
+        }
+    }
+
+    const saveBtn = document.getElementById('savePinoutBtn');
+    saveBtn.disabled = true;
+    saveBtn.innerHTML = '<span>Збереження...</span>';
+
+    try {
+        const response = await fetch("{% url 'catalog:pinout_save_api' component.component_id %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+            body: JSON.stringify({ pins: pins })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            window.location.href = "{% url 'catalog:pinout_view' component.component_id %}";
+        } else {
+            alert(`Помилка: ${data.error || 'Не вдалося зберегти'}`);
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = '<span>Зберегти розпіновку</span>';
+        }
+    } catch (err) {
+        // Fallback to standard form submit
+        document.getElementById('pinsJsonInput').value = JSON.stringify(pins);
+        document.getElementById('pinoutForm').submit();
+    }
+});
+
+// Initial Render on page load
+document.addEventListener('DOMContentLoaded', () => {
+    renderBuilder();
+});
+</script>
+{% endblock %}

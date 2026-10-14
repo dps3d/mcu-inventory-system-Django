@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+
+{% block title %}Розпіновка {{ component.part_number }} &bull; Pinout Viewer{% endblock %}
+
+{% block content %}
+<div class="pinout-page-container">
+    <!-- Header Navigation -->
+    <div class="detail-header-nav">
+        <nav class="detail-breadcrumbs">
+            <a href="{% url 'catalog:list' %}">Каталог деталей</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="{% url 'catalog:detail' component.component_id %}">{{ component.part_number }}</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">Інтерактивна розпіновка (Pinout)</span>
+        </nav>
+
+        <div class="detail-header-actions">
+            <a href="{% url 'catalog:detail' component.component_id %}" class="btn btn-secondary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>До деталей компонента</span>
+            </a>
+            {% if user.is_staff %}
+            <a href="{% url 'catalog:pinout_builder' component.component_id %}" class="btn btn-primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+                    <path d="M12 20h9"></path>
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                </svg>
+                <span>Конструктор Pinout</span>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Title Banner -->
+    <div class="detail-banner">
+        <div class="detail-banner-info">
+            <div class="banner-badges">
+                <span class="category-badge">{{ component.category.name }}</span>
+                {% if component.package_type %}
+                <span class="package-badge">{{ component.package_type }}</span>
+                {% endif %}
+                <span class="package-badge">Всього виводів: {{ pinouts.count }}</span>
+            </div>
+            <h1 class="detail-title">Розпіновка: {{ component.part_number }}</h1>
+            <p class="catalog-subtitle">Натисніть на будь-який пін для перегляду призначення або виберіть фільтр типу сигналу</p>
+        </div>
+    </div>
+
+    {% if has_pinouts %}
+    <!-- Signal Filter Buttons -->
+    <div class="signal-filter-toolbar">
+        <span class="filter-toolbar-label">Підсвітити сигнали:</span>
+        <button type="button" class="signal-filter-pill active" data-signal="ALL">
+            Всі ({{ pinouts.count }})
+        </button>
+        {% for sig, count in signal_counts.items %}
+        <button type="button" class="signal-filter-pill signal-pill-{{ sig|lower }}" data-signal="{{ sig }}">
+            <span class="signal-dot"></span> {{ sig }} ({{ count }})
+        </button>
+        {% endfor %}
+    </div>
+
+    <!-- Main Interactive Pinout Layout -->
+    <div class="pinout-workspace-layout">
+        <!-- Interactive Chip Graphic Container -->
+        <div class="chip-viewer-card">
+            <div class="chip-schematic-wrap">
+                <!-- Left Pins Column -->
+                <div class="pins-column pins-left">
+                    {% for p in left_pins %}
+                    <div class="interactive-pin-row pin-left-side"
+                         data-id="{{ p.pinout_id }}"
+                         data-side="left"
+                         data-pin="{{ p.pin_number }}"
+                         data-label="{{ p.pin_label }}"
+                         data-type="{{ p.signal_type }}"
+                         data-desc="{{ p.description|default:'' }}">
+                        <span class="pin-label-tag signal-type-{{ p.signal_type|lower }}">{{ p.pin_label }}</span>
+                        <span class="pin-idx-badge">{{ p.pin_number }}</span>
+                        <span class="pin-metal-leg"></span>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Center IC Body -->
+                <div class="chip-center-ic">
+                    <div class="chip-top-notch" title="Орієнтаційний ключ / Notch"></div>
+                    <div class="chip-dot-pin1" title="Мітка виводу 1"></div>
+                    <div class="chip-ic-label-wrap">
+                        <span class="chip-ic-name">{{ component.part_number }}</span>
+                        <span class="chip-ic-sub">{{ component.package_type|default:"IC Package" }}</span>
+                    </div>
+                    <div class="chip-arch-stripe"></div>
+                </div>
+
+                <!-- Right Pins Column -->
+                <div class="pins-column pins-right">
+                    {% for p in right_pins %}
+                    <div class="interactive-pin-row pin-right-side"
+                         data-id="{{ p.pinout_id }}"
+                         data-side="right"
+                         data-pin="{{ p.pin_number }}"
+                         data-label="{{ p.pin_label }}"
+                         data-type="{{ p.signal_type }}"
+                         data-desc="{{ p.description|default:'' }}">
+                        <span class="pin-metal-leg"></span>
+                        <span class="pin-idx-badge">{{ p.pin_number }}</span>
+                        <span class="pin-label-tag signal-type-{{ p.signal_type|lower }}">{{ p.pin_label }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Pin Inspector Side Card -->
+        <div class="pin-inspector-card" id="pinInspectorCard">
+            <div class="inspector-header">
+                <span class="inspector-tag">Інспектор виводу</span>
+                <span class="inspector-hint">Виберіть пін на схемі</span>
+            </div>
+
+            <div id="inspectorContent" class="inspector-body">
+                <div class="inspector-placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="inspector-empty-icon">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    <p>Клацніть або наведіть на будь-яку ніжку мікросхеми ліворуч для перегляду її повного опису та типу сигналу.</p>
+                </div>
+            </div>
+
+            <!-- Signal Types Legend -->
+            <div class="signals-legend">
+                <h4 class="legend-title">Колірне маркування сигналів</h4>
+                <div class="legend-grid">
+                    <div class="legend-item"><span class="sig-badge sig-power"></span> Power (Живлення)</div>
+                    <div class="legend-item"><span class="sig-badge sig-ground"></span> Ground (Земля)</div>
+                    <div class="legend-item"><span class="sig-badge sig-gpio"></span> GPIO (Ввід / вивід)</div>
+                    <div class="legend-item"><span class="sig-badge sig-i2c"></span> I2C (SDA, SCL)</div>
+                    <div class="legend-item"><span class="sig-badge sig-uart"></span> UART (TX, RX)</div>
+                    <div class="legend-item"><span class="sig-badge sig-spi"></span> SPI (MOSI, MISO)</div>
+                    <div class="legend-item"><span class="sig-badge sig-adc"></span> ADC (Аналоговий вхід)</div>
+                    <div class="legend-item"><span class="sig-badge sig-reset"></span> Reset (Скидання)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- Empty State -->
+    <div class="empty-state-box">
+        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="6" y="4" width="12" height="16" rx="2"></rect>
+            <line x1="2" y1="8" x2="6" y2="8"></line>
+            <line x1="2" y1="12" x2="6" y2="12"></line>
+            <line x1="2" y1="16" x2="6" y2="16"></line>
+            <line x1="18" y1="8" x2="22" y2="8"></line>
+            <line x1="18" y1="12" x2="22" y2="12"></line>
+            <line x1="18" y1="16" x2="22" y2="16"></line>
+        </svg>
+        <h2 class="empty-title">Розпіновку ще не налаштовано</h2>
+        <p class="empty-desc">Для компонента «{{ component.part_number }}» поки немає створених виводів у базі даних.</p>
+        <div class="empty-actions">
+            {% if user.is_staff %}
+            <a href="{% url 'catalog:pinout_builder' component.component_id %}" class="btn btn-primary">
+                + Відкрити конструктор розпіновок (Pinout Builder)
+            </a>
+            {% else %}
+            <a href="{% url 'catalog:detail' component.component_id %}" class="btn btn-secondary">
+                Повернутись до компонента
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const pinRows = document.querySelectorAll('.interactive-pin-row');
+    const inspectorContent = document.getElementById('inspectorContent');
+    const filterPills = document.querySelectorAll('.signal-filter-pill');
+
+    function selectPin(pin) {
+        pinRows.forEach(p => p.classList.remove('selected-pin'));
+        pin.classList.add('selected-pin');
+
+        const num = pin.dataset.pin;
+        const label = pin.dataset.label;
+        const type = pin.dataset.type;
+        const side = pin.dataset.side === 'left' ? 'Ліва сторона' : 'Права сторона';
+        const desc = pin.dataset.desc || 'Додатковий опис відсутній';
+
+        inspectorContent.innerHTML = `
+            <div class="active-pin-info">
+                <div class="pin-active-headline">
+                    <span class="pin-active-number">Пін #${num}</span>
+                    <span class="signal-tag signal-type-${type.toLowerCase()}">${type}</span>
+                </div>
+                <div class="pin-active-label">${label}</div>
+                <div class="pin-active-meta">
+                    <div class="pin-meta-item">
+                        <span class="meta-dt">Розташування:</span>
+                        <span class="meta-dd">${side}</span>
+                    </div>
+                    <div class="pin-meta-item">
+                        <span class="meta-dt">Тип виводу:</span>
+                        <span class="meta-dd">${type}</span>
+                    </div>
+                </div>
+                <div class="pin-active-desc">
+                    <span class="meta-dt">Опис / Функція:</span>
+                    <p>${desc}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    pinRows.forEach(pin => {
+        pin.addEventListener('click', () => selectPin(pin));
+        pin.addEventListener('mouseenter', () => selectPin(pin));
+    });
+
+    // Auto-select pin #1 if exists
+    if (pinRows.length > 0) {
+        selectPin(pinRows[0]);
+    }
+
+    // Signal Filters
+    filterPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            filterPills.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+
+            const selectedSignal = pill.dataset.signal;
+            pinRows.forEach(pin => {
+                if (selectedSignal === 'ALL' || pin.dataset.type === selectedSignal) {
+                    pin.classList.remove('dimmed-pin');
+                    pin.classList.add('highlighted-pin');
+                } else {
+                    pin.classList.add('dimmed-pin');
+                    pin.classList.remove('highlighted-pin');
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}
