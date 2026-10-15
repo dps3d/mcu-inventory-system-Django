@@ -211,7 +211,7 @@ def dashboard(request):
 def quick_operation(request):
     """
     Обробник швидких складських операцій: «Взяти», «Покласти», «Повернення», «Коригування».
-    Забезпечує транзакційність (atomic) та перевірку вільного залишку.
+    Забезпечує транзакційність (atomic), блокування рядка (select_for_update) та сувору перевірку лімітів.
     """
     if request.method == 'POST':
         form = QuickStockOperationForm(request.POST)
@@ -232,21 +232,46 @@ def quick_operation(request):
                     )
 
                     if op_type == 'consumption_out':
-                        # Взяти: перевіряємо чи є достатній вільний залишок
-                        free_available = stock.free_stock
-                        if qty > free_available:
+                        # Взяти (списання): перевіряємо чи є взагалі наявний залишок
+                        if stock.quantity_on_hand <= 0:
                             messages.error(
                                 request,
-                                f"Помилка списання: недостатньо вільного залишку {component.part_number} "
-                                f"у комірці {location}. Доступно: {free_available} шт (запитано: {qty} шт)."
+                                f"Помилка списання: у комірці {location} немає деталі {component.part_number} (наявний залишок: 0 шт)."
                             )
+                            return redirect(request.META.get('HTTP_REFERER') or reverse('inventory:dashboard'))
+
+                        # Перевіряємо чи достатньо саме вільного (незарезервованого) залишку
+                        free_available = stock.free_stock
+                        if qty > free_available:
+                            if stock.quantity_reserved > 0:
+                                messages.error(
+                                    request,
+                                    f"Помилка списання: недостатньо вільного залишку {component.part_number} "
+                                    f"у комірці {location}. Всього на складі: {stock.quantity_on_hand} шт, "
+                                    f"але {stock.quantity_reserved} шт зарезервовано під проєкти. "
+                                    f"Доступно для видачі лише: {free_available} шт (запитано: {qty} шт)."
+                                )
+                            else:
+                                messages.error(
+                                    request,
+                                    f"Помилка списання: недостатньо залишку {component.part_number} "
+                                    f"у комірці {location}. Наявний залишок: {stock.quantity_on_hand} шт (запитано: {qty} шт)."
+                                )
                             return redirect(request.META.get('HTTP_REFERER') or reverse('inventory:dashboard'))
 
                         stock.quantity_on_hand -= qty
                         delta = -qty
 
                     elif op_type in ['purchase_in', 'return']:
-                        # Покласти або Повернення
+                        # Перевірка на фізичну місткість комірки (максимум 50 000 шт)
+                        if stock.quantity_on_hand + qty > 50000:
+                            messages.error(
+                                request,
+                                f"Помилка: перевищено максимальну місткість комірки (50 000 шт). "
+                                f"Поточний залишок: {stock.quantity_on_hand} шт, спроба додати: {qty} шт."
+                            )
+                            return redirect(request.META.get('HTTP_REFERER') or reverse('inventory:dashboard'))
+
                         stock.quantity_on_hand += qty
                         delta = qty
                         if unit_price is not None:
@@ -254,7 +279,31 @@ def quick_operation(request):
 
                     elif op_type == 'adjustment':
                         # Коригування фактичного залишку
+                        if qty < 0:
+                            messages.error(request, "Фактичний залишок не може бути від'ємним.")
+                            return redirect(request.META.get('HTTP_REFERER') or reverse('inventory:dashboard'))
+
+                        if qty < stock.quantity_reserved:
+                            messages.error(
+                                request,
+                                f"Помилка коригування: неможливо встановити залишок {qty} шт, "
+                                f"оскільки {stock.quantity_reserved} шт уже зарезервовано під активні проєкти. "
+                                f"Спочатку звільніть резерв або вкажіть залишок не менше {stock.quantity_reserved} шт."
+                            )
+                            return redirect(request.META.get('HTTP_REFERER') or reverse('inventory:dashboard'))
+
+                        if qty > 50000:
+                            messages.error(request, "Залишок однієї комірки не може перевищувати 50 000 шт.")
+                            return redirect(request.META.get('HTTP_REFERER') or reverse('inventory:dashboard'))
+
                         delta = qty - stock.quantity_on_hand
+                        if delta == 0:
+                            messages.info(
+                                request,
+                                f"Залишок {component.part_number} у комірці {location} вже становить {qty} шт. Змін не внесено."
+                            )
+                            return redirect(request.META.get('HTTP_REFERER') or reverse('inventory:dashboard'))
+
                         stock.quantity_on_hand = qty
                         if unit_price is not None:
                             stock.unit_price = unit_price
@@ -282,8 +331,16 @@ def quick_operation(request):
                 messages.error(request, f"Помилка при виконанні операції: {str(e)}")
 
         else:
-            errors = " ".join([f"{f}: {e.as_text()}" for f, e in form.errors.items()])
-            messages.error(request, f"Некоректні дані у формі операції: {errors}")
+            # Зручне форматування помилок валідації форми
+            error_msgs = []
+            for field, errs in form.errors.items():
+                for err in errs:
+                    if field == '__all__':
+                        error_msgs.append(str(err))
+                    else:
+                        label = form.fields[field].label if field in form.fields else field
+                        error_msgs.append(f"{label}: {err}")
+            messages.error(request, " ".join(error_msgs))
 
     return redirect(request.META.get('HTTP_REFERER') or reverse('inventory:dashboard'))
 
@@ -291,11 +348,19 @@ def quick_operation(request):
 def location_detail(request, pk):
     """
     Детальний перегляд окремої комірки: компоненти, вільні та зарезервовані залишки, журнал операцій комірки.
+    Безпечно обробляє відсутні або видалені комірки замість стандартної помилки 404.
     """
-    location = get_object_or_404(
-        StorageLocations.objects.prefetch_related('stocks__component__category'),
-        pk=pk
-    )
+    try:
+        location = StorageLocations.objects.prefetch_related(
+            Prefetch(
+                'stocks',
+                queryset=InventoryStocks.objects.select_related('component__category')
+            )
+        ).get(pk=pk)
+    except StorageLocations.DoesNotExist:
+        messages.warning(request, f"Комірку №{pk} не знайдено (можливо, її було видалено або переміщено).")
+        return redirect('inventory:dashboard')
+
     pill = location.get_category_pill()
     stocks = location.stocks.filter(quantity_on_hand__gt=0).select_related('component__category')
 
@@ -345,7 +410,12 @@ def location_create(request):
 @staff_member_required
 def location_edit(request, pk):
     """Редагування існуючої комірки"""
-    location = get_object_or_404(StorageLocations, pk=pk)
+    try:
+        location = StorageLocations.objects.get(pk=pk)
+    except StorageLocations.DoesNotExist:
+        messages.warning(request, f"Комірку №{pk} не знайдено.")
+        return redirect('inventory:dashboard')
+
     if request.method == 'POST':
         form = StorageLocationForm(request.POST, instance=location)
         if form.is_valid():
@@ -394,7 +464,7 @@ def supplier_create(request):
 def row_create(request):
     """
     Інтуїтивне додавання нового ряду комірок до органайзера.
-    Створює ряд із зазначеною кількістю комірок (наприклад 4, 6, 8, 10).
+    Створює ряд із зазначеною кількістю комірок (від 1 до 50).
     """
     if request.method == 'POST':
         box_number = request.POST.get('box_number', '').strip()
@@ -406,11 +476,27 @@ def row_create(request):
             messages.error(request, "Вкажіть назву органайзера.")
             return redirect('inventory:dashboard')
 
+        if len(box_number) > 50:
+            messages.error(request, "Назва органайзера занадто довга (максимум 50 символів).")
+            return redirect('inventory:dashboard')
+
         try:
             cell_count = int(raw_count)
         except ValueError:
             cell_count = 8
-        cell_count = max(1, min(cell_count, 50))
+
+        if cell_count < 1 or cell_count > 50:
+            messages.error(request, "Кількість комірок у ряду повинна бути від 1 до 50.")
+            return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
+
+        # Перевірка на загальну кількість комірок в органайзері
+        existing_org_cells = StorageLocations.objects.filter(box_number=box_number).count()
+        if existing_org_cells + cell_count > 300:
+            messages.error(
+                request,
+                f"В органайзері «{box_number}» уже є {existing_org_cells} комірок. Ліміт: 300 комірок на органайзер."
+            )
+            return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
 
         if not shelf_name:
             existing_count = (
@@ -420,9 +506,14 @@ def row_create(request):
                 .count()
             )
             shelf_name = f"Ряд {existing_count + 1}"
+        elif len(shelf_name) > 50:
+            messages.error(request, "Назва ряду не може перевищувати 50 символів.")
+            return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
 
         if not prefix:
             prefix = "C"
+        elif len(prefix) > 10:
+            prefix = prefix[:10]
 
         created = 0
         with transaction.atomic():
@@ -450,7 +541,7 @@ def row_create(request):
 def row_delete(request):
     """
     Видалення порожнього ряду комірок з органайзера.
-    Якщо в ряду є хоча б одна деталь, видалення блокується із попередженням.
+    Якщо в ряду є хоча б одна деталь або резерв, видалення блокується із попередженням.
     """
     if request.method == 'POST':
         box_number = request.POST.get('box_number', '').strip()
@@ -461,10 +552,12 @@ def row_delete(request):
             return redirect('inventory:dashboard')
 
         row_locs = StorageLocations.objects.filter(box_number=box_number, shelf=shelf_name)
-        occupied_locs = row_locs.filter(stocks__quantity_on_hand__gt=0).distinct()
+        occupied_locs = row_locs.filter(
+            Q(stocks__quantity_on_hand__gt=0) | Q(stocks__quantity_reserved__gt=0)
+        ).distinct()
 
         if occupied_locs.exists():
-            messages.error(request, f"Неможливо видалити ряд «{shelf_name}»: у ньому є зайняті комірки з деталями!")
+            messages.error(request, f"Неможливо видалити ряд «{shelf_name}»: у ньому є зайняті комірки з деталями або резервами!")
             return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
 
         count = row_locs.count()
@@ -487,10 +580,22 @@ def location_quick_add(request):
             messages.error(request, "Вкажіть назву органайзера.")
             return redirect('inventory:dashboard')
 
+        if len(box_number) > 50:
+            messages.error(request, "Назва органайзера занадто довга (максимум 50 символів).")
+            return redirect('inventory:dashboard')
+
+        if shelf_name and len(shelf_name) > 50:
+            messages.error(request, "Назва ряду занадто довга (максимум 50 символів).")
+            return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
+
         if not cell_code:
             existing = StorageLocations.objects.filter(box_number=box_number, shelf=shelf_name).count()
             prefix = "CELL" if not shelf_name else "C"
             cell_code = f"{prefix}-{(existing + 1):02d}"
+
+        if len(cell_code) > 20:
+            messages.error(request, "Код комірки занадто довгий (максимум 20 символів).")
+            return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
 
         if StorageLocations.objects.filter(box_number=box_number, shelf=shelf_name, cell_code=cell_code).exists():
             loc_desc = f"в ряду «{shelf_name}»" if shelf_name else "(самостійна)"
@@ -510,12 +615,20 @@ def location_quick_add(request):
 @staff_member_required
 def location_delete(request, pk):
     """Видалення окремої комірки (тільки якщо вона порожня)"""
-    location = get_object_or_404(StorageLocations, pk=pk)
+    try:
+        location = StorageLocations.objects.get(pk=pk)
+    except StorageLocations.DoesNotExist:
+        messages.warning(request, f"Комірку №{pk} не знайдено (можливо, її вже було видалено).")
+        return redirect('inventory:dashboard')
+
     box_number = location.box_number
 
     if request.method == 'POST':
-        if location.stocks.filter(quantity_on_hand__gt=0).exists():
-            messages.error(request, f"Неможливо видалити комірку «{location.cell_code}», оскільки в ній є деталі.")
+        active_stocks = location.stocks.filter(
+            Q(quantity_on_hand__gt=0) | Q(quantity_reserved__gt=0)
+        )
+        if active_stocks.exists():
+            messages.error(request, f"Неможливо видалити комірку «{location.cell_code}», оскільки в ній є деталі або резерви.")
             return redirect('inventory:location_detail', pk=location.pk)
 
         location.delete()

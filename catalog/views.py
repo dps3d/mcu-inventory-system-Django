@@ -109,10 +109,11 @@ def component_detail(request, pk):
     """
     Детальний перегляд компонента: характеристики, складські комірки та статус.
     """
-    component = get_object_or_404(
-        Components.objects.select_related('category'),
-        pk=pk
-    )
+    try:
+        component = Components.objects.select_related('category').get(pk=pk)
+    except Components.DoesNotExist:
+        messages.warning(request, f"Компонент №{pk} не знайдено в каталозі (можливо, його було видалено).")
+        return redirect('catalog:list')
 
     stocks = component.stocks.select_related('location').all()
     total_on_hand = sum(s.quantity_on_hand for s in stocks)
@@ -176,7 +177,11 @@ def component_edit(request, pk):
     """
     Редагування існуючого компонента (тільки для персоналу).
     """
-    component = get_object_or_404(Components, pk=pk)
+    try:
+        component = Components.objects.get(pk=pk)
+    except Components.DoesNotExist:
+        messages.warning(request, f"Компонент №{pk} не знайдено.")
+        return redirect('catalog:list')
 
     if request.method == 'POST':
         form = ComponentForm(request.POST, request.FILES, instance=component)
@@ -202,7 +207,11 @@ def component_delete(request, pk):
     """
     Видалення компонента (тільки для персоналу).
     """
-    component = get_object_or_404(Components, pk=pk)
+    try:
+        component = Components.objects.get(pk=pk)
+    except Components.DoesNotExist:
+        messages.warning(request, f"Компонент №{pk} не знайдено.")
+        return redirect('catalog:list')
 
     if request.method == 'POST':
         part_name = component.part_number
@@ -226,10 +235,12 @@ def pinout_view(request, pk):
     """
     Публічний інтерактивний візуалізатор розпіновки (Pinout Viewer).
     """
-    component = get_object_or_404(
-        Components.objects.select_related('category'),
-        pk=pk
-    )
+    try:
+        component = Components.objects.select_related('category').get(pk=pk)
+    except Components.DoesNotExist:
+        messages.warning(request, f"Компонент №{pk} не знайдено.")
+        return redirect('catalog:list')
+
     pinouts = component.pinouts.all().order_by('side', 'pin_number')
     left_pins = [p for p in pinouts if p.side == 'left']
     right_pins = [p for p in pinouts if p.side == 'right']

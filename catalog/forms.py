@@ -75,6 +75,28 @@ class ComponentForm(forms.ModelForm):
             'image_path': 'Зовнішнє посилання на фото (URL)',
         }
 
+    def clean_part_number(self):
+        val = self.cleaned_data.get('part_number', '').strip()
+        if not val:
+            raise forms.ValidationError("Вкажіть маркування (парт-номер).")
+        if len(val) > 100:
+            raise forms.ValidationError("Парт-номер не може перевищувати 100 символів.")
+        qs = Components.objects.filter(part_number__iexact=val)
+        if self.instance and self.instance.pk:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise forms.ValidationError(f"Компонент з парт-номером «{val}» вже існує в каталозі!")
+        return val
+
+    def clean_min_threshold(self):
+        val = self.cleaned_data.get('min_threshold')
+        if val is not None:
+            if val < 0:
+                raise forms.ValidationError("Мінімальний поріг не може бути від'ємним.")
+            if val > 100000:
+                raise forms.ValidationError("Мінімальний поріг не може перевищувати 100 000 шт.")
+        return val
+
     def clean_datasheet_url(self):
         url = self.cleaned_data.get('datasheet_url')
         if url:

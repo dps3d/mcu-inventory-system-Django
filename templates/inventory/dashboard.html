@@ -404,10 +404,10 @@
                         </td>
                         <td style="text-align: right;">
                             <div class="table-row-actions">
-                                <button type="button" class="btn-table-action btn-put" onclick="prefillQuickOp('{{ stock.component.pk }}', '{{ stock.location.pk|default:'' }}', 'purchase_in')" title="Покласти деталь у комірку">
+                                <button type="button" class="btn-table-action btn-put" onclick="prefillQuickOp('{{ stock.component.pk }}', '{{ stock.location.pk|default:'' }}', 'purchase_in', {{ stock.free_stock }}, {{ stock.quantity_on_hand }})" title="Покласти деталь у комірку">
                                     + Покласти
                                 </button>
-                                <button type="button" class="btn-table-action btn-take" onclick="prefillQuickOp('{{ stock.component.pk }}', '{{ stock.location.pk|default:'' }}', 'consumption_out')" title="Взяти деталь для роботи">
+                                <button type="button" class="btn-table-action btn-take" onclick="prefillQuickOp('{{ stock.component.pk }}', '{{ stock.location.pk|default:'' }}', 'consumption_out', {{ stock.free_stock }}, {{ stock.quantity_on_hand }})" title="Взяти деталь для роботи">
                                     - Взяти
                                 </button>
                             </div>
@@ -588,14 +588,41 @@
                     <label class="form-label" for="opLocationSelect">Комірка зберігання *</label>
                     {{ quick_form.location }}
                 </div>
-                <div class="form-row-2">
-                    <div class="form-group">
-                        <label class="form-label" for="opTypeSelect">Тип операції *</label>
-                        {{ quick_form.transaction_type }}
+                <div class="form-group">
+                    <label class="form-label" for="opTypeSelect">Тип операції *</label>
+                    {{ quick_form.transaction_type }}
+                </div>
+
+                <div id="opStockFeedback" class="op-stock-feedback op-feedback-info" style="display: none;"></div>
+
+                <!-- Quantity Interactive Slider & Stepper Component -->
+                <div class="form-group qty-control-group">
+                    <div class="qty-header">
+                        <label class="form-label" for="opQuantityInput">Кількість для операції (шт) *</label>
+                        <div class="qty-stepper-wrap">
+                            <button type="button" class="btn-qty-step" onclick="stepOpQty(-1)" title="Зменшити на 1">&minus;</button>
+                            <input type="number" name="quantity" id="opQuantityInput" class="form-input qty-number-input" value="1" min="1" max="10000" required oninput="syncQtyFromInput(this.value)">
+                            <button type="button" class="btn-qty-step" onclick="stepOpQty(1)" title="Збільшити на 1">&plus;</button>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label" for="opQuantityInput">Кількість (шт) *</label>
-                        {{ quick_form.quantity }}
+                    <div class="qty-slider-container">
+                        <input type="range" id="opQuantitySlider" class="qty-slider" min="1" max="100" value="1" step="1" oninput="syncQtyFromSlider(this.value)">
+                        <div class="qty-slider-ticks">
+                            <span>1 шт</span>
+                            <span>25 шт</span>
+                            <span>50 шт</span>
+                            <span>75 шт</span>
+                            <span>100+</span>
+                        </div>
+                    </div>
+                    <div class="qty-presets-bar">
+                        <span class="presets-label">Швидкий вибір:</span>
+                        <button type="button" class="qty-chip active" onclick="setOpQty(1)">1</button>
+                        <button type="button" class="qty-chip" onclick="setOpQty(5)">5</button>
+                        <button type="button" class="qty-chip" onclick="setOpQty(10)">10</button>
+                        <button type="button" class="qty-chip" onclick="setOpQty(25)">25</button>
+                        <button type="button" class="qty-chip" onclick="setOpQty(50)">50</button>
+                        <button type="button" class="qty-chip" onclick="setOpQty(100)">100</button>
                     </div>
                 </div>
                 <div class="form-group">
@@ -626,14 +653,37 @@
                     <input type="text" name="box_number" id="rowBoxInput" class="form-input" required placeholder="Наприклад: Касетниця SMD, Органайзер A">
                     <span class="field-hint">Якщо такого органайзера ще немає, він створиться автоматично</span>
                 </div>
-                <div class="form-row-2">
-                    <div class="form-group">
-                        <label class="form-label" for="rowShelfInput">Назва ряду / секції *</label>
-                        <input type="text" name="shelf_name" id="rowShelfInput" class="form-input" placeholder="Наприклад: Ряд 1, Ряд 2, Секція A">
-                    </div>
-                    <div class="form-group">
+                <div class="form-group">
+                    <label class="form-label" for="rowShelfInput">Назва ряду / секції *</label>
+                    <input type="text" name="shelf_name" id="rowShelfInput" class="form-input" placeholder="Наприклад: Ряд 1, Ряд 2, Секція A">
+                </div>
+                <div class="form-group qty-control-group">
+                    <div class="qty-header">
                         <label class="form-label" for="rowCountInput">Кількість комірок у ряду *</label>
-                        <input type="number" name="cell_count" id="rowCountInput" class="form-input" value="8" min="1" max="50">
+                        <div class="qty-stepper-wrap">
+                            <button type="button" class="btn-qty-step" onclick="stepRowCells(-1)" title="Зменшити на 1">&minus;</button>
+                            <input type="number" name="cell_count" id="rowCountInput" class="form-input qty-number-input" value="8" min="1" max="50" required oninput="syncRowCellsFromInput(this.value)">
+                            <button type="button" class="btn-qty-step" onclick="stepRowCells(1)" title="Збільшити на 1">&plus;</button>
+                        </div>
+                    </div>
+                    <div class="qty-slider-container">
+                        <input type="range" id="rowCellsSlider" class="qty-slider" min="1" max="30" value="8" step="1" oninput="syncRowCellsFromSlider(this.value)">
+                        <div class="qty-slider-ticks">
+                            <span>1</span>
+                            <span>8</span>
+                            <span>16</span>
+                            <span>24</span>
+                            <span>30</span>
+                        </div>
+                    </div>
+                    <div class="qty-presets-bar row-presets">
+                        <span class="presets-label">Типова сітка:</span>
+                        <button type="button" class="qty-chip" onclick="setRowCells(4)">4</button>
+                        <button type="button" class="qty-chip" onclick="setRowCells(6)">6</button>
+                        <button type="button" class="qty-chip active" onclick="setRowCells(8)">8</button>
+                        <button type="button" class="qty-chip" onclick="setRowCells(10)">10</button>
+                        <button type="button" class="qty-chip" onclick="setRowCells(12)">12</button>
+                        <button type="button" class="qty-chip" onclick="setRowCells(16)">16</button>
                     </div>
                 </div>
                 <div class="form-group">
@@ -735,12 +785,175 @@ document.addEventListener('keydown', function(e) {
         document.querySelectorAll('.modal-backdrop').forEach(function(m) {
             m.style.display = 'none';
         });
+});
+
+// Quantity Slider Sync
+function syncQtyFromSlider(val) {
+    val = parseInt(val) || 1;
+    document.getElementById('opQuantityInput').value = val;
+    updateQtyChips(val);
+}
+
+function syncQtyFromInput(val) {
+    val = parseInt(val) || 1;
+    val = Math.max(1, val);
+    const slider = document.getElementById('opQuantitySlider');
+    if (slider) {
+        if (val > parseInt(slider.max)) {
+            slider.max = Math.max(val, 250);
+        }
+        slider.value = val;
+    }
+    updateQtyChips(val);
+}
+
+function setOpQty(val) {
+    document.getElementById('opQuantityInput').value = val;
+    const slider = document.getElementById('opQuantitySlider');
+    if (slider) {
+        if (val > parseInt(slider.max)) {
+            slider.max = Math.max(val, 250);
+        }
+        slider.value = val;
+    }
+    updateQtyChips(val);
+}
+
+function stepOpQty(delta) {
+    const input = document.getElementById('opQuantityInput');
+    let current = parseInt(input.value) || 1;
+    let next = Math.max(1, current + delta);
+    setOpQty(next);
+}
+
+function updateQtyChips(val) {
+    document.querySelectorAll('.qty-presets-bar:not(.row-presets) .qty-chip').forEach(function(chip) {
+        if (parseInt(chip.textContent.trim()) === val) {
+            chip.classList.add('active');
+        } else {
+            chip.classList.remove('active');
+        }
+    });
+}
+
+// Row Cells Slider Sync
+function syncRowCellsFromSlider(val) {
+    val = parseInt(val) || 8;
+    document.getElementById('rowCountInput').value = val;
+    updateRowChips(val);
+}
+
+function syncRowCellsFromInput(val) {
+    val = parseInt(val) || 1;
+    val = Math.max(1, Math.min(50, val));
+    const slider = document.getElementById('rowCellsSlider');
+    if (slider) {
+        slider.value = Math.min(val, parseInt(slider.max));
+    }
+    updateRowChips(val);
+}
+
+function setRowCells(val) {
+    document.getElementById('rowCountInput').value = val;
+    const slider = document.getElementById('rowCellsSlider');
+    if (slider) {
+        slider.value = val;
+    }
+    updateRowChips(val);
+}
+
+function stepRowCells(delta) {
+    const input = document.getElementById('rowCountInput');
+    let current = parseInt(input.value) || 8;
+    let next = Math.max(1, Math.min(50, current + delta));
+    setRowCells(next);
+}
+
+function updateRowChips(val) {
+    document.querySelectorAll('.row-presets .qty-chip').forEach(function(chip) {
+        if (parseInt(chip.textContent.trim()) === val) {
+            chip.classList.add('active');
+        } else {
+            chip.classList.remove('active');
+        }
+    });
+}
+
+let currentTargetFreeStock = null;
+let currentTargetOnHand = null;
+
+function updateQuickOpFeedback() {
+    const feedback = document.getElementById('opStockFeedback');
+    const opType = document.getElementById('opTypeSelect') ? document.getElementById('opTypeSelect').value : 'purchase_in';
+    const qtyInput = document.getElementById('opQuantityInput');
+    const slider = document.getElementById('opQuantitySlider');
+    const qty = parseInt(qtyInput.value) || 0;
+
+    if (opType === 'adjustment') {
+        qtyInput.min = '0';
+        if (slider) slider.min = '0';
+    } else {
+        qtyInput.min = '1';
+        if (slider) slider.min = '1';
+        if (qty === 0) {
+            qtyInput.value = 1;
+            if (slider) slider.value = 1;
+        }
+    }
+
+    if (!feedback) return;
+
+    if (currentTargetFreeStock !== null && currentTargetOnHand !== null) {
+        if (opType === 'consumption_out') {
+            if (currentTargetFreeStock === 0) {
+                feedback.className = 'op-stock-feedback op-feedback-danger';
+                feedback.innerHTML = '⚠️ <strong>Увага:</strong> Вільний залишок 0 шт! Списання неможливе.';
+                feedback.style.display = 'flex';
+            } else if (qty > currentTargetFreeStock) {
+                feedback.className = 'op-stock-feedback op-feedback-danger';
+                feedback.innerHTML = `⚠️ Запитано <strong>${qty} шт</strong>, але вільно лише <strong>${currentTargetFreeStock} шт</strong> (всього на складі: ${currentTargetOnHand} шт)!`;
+                feedback.style.display = 'flex';
+            } else {
+                feedback.className = 'op-stock-feedback op-feedback-info';
+                feedback.innerHTML = `📍 Доступно для взяття: <strong>${currentTargetFreeStock} шт</strong> (всього у комірці: ${currentTargetOnHand} шт)`;
+                feedback.style.display = 'flex';
+            }
+        } else if (opType === 'purchase_in' || opType === 'return') {
+            feedback.className = 'op-stock-feedback op-feedback-info';
+            feedback.innerHTML = `📦 Поточний залишок у комірці: <strong>${currentTargetOnHand} шт</strong>. Після операції стане: <strong>${currentTargetOnHand + qty} шт</strong>.`;
+            feedback.style.display = 'flex';
+        } else if (opType === 'adjustment') {
+            const reserved = currentTargetOnHand - currentTargetFreeStock;
+            if (qty < reserved) {
+                feedback.className = 'op-stock-feedback op-feedback-danger';
+                feedback.innerHTML = `⚠️ Зарезервовано <strong>${reserved} шт</strong>. Залишок не може бути меншим за ${reserved} шт.`;
+                feedback.style.display = 'flex';
+            } else {
+                feedback.className = 'op-stock-feedback op-feedback-warning';
+                feedback.innerHTML = `⚙️ Встановлення нового фактичного залишку: <strong>${qty} шт</strong> (було: ${currentTargetOnHand} шт, зарезервовано: ${reserved} шт).`;
+                feedback.style.display = 'flex';
+            }
+        }
+    } else {
+        feedback.style.display = 'none';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const opTypeSelect = document.getElementById('opTypeSelect');
+    if (opTypeSelect) {
+        opTypeSelect.addEventListener('change', updateQuickOpFeedback);
+    }
+    const opQtyInput = document.getElementById('opQuantityInput');
+    if (opQtyInput) {
+        opQtyInput.addEventListener('input', updateQuickOpFeedback);
     }
 });
 
+function prefillQuickOp(componentId, locationId, opType, freeStock, onHand) {
+    currentTargetFreeStock = (freeStock !== undefined && freeStock !== null) ? parseInt(freeStock) : null;
+    currentTargetOnHand = (onHand !== undefined && onHand !== null) ? parseInt(onHand) : null;
 
-
-function prefillQuickOp(componentId, locationId, opType) {
     openQuickOpModal();
     if (componentId) {
         document.getElementById('opComponentSelect').value = componentId;
@@ -751,6 +964,14 @@ function prefillQuickOp(componentId, locationId, opType) {
     if (opType) {
         document.getElementById('opTypeSelect').value = opType;
     }
+
+    // Set slider max if consuming
+    const slider = document.getElementById('opQuantitySlider');
+    if (slider && opType === 'consumption_out' && currentTargetFreeStock !== null && currentTargetFreeStock > 0) {
+        slider.max = Math.max(currentTargetFreeStock, 50);
+    }
+
+    updateQuickOpFeedback();
 }
 </script>
 {% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Сторінку не знайдено (404) &bull; MCU Inventory System{% endblock %}
+
+{% block content %}
+<div class="dashboard-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 55vh; text-align: center; padding: 3rem 1.5rem;">
+    <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 3rem 2.5rem; max-width: 560px; width: 100%; box-shadow: var(--shadow-md);">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(220, 180, 70, 0.12); color: #dec262; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 28px; font-weight: 800; font-family: var(--font-mono);">
+            404
+        </div>
+        <h1 style="font-size: 22px; font-weight: 700; margin-bottom: 0.75rem; color: var(--text-primary);">
+            Сторінку або комірку не знайдено
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin-bottom: 2rem;">
+            Запитуваної комірки, деталі або сторінки не існує в системі. Можливо, її було видалено, реорганізовано або введено застаріле посилання.
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a href="{% url 'inventory:dashboard' %}" class="btn btn-primary" style="padding: 0.65rem 1.25rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>Складські комірки</span>
+            </a>
+            <a href="{% url 'home' %}" class="btn btn-secondary" style="padding: 0.65rem 1.25rem;">
+                <span>Головна панель</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
