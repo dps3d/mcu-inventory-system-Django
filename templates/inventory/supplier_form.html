@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} &bull; MCU Inventory System{% endblock %}
+
+{% block content %}
+<div class="form-page-container">
+    <div class="detail-header-nav">
+        <nav class="detail-breadcrumbs">
+            <a href="{% url 'inventory:dashboard' %}">Складський облік</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="{% url 'inventory:suppliers_list' %}">Постачальники</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">{{ title }}</span>
+        </nav>
+        <div class="detail-header-actions">
+            <a href="{% url 'inventory:suppliers_list' %}" class="btn btn-secondary">Скасувати</a>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <h2 class="form-title">{{ title }}</h2>
+        <p class="catalog-subtitle" style="margin-bottom: 1.5rem;">Введіть контактні дані постачальника та посилання</p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label class="form-label" for="id_name">Назва постачальника *</label>
+                {{ form.name }}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="id_url">Вебсайт / Інтернет-магазин</label>
+                {{ form.url }}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="id_contact_notes">Контакти / Нотатки</label>
+                {{ form.contact_notes }}
+            </div>
+
+            <div class="form-actions" style="margin-top: 2rem;">
+                <button type="submit" class="btn btn-primary">Зберегти постачальника</button>
+                <a href="{% url 'inventory:suppliers_list' %}" class="btn btn-secondary">Скасувати</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

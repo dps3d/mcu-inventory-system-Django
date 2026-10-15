@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} &bull; MCU Inventory System{% endblock %}
+
+{% block content %}
+<div class="form-page-container">
+    <div class="detail-header-nav">
+        <nav class="detail-breadcrumbs">
+            <a href="{% url 'inventory:dashboard' %}">Складський облік</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">{{ title }}</span>
+        </nav>
+        <div class="detail-header-actions">
+            <a href="{% url 'inventory:dashboard' %}" class="btn btn-secondary">Скасувати</a>
+        </div>
+    </div>
+
+    <div class="form-card">
+        <h2 class="form-title">{{ title }}</h2>
+        <p class="catalog-subtitle" style="margin-bottom: 1.5rem;">Вкажіть назву органайзера, секцію та унікальний код комірки</p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label class="form-label" for="id_box_number">Органайзер / Коробка *</label>
+                {{ form.box_number }}
+                <span class="field-hint">Наприклад: Органайзер A, Шафа SMD, Бокс №1</span>
+            </div>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label class="form-label" for="id_shelf">Полиця / Секція</label>
+                    {{ form.shelf }}
+                    <span class="field-hint">Опціонально: Полиця 1, Верхній ярус...</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="id_cell_code">Код комірки *</label>
+                    {{ form.cell_code }}
+                    <span class="field-hint">Код ящика: A1, B4, 05...</span>
+                </div>
+            </div>
+
+            <div class="form-actions" style="margin-top: 2rem;">
+                <button type="submit" class="btn btn-primary">Зберегти комірку</button>
+                <a href="{% url 'inventory:dashboard' %}" class="btn btn-secondary">Скасувати</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Постачальники &bull; MCU Inventory System{% endblock %}
+
+{% block content %}
+<div class="suppliers-page">
+    <div class="detail-header-nav">
+        <div>
+            <h1 class="catalog-title">Постачальники компонентів</h1>
+            <p class="catalog-subtitle">Реєстр компаній та дистриб'юторів електронних компонентів лабораторії</p>
+        </div>
+        <div class="detail-header-actions">
+            {% if user.is_staff %}
+            <a href="{% url 'inventory:supplier_create' %}" class="btn btn-primary">
+                <span>+ Додати постачальника</span>
+            </a>
+            {% endif %}
+            <a href="{% url 'inventory:dashboard' %}" class="btn btn-secondary">
+                <span>&larr; До складського обліку</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="suppliers-grid">
+        {% for s in suppliers %}
+        <div class="supplier-card">
+            <div class="supplier-card-header">
+                <span class="supplier-icon">🏢</span>
+                <div class="supplier-title-wrap">
+                    <h3 class="supplier-name">{{ s.name }}</h3>
+                    {% if s.url %}
+                    <a href="{{ s.url }}" target="_blank" rel="noopener noreferrer" class="supplier-link">
+                        {{ s.url }} &nearr;
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if s.contact_notes %}
+            <div class="supplier-notes">
+                <p>{{ s.contact_notes|linebreaksbr }}</p>
+            </div>
+            {% endif %}
+
+            <div class="supplier-footer">
+                <span class="supplier-orders-count">Замовлень: <strong>{{ s.orders_count }}</strong></span>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state-box">
+            <p class="empty-desc">Постачальників ще не додано.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

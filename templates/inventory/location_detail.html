@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+
+{% block title %}Комірка {{ location }} &bull; MCU Inventory System{% endblock %}
+
+{% block content %}
+<div class="location-detail-page">
+    <!-- Breadcrumbs & Actions -->
+    <div class="detail-header-nav">
+        <nav class="detail-breadcrumbs">
+            <a href="{% url 'inventory:dashboard' %}">Складський облік</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="{% url 'inventory:dashboard' %}?tab=locations&box={{ location.box_number|urlencode }}">{{ location.box_number }}</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">Комірка [{{ location.cell_code }}]</span>
+        </nav>
+        <div class="detail-header-actions">
+            <button type="button" class="btn btn-primary" onclick="openQuickOpModal()">
+                <span>+ Операція в цій комірці</span>
+            </button>
+            {% if user.is_staff %}
+            <a href="{% url 'inventory:location_edit' location.pk %}" class="btn btn-secondary">
+                <span>Редагувати</span>
+            </a>
+            {% endif %}
+            <a href="{% url 'inventory:dashboard' %}?tab=locations&box={{ location.box_number|urlencode }}" class="btn btn-secondary">
+                <span>&larr; До органайзера</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Location Overview Banner -->
+    <div class="detail-banner">
+        <div class="detail-banner-info">
+            <div class="banner-badges">
+                <span class="organizer-badge">Органайзер: {{ location.box_number }}</span>
+                {% if location.shelf %}
+                <span class="shelf-badge">Полиця: {{ location.shelf }}</span>
+                {% endif %}
+                <span class="cat-pill {{ pill.css_class }}">{{ pill.label }}</span>
+            </div>
+            <h1 class="detail-title">Комірка: {{ location.cell_code }}</h1>
+            <p class="catalog-subtitle">Фізичне розташування деталей та актуальний лабораторний фонд</p>
+        </div>
+
+        <div class="location-stat-boxes">
+            <div class="loc-stat-box">
+                <span class="loc-stat-num">{{ total_qty }}</span>
+                <span class="loc-stat-lbl">Фактично (шт)</span>
+            </div>
+            <div class="loc-stat-box">
+                <span class="loc-stat-num text-amber">{{ total_res }}</span>
+                <span class="loc-stat-lbl">Зарезервовано (шт)</span>
+            </div>
+            <div class="loc-stat-box">
+                <span class="loc-stat-num text-emerald">{{ total_free }}</span>
+                <span class="loc-stat-lbl">Вільно (шт)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Components in This Cell -->
+    <div class="detail-card" style="margin-bottom: 2rem;">
+        <h3 class="card-section-title">Компоненти в цій комірці ({{ stocks|length }})</h3>
+        {% if stocks %}
+        <div class="table-responsive-wrap">
+            <table class="inventory-table">
+                <thead>
+                    <tr>
+                        <th>Деталь / Парт-номер</th>
+                        <th>Категорія</th>
+                        <th>Корпус</th>
+                        <th style="text-align: right;">Фактично</th>
+                        <th style="text-align: right;">Зарезервовано</th>
+                        <th style="text-align: right;">Вільний залишок</th>
+                        <th style="text-align: right;">Швидкі дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in stocks %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'catalog:detail' s.component.component_id %}" class="table-part-link">
+                                {{ s.component.part_number }}
+                            </a>
+                        </td>
+                        <td>
+                            <span class="category-badge">{{ s.component.category.name }}</span>
+                        </td>
+                        <td>
+                            <span class="package-badge-sm">{{ s.component.package_type|default:"—" }}</span>
+                        </td>
+                        <td style="text-align: right; font-weight: 600;">
+                            {{ s.quantity_on_hand }} шт
+                        </td>
+                        <td style="text-align: right; color: var(--accent-bone);">
+                            {{ s.quantity_reserved }} шт
+                        </td>
+                        <td style="text-align: right; font-weight: 700;">
+                            {{ s.free_stock }} шт
+                        </td>
+                        <td style="text-align: right;">
+                            <div class="table-row-actions">
+                                <button type="button" class="btn-table-action btn-put" onclick="prefillQuickOp('{{ s.component.pk }}', '{{ location.pk }}', 'purchase_in')">
+                                    + Покласти
+                                </button>
+                                <button type="button" class="btn-table-action btn-take" onclick="prefillQuickOp('{{ s.component.pk }}', '{{ location.pk }}', 'consumption_out')">
+                                    - Взяти
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state-box" style="padding: 2.5rem 1rem;">
+            <p class="empty-desc">Ця комірка зараз порожня. Ви можете покласти сюди деталі через швидку операцію.</p>
+            <button type="button" class="btn btn-primary" onclick="openQuickOpModal()">
+                <span>+ Покласти деталь у комірку</span>
+            </button>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Cell History -->
+    <div class="detail-card">
+        <h3 class="card-section-title">Останні операції в цій комірці</h3>
+        {% if transactions_list %}
+        <div class="table-responsive-wrap">
+            <table class="inventory-table">
+                <thead>
+                    <tr>
+                        <th style="width: 160px;">Дата</th>
+                        <th>Операція</th>
+                        <th>Деталь</th>
+                        <th style="text-align: right;">Зміна</th>
+                        <th>Примітка</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tr in transactions_list %}
+                    <tr>
+                        <td class="text-muted font-mono" style="font-size: 12px;">{{ tr.created_at|date:"d.m.Y H:i" }}</td>
+                        <td><span class="tr-badge tr-{{ tr.transaction_type }}">{{ tr.get_transaction_type_display }}</span></td>
+                        <td>{{ tr.stock.component.part_number }}</td>
+                        <td style="text-align: right; font-family: var(--font-mono); font-weight: 700;">
+                            {% if tr.quantity_change > 0 %}
+                            <span class="delta-plus">+{{ tr.quantity_change }} шт</span>
+                            {% elif tr.quantity_change < 0 %}
+                            <span class="delta-minus">{{ tr.quantity_change }} шт</span>
+                            {% else %}
+                            <span class="text-muted">0 шт</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-muted text-sm">{{ tr.notes|default:"—" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted text-sm" style="padding: 1rem 0;">Рухів по цій комірці ще не зафіксовано.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Quick Stock Operation Modal Dialog -->
+<div id="quickOpModal" class="modal-backdrop" style="display: none;" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">Швидка операція: {{ location }}</h3>
+            <button type="button" class="modal-close-btn" onclick="closeQuickOpModal()">&times;</button>
+        </div>
+        <form method="post" action="{% url 'inventory:quick_operation' %}">
+            {% csrf_token %}
+            <div class="modal-body">
+                <input type="hidden" name="location" id="opLocationSelect" value="{{ location.pk }}">
+                <div class="form-group">
+                    <label class="form-label" for="opComponentSelect">Компонент *</label>
+                    {{ quick_form.component }}
+                </div>
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label" for="opTypeSelect">Тип операції *</label>
+                        {{ quick_form.transaction_type }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="opQuantityInput">Кількість (шт) *</label>
+                        {{ quick_form.quantity }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="id_notes">Примітка / Ціль операції</label>
+                    {{ quick_form.notes }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeQuickOpModal()">Скасувати</button>
+                <button type="submit" class="btn btn-primary">Виконати операцію</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openQuickOpModal() {
+    document.getElementById('quickOpModal').style.display = 'flex';
+}
+function closeQuickOpModal() {
+    document.getElementById('quickOpModal').style.display = 'none';
+}
+function closeModalOnBackdrop(event) {
+    if (event.target === document.getElementById('quickOpModal')) {
+        closeQuickOpModal();
+    }
+}
+function prefillQuickOp(componentId, locationId, opType) {
+    openQuickOpModal();
+    if (componentId) document.getElementById('opComponentSelect').value = componentId;
+    if (opType) document.getElementById('opTypeSelect').value = opType;
+}
+</script>
+{% endblock %}

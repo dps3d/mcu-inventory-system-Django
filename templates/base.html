@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}MCU Inventory System{% endblock %}</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=20261014.2">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=20261015.1">
     {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -47,7 +47,7 @@
                     </svg>
                     <span>Каталог компонентів</span>
                 </a>
-                <a href="#inventory" class="nav-item">
+                <a href="{% url 'inventory:dashboard' %}" class="nav-item {% if request.resolver_match.app_name == 'inventory' %}active{% endif %}">
                     <svg width="17" height="17" class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
                     </svg>

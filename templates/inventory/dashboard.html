@@ -1,0 +1,557 @@
+{% extends 'base.html' %}
+
+{% block title %}Складський облік &bull; MCU Inventory System{% endblock %}
+
+{% block content %}
+<div class="inventory-page">
+    <!-- Header Hero Banner -->
+    <div class="detail-header-nav">
+        <div>
+            <h1 class="catalog-title">Складський облік та комірки</h1>
+            <p class="catalog-subtitle">Органайзери з колірними пігулками категорій, швидкі операції «Взяти / Покласти» та контроль дефіциту</p>
+        </div>
+        <div class="detail-header-actions">
+            <button type="button" class="btn btn-primary" onclick="openQuickOpModal()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Швидка операція (Взяти / Покласти)</span>
+            </button>
+            {% if user.is_staff %}
+            <a href="{% url 'inventory:location_create' %}" class="btn btn-secondary">
+                <span>+ Нова комірка</span>
+            </a>
+            {% endif %}
+            <a href="{% url 'inventory:suppliers_list' %}" class="btn btn-secondary">
+                <span>Постачальники</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Inventory KPI Stats Grid -->
+    <div class="kpi-stats-grid">
+        <div class="kpi-stat-card">
+            <div class="kpi-stat-icon icon-emerald">
+                <svg width="22" height="22" class="kpi-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                </svg>
+            </div>
+            <div class="kpi-stat-info">
+                <span class="kpi-stat-val">{{ total_on_hand }} <small style="font-size: 13px; font-weight: normal; color: var(--text-muted);">шт</small></span>
+                <span class="kpi-stat-lbl">Фактичний залишок у фонді</span>
+            </div>
+        </div>
+
+        <div class="kpi-stat-card">
+            <div class="kpi-stat-icon icon-blue">
+                <svg width="22" height="22" class="kpi-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <div class="kpi-stat-info">
+                <span class="kpi-stat-val">{{ total_free }} <small style="font-size: 13px; font-weight: normal; color: var(--text-muted);">шт</small></span>
+                <span class="kpi-stat-lbl">Вільний залишок для видачі</span>
+            </div>
+        </div>
+
+        <div class="kpi-stat-card">
+            <div class="kpi-stat-icon icon-amber">
+                <svg width="22" height="22" class="kpi-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+            </div>
+            <div class="kpi-stat-info">
+                <span class="kpi-stat-val">{{ total_reserved }} <small style="font-size: 13px; font-weight: normal; color: var(--text-muted);">шт</small></span>
+                <span class="kpi-stat-lbl">Зарезервовано інженерами</span>
+            </div>
+        </div>
+
+        <a href="{% url 'inventory:dashboard' %}?tab=stocks&deficit=1" class="kpi-stat-card {% if deficit_count > 0 %}stat-alert{% endif %}">
+            <div class="kpi-stat-icon {% if deficit_count > 0 %}icon-danger{% else %}icon-purple{% endif %}">
+                <svg width="22" height="22" class="kpi-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+            </div>
+            <div class="kpi-stat-info">
+                <span class="kpi-stat-val">{{ deficit_count }}</span>
+                <span class="kpi-stat-lbl">Позицій у дефіциті</span>
+            </div>
+        </a>
+    </div>
+
+    <!-- Inventory Navigation Tabs -->
+    <div class="inventory-tabs-bar">
+        <a href="{% url 'inventory:dashboard' %}?tab=locations" class="inv-tab-btn {% if active_tab == 'locations' %}active{% endif %}">
+            <svg width="16" height="16" class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span>Органайзери та комірки</span>
+        </a>
+        <a href="{% url 'inventory:dashboard' %}?tab=stocks" class="inv-tab-btn {% if active_tab == 'stocks' %}active{% endif %}">
+            <svg width="16" height="16" class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+            <span>Зведений облік залишків</span>
+        </a>
+        <a href="{% url 'inventory:dashboard' %}?tab=history" class="inv-tab-btn {% if active_tab == 'history' %}active{% endif %}">
+            <svg width="16" height="16" class="tab-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>Журнал операцій</span>
+        </a>
+    </div>
+
+    <!-- TAB 1: Visual Organizers & Cells Grid -->
+    {% if active_tab == 'locations' %}
+    <div class="tab-pane active">
+        <!-- Organizers Selector Pills -->
+        <div class="organizers-nav-card">
+            <div class="organizers-nav-header">
+                <span class="organizers-nav-title">Оберіть органайзер або бокс:</span>
+                {% if selected_box %}
+                <span class="organizers-summary-tag">
+                    {{ selected_box }}: {{ total_in_box }} комірок ({{ occupied_in_box }} зайнятих, {{ empty_in_box }} вільних)
+                </span>
+                {% endif %}
+            </div>
+            <div class="organizers-chips-row">
+                {% for box in organizers_list %}
+                <a href="{% url 'inventory:dashboard' %}?tab=locations&box={{ box|urlencode }}" class="organizer-chip {% if box == selected_box %}active{% endif %}">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="organizer-chip-svg">
+                        <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="10" y1="8" x2="14" y2="8"></line>
+                        <line x1="10" y1="16" x2="14" y2="16"></line>
+                    </svg>
+                    <span class="organizer-name">{{ box }}</span>
+                </a>
+                {% empty %}
+                <p class="text-muted text-sm">Комірок зберігання ще не створено.</p>
+                {% endfor %}
+            </div>
+
+            <!-- Optional Shelves Sub-filter -->
+            {% if shelves_list %}
+            <div class="shelves-sub-filter">
+                <span class="sub-filter-label">Полиця / Секція:</span>
+                <a href="{% url 'inventory:dashboard' %}?tab=locations&box={{ selected_box|urlencode }}" class="shelf-pill {% if not selected_shelf %}active{% endif %}">Всі полиці</a>
+                {% for sh in shelves_list %}
+                <a href="{% url 'inventory:dashboard' %}?tab=locations&box={{ selected_box|urlencode }}&shelf={{ sh|urlencode }}" class="shelf-pill {% if sh == selected_shelf %}active{% endif %}">
+                    {{ sh }}
+                </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Legend for Visual Category Pills -->
+        <div class="pills-legend-bar">
+            <span class="legend-heading">Колірне маркування вмісту комірок:</span>
+            <div class="legend-pills-list">
+                <div class="legend-pill-item">
+                    <span class="cat-pill pill-single">Категорія</span>
+                    <span class="legend-desc">1 категорія деталей</span>
+                </div>
+                <div class="legend-pill-item">
+                    <span class="cat-pill pill-dual">Кат. A + Кат. B</span>
+                    <span class="legend-desc">2 категорії (змішаний відтінок)</span>
+                </div>
+                <div class="legend-pill-item">
+                    <span class="cat-pill pill-mixed">Різне</span>
+                    <span class="legend-desc">3+ категорій деталей</span>
+                </div>
+                <div class="legend-pill-item">
+                    <span class="cat-pill pill-empty">Порожня</span>
+                    <span class="legend-desc">Вільна комірка для розміщення</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visual Cells Matrix -->
+        {% if locations_data %}
+        <div class="cells-grid">
+            {% for item in locations_data %}
+            <div class="cell-card {% if item.active_stocks %}cell-occupied{% else %}cell-vacant{% endif %}" onclick="window.location='{% url 'inventory:location_detail' item.location.pk %}'">
+                <div class="cell-top">
+                    <span class="cell-code-badge">{{ item.location.cell_code }}</span>
+                    {% if item.location.shelf %}
+                    <span class="cell-shelf-tag">{{ item.location.shelf }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="cell-middle">
+                    <span class="cat-pill {{ item.pill.css_class }}" title="{{ item.pill.label }}">
+                        {{ item.pill.label|truncatechars:24 }}
+                    </span>
+                </div>
+
+                <div class="cell-bottom">
+                    {% if item.active_stocks %}
+                    <div class="cell-stock-count">
+                        <strong class="stock-qty-num">{{ item.total_qty }}</strong>
+                        <span class="stock-qty-unit">шт ({{ item.active_stocks|length }} поз.)</span>
+                    </div>
+                    {% else %}
+                    <span class="cell-empty-hint">Вільна</span>
+                    {% endif %}
+                    <span class="cell-arrow-icon">&rarr;</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state-box">
+            <p class="empty-desc">У цьому органайзері поки немає створених комірок.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- TAB 2: Complete Stock Inventory List -->
+    {% elif active_tab == 'stocks' %}
+    <div class="tab-pane active">
+        <!-- Filter Toolbar -->
+        <form method="get" class="catalog-filter-bar">
+            <input type="hidden" name="tab" value="stocks">
+            <div class="filter-row">
+                <div class="filter-field search-field">
+                    <svg width="16" height="16" class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" name="q" value="{{ query }}" placeholder="Пошук деталі, опису або комірки..." class="filter-input">
+                    {% if query %}
+                    <a href="{% url 'inventory:dashboard' %}?tab=stocks" class="clear-search-btn" title="Очистити">&times;</a>
+                    {% endif %}
+                </div>
+
+                <div class="filter-field">
+                    <select name="box" class="filter-select" onchange="this.form.submit()">
+                        <option value="">Усі органайзери</option>
+                        {% for b in organizers_list %}
+                        <option value="{{ b }}" {% if b == selected_box %}selected{% endif %}>{{ b }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="filter-field">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="deficit" value="1" {% if is_deficit_only %}checked{% endif %} onchange="this.form.submit()">
+                        <span>Тільки в дефіциті</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-secondary btn-sm">Застосувати</button>
+            </div>
+        </form>
+
+        <!-- Stocks Table -->
+        {% if page_obj %}
+        <div class="table-responsive-wrap">
+            <table class="inventory-table">
+                <thead>
+                    <tr>
+                        <th>Деталь / Парт-номер</th>
+                        <th>Категорія</th>
+                        <th>Комірка зберігання</th>
+                        <th style="text-align: right;">Фактичний залишок</th>
+                        <th style="text-align: right;">Зарезервовано</th>
+                        <th style="text-align: right;">Вільний залишок</th>
+                        <th style="text-align: center;">Статус</th>
+                        <th style="text-align: right;">Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock in page_obj %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'catalog:detail' stock.component.component_id %}" class="table-part-link">
+                                {{ stock.component.part_number }}
+                            </a>
+                            {% if stock.component.package_type %}
+                            <span class="package-badge-sm">{{ stock.component.package_type }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="category-badge">{{ stock.component.category.name }}</span>
+                        </td>
+                        <td>
+                            {% if stock.location %}
+                            <a href="{% url 'inventory:location_detail' stock.location.pk %}" class="table-loc-pill">
+                                📍 {{ stock.location.box_number }} [{{ stock.location.cell_code }}]
+                            </a>
+                            {% else %}
+                            <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: right; font-weight: 600;">
+                            {{ stock.quantity_on_hand }} шт
+                        </td>
+                        <td style="text-align: right; color: var(--accent-bone);">
+                            {{ stock.quantity_reserved }} шт
+                        </td>
+                        <td style="text-align: right; font-weight: 700;">
+                            {{ stock.free_stock }} шт
+                        </td>
+                        <td style="text-align: center;">
+                            {% if stock.free_stock == 0 %}
+                            <span class="stock-pill stock-zero">Вичерпано</span>
+                            {% elif stock.free_stock <= stock.component.min_threshold %}
+                            <span class="stock-pill stock-low">Дефіцит (&le; {{ stock.component.min_threshold }})</span>
+                            {% else %}
+                            <span class="stock-pill stock-ok">В нормі</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: right;">
+                            <div class="table-row-actions">
+                                <button type="button" class="btn-table-action btn-put" onclick="prefillQuickOp('{{ stock.component.pk }}', '{{ stock.location.pk|default:'' }}', 'purchase_in')" title="Покласти деталь у комірку">
+                                    + Покласти
+                                </button>
+                                <button type="button" class="btn-table-action btn-take" onclick="prefillQuickOp('{{ stock.component.pk }}', '{{ stock.location.pk|default:'' }}', 'consumption_out')" title="Взяти деталь для роботи">
+                                    - Взяти
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 3rem 1rem;" class="text-muted">
+                            Залишки за вказаними фільтрами не знайдено.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="pagination-bar">
+            {% if page_obj.has_previous %}
+            <a href="?tab=stocks&page={{ page_obj.previous_page_number }}&q={{ query }}&box={{ selected_box }}&deficit={{ is_deficit_only|yesno:'1,' }}" class="pagination-btn">
+                &larr; Попередня
+            </a>
+            {% else %}
+            <span class="pagination-btn disabled">&larr; Попередня</span>
+            {% endif %}
+
+            <div class="pagination-pages">
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="page-number active">{{ num }}</span>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a href="?tab=stocks&page={{ num }}&q={{ query }}&box={{ selected_box }}&deficit={{ is_deficit_only|yesno:'1,' }}" class="page-number">
+                            {{ num }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {% if page_obj.has_next %}
+            <a href="?tab=stocks&page={{ page_obj.next_page_number }}&q={{ query }}&box={{ selected_box }}&deficit={{ is_deficit_only|yesno:'1,' }}" class="pagination-btn">
+                Наступна &rarr;
+            </a>
+            {% else %}
+            <span class="pagination-btn disabled">Наступна &rarr;</span>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+
+    <!-- TAB 3: Stock Movement Log -->
+    {% elif active_tab == 'history' %}
+    <div class="tab-pane active">
+        <!-- Operations Filter -->
+        <div class="history-filter-bar">
+            <span class="filter-label">Фільтр операцій:</span>
+            <a href="{% url 'inventory:dashboard' %}?tab=history" class="history-pill {% if not op_filter %}active{% endif %}">Всі рухи</a>
+            {% for code, label in transaction_types %}
+            <a href="{% url 'inventory:dashboard' %}?tab=history&op_type={{ code }}" class="history-pill {% if op_filter == code %}active{% endif %}">
+                {{ label }}
+            </a>
+            {% endfor %}
+        </div>
+
+        <div class="table-responsive-wrap">
+            <table class="inventory-table">
+                <thead>
+                    <tr>
+                        <th style="width: 160px;">Дата та час</th>
+                        <th>Тип операції</th>
+                        <th>Деталь</th>
+                        <th>Комірка</th>
+                        <th style="text-align: right;">Зміна</th>
+                        <th>Примітка</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tr in page_obj %}
+                    <tr>
+                        <td class="text-muted font-mono" style="font-size: 12px;">
+                            {{ tr.created_at|date:"d.m.Y H:i" }}
+                        </td>
+                        <td>
+                            <span class="tr-badge tr-{{ tr.transaction_type }}">
+                                {{ tr.get_transaction_type_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{% url 'catalog:detail' tr.stock.component.component_id %}" class="table-part-link">
+                                {{ tr.stock.component.part_number }}
+                            </a>
+                        </td>
+                        <td>
+                            {% if tr.stock.location %}
+                            <a href="{% url 'inventory:location_detail' tr.stock.location.pk %}" class="table-loc-pill">
+                                {{ tr.stock.location.box_number }} [{{ tr.stock.location.cell_code }}]
+                            </a>
+                            {% else %}
+                            <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: right; font-weight: 700; font-family: var(--font-mono);">
+                            {% if tr.quantity_change > 0 %}
+                            <span class="delta-plus">+{{ tr.quantity_change }} шт</span>
+                            {% elif tr.quantity_change < 0 %}
+                            <span class="delta-minus">{{ tr.quantity_change }} шт</span>
+                            {% else %}
+                            <span class="text-muted">0 шт</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-muted text-sm">
+                            {{ tr.notes|default:"—" }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 3rem 1rem;" class="text-muted">
+                            Журнал складських операцій поки що порожній.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="pagination-bar">
+            {% if page_obj.has_previous %}
+            <a href="?tab=history&page={{ page_obj.previous_page_number }}&op_type={{ op_filter }}" class="pagination-btn">
+                &larr; Попередня
+            </a>
+            {% else %}
+            <span class="pagination-btn disabled">&larr; Попередня</span>
+            {% endif %}
+
+            <div class="pagination-pages">
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span class="page-number active">{{ num }}</span>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a href="?tab=history&page={{ num }}&op_type={{ op_filter }}" class="page-number">
+                            {{ num }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {% if page_obj.has_next %}
+            <a href="?tab=history&page={{ page_obj.next_page_number }}&op_type={{ op_filter }}" class="pagination-btn">
+                Наступна &rarr;
+            </a>
+            {% else %}
+            <span class="pagination-btn disabled">Наступна &rarr;</span>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- Quick Stock Operation Modal Dialog -->
+<div id="quickOpModal" class="modal-backdrop" style="display: none;" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">Швидка складська операція</h3>
+            <button type="button" class="modal-close-btn" onclick="closeQuickOpModal()">&times;</button>
+        </div>
+        <form method="post" action="{% url 'inventory:quick_operation' %}">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="opComponentSelect">Компонент *</label>
+                    {{ quick_form.component }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="opLocationSelect">Комірка зберігання *</label>
+                    {{ quick_form.location }}
+                </div>
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label" for="opTypeSelect">Тип операції *</label>
+                        {{ quick_form.transaction_type }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="opQuantityInput">Кількість (шт) *</label>
+                        {{ quick_form.quantity }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="id_notes">Примітка / Ціль операції</label>
+                    {{ quick_form.notes }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeQuickOpModal()">Скасувати</button>
+                <button type="submit" class="btn btn-primary">Підтвердити операцію</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openQuickOpModal() {
+    document.getElementById('quickOpModal').style.display = 'flex';
+}
+
+function closeQuickOpModal() {
+    document.getElementById('quickOpModal').style.display = 'none';
+}
+
+function closeModalOnBackdrop(event) {
+    if (event.target === document.getElementById('quickOpModal')) {
+        closeQuickOpModal();
+    }
+}
+
+function prefillQuickOp(componentId, locationId, opType) {
+    openQuickOpModal();
+    if (componentId) {
+        document.getElementById('opComponentSelect').value = componentId;
+    }
+    if (locationId) {
+        document.getElementById('opLocationSelect').value = locationId;
+    }
+    if (opType) {
+        document.getElementById('opTypeSelect').value = opType;
+    }
+}
+</script>
+{% endblock %}
