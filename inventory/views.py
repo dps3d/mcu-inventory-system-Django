@@ -20,13 +20,20 @@ def dashboard(request):
     - Зведена таблиця залишків компонентів з контролем дефіциту.
     - Журнал складських рухів (StockTransactions).
     """
+    # Clean up any orphaned stocks that have no location and 0 quantities
+    InventoryStocks.objects.filter(
+        location__isnull=True,
+        quantity_on_hand=0,
+        quantity_reserved=0
+    ).delete()
+
     active_tab = request.GET.get('tab', 'locations')
     if active_tab not in ['locations', 'stocks', 'history']:
         active_tab = 'locations'
 
-    # Global KPI Metrics
+    # Global KPI Metrics (only active storage locations)
     total_locations = StorageLocations.objects.count()
-    stocks_qs = InventoryStocks.objects.select_related('component', 'location')
+    stocks_qs = InventoryStocks.objects.filter(location__isnull=False).select_related('component', 'location')
     total_positions = stocks_qs.count()
     total_units_data = stocks_qs.aggregate(
         total_on_hand=Sum('quantity_on_hand'),
@@ -36,10 +43,13 @@ def dashboard(request):
     total_reserved = total_units_data['total_reserved'] or 0
     total_free = max(0, total_on_hand - total_reserved)
 
-    # Deficit items count (free_stock <= min_threshold)
+    # Deficit items count (free_stock <= min_threshold or free_stock == 0)
     deficit_count = 0
     for stock in stocks_qs:
-        if stock.component and stock.free_stock <= stock.component.min_threshold:
+        if stock.component and (
+            stock.free_stock == 0 or
+            (stock.component.min_threshold and stock.free_stock <= stock.component.min_threshold)
+        ):
             deficit_count += 1
 
     context = {
@@ -146,7 +156,7 @@ def dashboard(request):
         is_deficit_only = request.GET.get('deficit') == '1'
         selected_box = request.GET.get('box', '')
 
-        stocks_list_qs = InventoryStocks.objects.select_related(
+        stocks_list_qs = InventoryStocks.objects.filter(location__isnull=False).select_related(
             'component__category', 'location'
         ).order_by('component__part_number')
 
@@ -161,12 +171,14 @@ def dashboard(request):
         if selected_box:
             stocks_list_qs = stocks_list_qs.filter(location__box_number=selected_box)
 
-        # Deficit filter
+        # Deficit filter (free_stock <= min_threshold or free_stock == 0)
         if is_deficit_only:
-            # Filter in Python or DB expression
             deficit_stock_ids = [
                 s.stock_id for s in stocks_list_qs
-                if s.component and s.free_stock <= s.component.min_threshold
+                if s.component and (
+                    s.free_stock == 0 or
+                    (s.component.min_threshold and s.free_stock <= s.component.min_threshold)
+                )
             ]
             stocks_list_qs = stocks_list_qs.filter(stock_id__in=deficit_stock_ids)
 
@@ -561,6 +573,12 @@ def row_delete(request):
             return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
 
         count = row_locs.count()
+        # Delete empty stocks in these locations before deleting locations to prevent ghost deficit entries
+        InventoryStocks.objects.filter(
+            location__in=row_locs,
+            quantity_on_hand=0,
+            quantity_reserved=0
+        ).delete()
         row_locs.delete()
         messages.success(request, f"Ряд «{shelf_name}» ({count} комірок) успішно видалено.")
         return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
@@ -631,6 +649,8 @@ def location_delete(request, pk):
             messages.error(request, f"Неможливо видалити комірку «{location.cell_code}», оскільки в ній є деталі або резерви.")
             return redirect('inventory:location_detail', pk=location.pk)
 
+        # Delete empty stocks in this location before deleting location to prevent ghost deficit entries
+        location.stocks.filter(quantity_on_hand=0, quantity_reserved=0).delete()
         location.delete()
         messages.success(request, f"Порожню комірку «{location.cell_code}» успішно видалено.")
         return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
@@ -695,11 +715,17 @@ def organizer_delete(request):
             return redirect('inventory:dashboard')
 
         org_locs = StorageLocations.objects.filter(box_number=box_number)
-        if org_locs.filter(stocks__quantity_on_hand__gt=0).exists():
-            messages.error(request, f"Неможливо видалити органайзер «{box_number}»: у ньому є деталі!")
+        if org_locs.filter(Q(stocks__quantity_on_hand__gt=0) | Q(stocks__quantity_reserved__gt=0)).exists():
+            messages.error(request, f"Неможливо видалити органайзер «{box_number}»: у ньому є деталі або резерви!")
             return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
 
         count = org_locs.count()
+        # Delete empty stocks in these locations before deleting locations to prevent ghost deficit entries
+        InventoryStocks.objects.filter(
+            location__in=org_locs,
+            quantity_on_hand=0,
+            quantity_reserved=0
+        ).delete()
         org_locs.delete()
         messages.success(request, f"Органайзер «{box_number}» ({count} комірок) видалено.")
         return redirect('inventory:dashboard')

@@ -396,7 +396,7 @@
                         <td style="text-align: center;">
                             {% if stock.free_stock == 0 %}
                             <span class="stock-pill stock-zero">Вичерпано</span>
-                            {% elif stock.free_stock <= stock.component.min_threshold %}
+                            {% elif stock.component.min_threshold and stock.free_stock <= stock.component.min_threshold %}
                             <span class="stock-pill stock-low">Дефіцит (&le; {{ stock.component.min_threshold }})</span>
                             {% else %}
                             <span class="stock-pill stock-ok">В нормі</span>
@@ -407,9 +407,15 @@
                                 <button type="button" class="btn-table-action btn-put" onclick="prefillQuickOp('{{ stock.component.pk }}', '{{ stock.location.pk|default:'' }}', 'purchase_in', {{ stock.free_stock }}, {{ stock.quantity_on_hand }})" title="Покласти деталь у комірку">
                                     + Покласти
                                 </button>
+                                {% if stock.free_stock > 0 %}
                                 <button type="button" class="btn-table-action btn-take" onclick="prefillQuickOp('{{ stock.component.pk }}', '{{ stock.location.pk|default:'' }}', 'consumption_out', {{ stock.free_stock }}, {{ stock.quantity_on_hand }})" title="Взяти деталь для роботи">
                                     - Взяти
                                 </button>
+                                {% else %}
+                                <button type="button" class="btn-table-action btn-take disabled" disabled title="Залишок вичерпано (0 шт) — списання неможливе">
+                                    - Взяти
+                                </button>
+                                {% endif %}
                             </div>
                         </td>
                     </tr>
@@ -750,8 +756,13 @@
 
 {% block extra_js %}
 <script>
-function openQuickOpModal() {
+function openQuickOpModal(resetState = true) {
+    if (resetState) {
+        currentTargetFreeStock = null;
+        currentTargetOnHand = null;
+    }
     document.getElementById('quickOpModal').style.display = 'flex';
+    updateQuickOpFeedback();
 }
 function closeQuickOpModal() {
     document.getElementById('quickOpModal').style.display = 'none';
@@ -954,21 +965,37 @@ function prefillQuickOp(componentId, locationId, opType, freeStock, onHand) {
     currentTargetFreeStock = (freeStock !== undefined && freeStock !== null) ? parseInt(freeStock) : null;
     currentTargetOnHand = (onHand !== undefined && onHand !== null) ? parseInt(onHand) : null;
 
-    openQuickOpModal();
+    openQuickOpModal(false);
     if (componentId) {
-        document.getElementById('opComponentSelect').value = componentId;
+        const compSelect = document.getElementById('opComponentSelect');
+        if (compSelect) compSelect.value = componentId;
     }
-    if (locationId) {
-        document.getElementById('opLocationSelect').value = locationId;
+    const locSelect = document.getElementById('opLocationSelect');
+    if (locSelect) {
+        if (locationId) {
+            locSelect.value = locationId;
+        } else if (!locSelect.value && locSelect.options.length > 1) {
+            for (let i = 0; i < locSelect.options.length; i++) {
+                if (locSelect.options[i].value) {
+                    locSelect.selectedIndex = i;
+                    break;
+                }
+            }
+        }
     }
     if (opType) {
-        document.getElementById('opTypeSelect').value = opType;
+        const typeSelect = document.getElementById('opTypeSelect');
+        if (typeSelect) typeSelect.value = opType;
     }
 
-    // Set slider max if consuming
+    // Set slider max if consuming, reset if putting
     const slider = document.getElementById('opQuantitySlider');
-    if (slider && opType === 'consumption_out' && currentTargetFreeStock !== null && currentTargetFreeStock > 0) {
-        slider.max = Math.max(currentTargetFreeStock, 50);
+    if (slider) {
+        if (opType === 'consumption_out' && currentTargetFreeStock !== null && currentTargetFreeStock > 0) {
+            slider.max = Math.max(currentTargetFreeStock, 50);
+        } else {
+            slider.max = 100;
+        }
     }
 
     updateQuickOpFeedback();

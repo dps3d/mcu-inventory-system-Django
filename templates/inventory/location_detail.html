@@ -103,9 +103,15 @@
                                 <button type="button" class="btn-table-action btn-put" onclick="prefillQuickOp('{{ s.component.pk }}', '{{ location.pk }}', 'purchase_in', {{ s.free_stock }}, {{ s.quantity_on_hand }})">
                                     + Покласти
                                 </button>
+                                {% if s.free_stock > 0 %}
                                 <button type="button" class="btn-table-action btn-take" onclick="prefillQuickOp('{{ s.component.pk }}', '{{ location.pk }}', 'consumption_out', {{ s.free_stock }}, {{ s.quantity_on_hand }})">
                                     - Взяти
                                 </button>
+                                {% else %}
+                                <button type="button" class="btn-table-action btn-take disabled" disabled title="Залишок вичерпано (0 шт) — списання неможливе">
+                                    - Взяти
+                                </button>
+                                {% endif %}
                             </div>
                         </td>
                     </tr>

@@ -4170,6 +4170,16 @@ svg.tab-icon-svg {
     color: #fed7aa;
 }
 
+.btn-table-action:disabled,
+.btn-table-action.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    color: var(--text-muted) !important;
+    box-shadow: none !important;
+}
+
 /* Transactions Badges & Movement Deltas */
 .tr-badge {
     display: inline-block;
