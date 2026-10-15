@@ -6,7 +6,7 @@
 <div class="inventory-page">
     <!-- Header Hero Banner -->
     <div class="detail-header-nav">
-        <div>
+        <div class="detail-header-title-block">
             <h1 class="catalog-title">Складський облік та комірки</h1>
             <p class="catalog-subtitle">Органайзери з колірними пігулками категорій, швидкі операції «Взяти / Покласти» та контроль дефіциту</p>
         </div>
@@ -19,9 +19,9 @@
                 <span>Швидка операція (Взяти / Покласти)</span>
             </button>
             {% if user.is_staff %}
-            <a href="{% url 'inventory:location_create' %}" class="btn btn-secondary">
-                <span>+ Нова комірка</span>
-            </a>
+            <button type="button" class="btn btn-secondary" onclick="openAddRowModal('{{ selected_box|default:''|escapejs }}')">
+                <span>+ Додати ряд</span>
+            </button>
             {% endif %}
             <a href="{% url 'inventory:suppliers_list' %}" class="btn btn-secondary">
                 <span>Постачальники</span>
@@ -118,16 +118,40 @@
     <!-- TAB 1: Visual Organizers & Cells Grid -->
     {% if active_tab == 'locations' %}
     <div class="tab-pane active">
-        <!-- Organizers Selector Pills -->
+        <!-- Organizers Selector & Management Bar -->
         <div class="organizers-nav-card">
             <div class="organizers-nav-header">
-                <span class="organizers-nav-title">Оберіть органайзер або бокс:</span>
-                {% if selected_box %}
-                <span class="organizers-summary-tag">
-                    {{ selected_box }}: {{ total_in_box }} комірок ({{ occupied_in_box }} зайнятих, {{ empty_in_box }} вільних)
-                </span>
+                <div class="org-header-left">
+                    <span class="organizers-nav-title">Оберіть органайзер або бокс:</span>
+                    {% if selected_box %}
+                    <span class="organizers-summary-tag">
+                        {{ selected_box }}: {{ total_in_box }} комірок ({{ occupied_in_box }} зайнятих, {{ empty_in_box }} вільних)
+                    </span>
+                    {% endif %}
+                </div>
+                {% if user.is_staff %}
+                <div class="org-header-actions">
+                    <button type="button" class="btn btn-sm btn-secondary" onclick="openAddRowModal('{{ selected_box|default:''|escapejs }}')" title="Додати новий ряд до органайзера">
+                        <span>+ Додати ряд</span>
+                    </button>
+                    {% if selected_box %}
+                    <button type="button" class="btn btn-sm btn-secondary" onclick="openAddCellModal('{{ selected_box|escapejs }}', '')" title="Додати комірку">
+                        <span>+ Додати комірку</span>
+                    </button>
+                    {% if empty_in_box == total_in_box and total_in_box > 0 %}
+                    <form method="post" action="{% url 'inventory:organizer_delete' %}" style="display:inline;" onsubmit="return confirm('Видалити органайзер «{{ selected_box|escapejs }}» та всі його порожні комірки?');">
+                        {% csrf_token %}
+                        <input type="hidden" name="box_number" value="{{ selected_box }}">
+                        <button type="submit" class="btn btn-sm btn-danger-subtle" title="Видалити весь порожній органайзер">
+                            <span>Видалити органайзер</span>
+                        </button>
+                    </form>
+                    {% endif %}
+                    {% endif %}
+                </div>
                 {% endif %}
             </div>
+
             <div class="organizers-chips-row">
                 {% for box in organizers_list %}
                 <a href="{% url 'inventory:dashboard' %}?tab=locations&box={{ box|urlencode }}" class="organizer-chip {% if box == selected_box %}active{% endif %}">
@@ -140,15 +164,22 @@
                     <span class="organizer-name">{{ box }}</span>
                 </a>
                 {% empty %}
-                <p class="text-muted text-sm">Комірок зберігання ще не створено.</p>
+                <div class="empty-org-inline">
+                    <span class="text-muted text-sm">Органайзерів ще не створено.</span>
+                    {% if user.is_staff %}
+                    <button type="button" class="btn btn-sm btn-primary" onclick="openAddRowModal('')">
+                        + Створити перший ряд комірок
+                    </button>
+                    {% endif %}
+                </div>
                 {% endfor %}
             </div>
 
             <!-- Optional Shelves Sub-filter -->
-            {% if shelves_list %}
+            {% if shelves_list and shelves_list|length > 1 %}
             <div class="shelves-sub-filter">
-                <span class="sub-filter-label">Полиця / Секція:</span>
-                <a href="{% url 'inventory:dashboard' %}?tab=locations&box={{ selected_box|urlencode }}" class="shelf-pill {% if not selected_shelf %}active{% endif %}">Всі полиці</a>
+                <span class="sub-filter-label">Полиця / Ряд:</span>
+                <a href="{% url 'inventory:dashboard' %}?tab=locations&box={{ selected_box|urlencode }}" class="shelf-pill {% if not selected_shelf %}active{% endif %}">Всі ряди</a>
                 {% for sh in shelves_list %}
                 <a href="{% url 'inventory:dashboard' %}?tab=locations&box={{ selected_box|urlencode }}&shelf={{ sh|urlencode }}" class="shelf-pill {% if sh == selected_shelf %}active{% endif %}">
                     {{ sh }}
@@ -156,66 +187,122 @@
                 {% endfor %}
             </div>
             {% endif %}
-        </div>
 
-        <!-- Legend for Visual Category Pills -->
-        <div class="pills-legend-bar">
-            <span class="legend-heading">Колірне маркування вмісту комірок:</span>
-            <div class="legend-pills-list">
-                <div class="legend-pill-item">
-                    <span class="cat-pill pill-single">Категорія</span>
-                    <span class="legend-desc">1 категорія деталей</span>
-                </div>
-                <div class="legend-pill-item">
-                    <span class="cat-pill pill-dual">Кат. A + Кат. B</span>
-                    <span class="legend-desc">2 категорії (змішаний відтінок)</span>
-                </div>
-                <div class="legend-pill-item">
-                    <span class="cat-pill pill-mixed">Різне</span>
-                    <span class="legend-desc">3+ категорій деталей</span>
-                </div>
-                <div class="legend-pill-item">
-                    <span class="cat-pill pill-empty">Порожня</span>
-                    <span class="legend-desc">Вільна комірка для розміщення</span>
+            <!-- Category Pills Legend (Integrated smoothly directly inside the organizer card!) -->
+            <div class="pills-legend-bar">
+                <span class="legend-heading">Колірне маркування:</span>
+                <div class="legend-pills-list">
+                    <div class="legend-pill-item">
+                        <span class="cat-pill pill-single">Категорія</span>
+                        <span class="legend-desc">1 категорія деталей</span>
+                    </div>
+                    <div class="legend-pill-item">
+                        <span class="cat-pill pill-dual">Кат. A + Кат. B</span>
+                        <span class="legend-desc">2 категорії (змішаний)</span>
+                    </div>
+                    <div class="legend-pill-item">
+                        <span class="cat-pill pill-mixed">Різне</span>
+                        <span class="legend-desc">3+ категорій</span>
+                    </div>
+                    <div class="legend-pill-item">
+                        <span class="cat-pill pill-empty">Порожня</span>
+                        <span class="legend-desc">Вільна комірка</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Visual Cells Matrix -->
-        {% if locations_data %}
-        <div class="cells-grid">
-            {% for item in locations_data %}
-            <div class="cell-card {% if item.active_stocks %}cell-occupied{% else %}cell-vacant{% endif %}" onclick="window.location='{% url 'inventory:location_detail' item.location.pk %}'">
-                <div class="cell-top">
-                    <span class="cell-code-badge">{{ item.location.cell_code }}</span>
-                    {% if item.location.shelf %}
-                    <span class="cell-shelf-tag">{{ item.location.shelf }}</span>
-                    {% endif %}
-                </div>
-
-                <div class="cell-middle">
-                    <span class="cat-pill {{ item.pill.css_class }}" title="{{ item.pill.label }}">
-                        {{ item.pill.label|truncatechars:24 }}
-                    </span>
-                </div>
-
-                <div class="cell-bottom">
-                    {% if item.active_stocks %}
-                    <div class="cell-stock-count">
-                        <strong class="stock-qty-num">{{ item.total_qty }}</strong>
-                        <span class="stock-qty-unit">шт ({{ item.active_stocks|length }} поз.)</span>
+        <!-- Organizer Rows and Cells Cassette Blocks -->
+        {% if rows_data %}
+            {% for row in rows_data %}
+            <div class="organizer-row-block">
+                <div class="row-block-header">
+                    <div class="row-title-wrap">
+                        <span class="row-indicator-bullet"></span>
+                        <span class="row-title">{{ row.shelf_name }}</span>
+                        <span class="row-count-badge">{{ row.items|length }} комірок ({{ row.occupied_count }} зайнятих, {{ row.items|length|add:"-"|add:row.occupied_count }} вільних)</span>
                     </div>
-                    {% else %}
-                    <span class="cell-empty-hint">Вільна</span>
+                    {% if user.is_staff %}
+                    <div class="row-actions">
+                        <button type="button" class="btn-row-action btn-row-add" onclick="openAddCellModal('{{ selected_box|escapejs }}', '{{ row.raw_shelf|escapejs }}')" title="Додати наступну комірку в цей ряд">
+                            + Комірка
+                        </button>
+                        {% if row.occupied_count == 0 %}
+                        <form method="post" action="{% url 'inventory:row_delete' %}" style="display:inline;" onsubmit="return confirm('Видалити порожній ряд «{{ row.shelf_name|escapejs }}» разом з усіма його комірками?');">
+                            {% csrf_token %}
+                            <input type="hidden" name="box_number" value="{{ selected_box }}">
+                            <input type="hidden" name="shelf_name" value="{{ row.raw_shelf }}">
+                            <button type="submit" class="btn-row-action btn-row-del" title="Видалити весь порожній ряд">
+                                Видалити ряд
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
                     {% endif %}
-                    <span class="cell-arrow-icon">&rarr;</span>
+                </div>
+
+                <!-- Cassette Row Grid: Snug, contiguous laboratory compartments! -->
+                <div class="cassette-row-grid">
+                    {% for item in row.items %}
+                    <div class="cell-card {% if item.active_stocks %}cell-occupied{% else %}cell-vacant{% endif %}">
+                        <div class="cell-click-area" onclick="window.location='{% url 'inventory:location_detail' item.location.pk %}'">
+                            <div class="cell-top">
+                                <span class="cell-code-badge">{{ item.location.cell_code }}</span>
+                                {% if not item.active_stocks and user.is_staff %}
+                                <form method="post" action="{% url 'inventory:location_delete' item.location.pk %}" class="cell-del-form" onclick="event.stopPropagation();" onsubmit="return confirm('Видалити порожню комірку [{{ item.location.cell_code }}]?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="cell-quick-del-btn" title="Видалити цю порожню комірку">&times;</button>
+                                </form>
+                                {% endif %}
+                            </div>
+
+                            <div class="cell-middle">
+                                <span class="cat-pill {{ item.pill.css_class }}" title="{{ item.pill.label }}">
+                                    {{ item.pill.label|truncatechars:22 }}
+                                </span>
+                            </div>
+
+                            <div class="cell-bottom">
+                                {% if item.active_stocks %}
+                                <div class="cell-stock-count">
+                                    <strong class="stock-qty-num">{{ item.total_qty }}</strong>
+                                    <span class="stock-qty-unit">шт</span>
+                                </div>
+                                {% else %}
+                                <span class="cell-empty-hint">Вільна</span>
+                                {% endif %}
+                                <span class="cell-arrow-icon">&rarr;</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
             {% endfor %}
-        </div>
         {% else %}
-        <div class="empty-state-box">
-            <p class="empty-desc">У цьому органайзері поки немає створених комірок.</p>
+        <div class="empty-state-box" style="padding: 3rem 1.5rem; text-align: center;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--text-muted); margin-bottom: 1rem;">
+                <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="10" y1="8" x2="14" y2="8"></line>
+                <line x1="10" y1="16" x2="14" y2="16"></line>
+            </svg>
+            <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 6px;">
+                {% if selected_box %}В органайзері «{{ selected_box }}» ще немає комірок{% else %}Комірок зберігання ще не створено{% endif %}
+            </h3>
+            <p class="empty-desc" style="max-width: 480px; margin: 0 auto 1.5rem;">
+                Створіть перший ряд комірок або новий органайзер для зручного зберігання мікроконтролерів і деталей.
+            </p>
+            {% if user.is_staff %}
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button type="button" class="btn btn-primary" onclick="openAddRowModal('{{ selected_box|default:''|escapejs }}')">
+                    + Створити ряд комірок
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="openAddCellModal('{{ selected_box|default:''|escapejs }}', '')">
+                    + Створити самостійну комірку
+                </button>
+            </div>
+            {% endif %}
         </div>
         {% endif %}
     </div>
@@ -523,6 +610,92 @@
         </form>
     </div>
 </div>
+
+<!-- Add Row Modal Dialog -->
+<div id="addRowModal" class="modal-backdrop" style="display: none;" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">Додати новий ряд комірок</h3>
+            <button type="button" class="modal-close-btn" onclick="closeAddRowModal()">&times;</button>
+        </div>
+        <form method="post" action="{% url 'inventory:row_create' %}">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="rowBoxInput">Органайзер / Бокс *</label>
+                    <input type="text" name="box_number" id="rowBoxInput" class="form-input" required placeholder="Наприклад: Касетниця SMD, Органайзер A">
+                    <span class="field-hint">Якщо такого органайзера ще немає, він створиться автоматично</span>
+                </div>
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label" for="rowShelfInput">Назва ряду / секції *</label>
+                        <input type="text" name="shelf_name" id="rowShelfInput" class="form-input" placeholder="Наприклад: Ряд 1, Ряд 2, Секція A">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="rowCountInput">Кількість комірок у ряду *</label>
+                        <input type="number" name="cell_count" id="rowCountInput" class="form-input" value="8" min="1" max="50">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="rowPrefixInput">Префікс коду комірок</label>
+                    <input type="text" name="prefix" id="rowPrefixInput" class="form-input" placeholder="Наприклад: SMD, A, C (створить SMD-01..SMD-08)">
+                    <span class="field-hint">Автоматично згенерує послідовні коди з 2 цифрами</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeAddRowModal()">Скасувати</button>
+                <button type="submit" class="btn btn-primary">Створити ряд комірок</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add Single Cell Modal Dialog -->
+<div id="addCellModal" class="modal-backdrop" style="display: none;" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">Створення комірки</h3>
+            <button type="button" class="modal-close-btn" onclick="closeAddCellModal()">&times;</button>
+        </div>
+        <form method="post" action="{% url 'inventory:location_quick_add' %}">
+            {% csrf_token %}
+            <div class="modal-body">
+                <!-- Explanatory / Warning Notice as requested -->
+                <div class="cell-creation-notice">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="notice-svg">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <div class="notice-text">
+                        <strong>Зверніть увагу:</strong> для систематизації деталей спочатку рекомендується <strong>створити ряд</strong> (кнопка «+ Додати ряд»), а потім наповнювати його комірками. Також ви можете <strong>створити самостійну комірку без ряду</strong> (поле «Ряд / Секція» залиште порожнім).
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="cellBoxInput">Органайзер / Бокс *</label>
+                    <input type="text" name="box_number" id="cellBoxInput" class="form-input" required placeholder="Наприклад: Касетниця SMD, Органайзер A">
+                </div>
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label" for="cellShelfInput">Ряд / Секція <span class="text-muted">(опціонально)</span></label>
+                        <input type="text" name="shelf_name" id="cellShelfInput" class="form-input" placeholder="Залиште порожнім для комірки без ряду">
+                        <span class="field-hint">Для самостійної комірки залиште порожнім</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="cellCodeInput">Код комірки *</label>
+                        <input type="text" name="cell_code" id="cellCodeInput" class="form-input" required placeholder="Наприклад: A-01, 15, SMD-09">
+                        <span class="field-hint">Унікальний код у межах секції</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeAddCellModal()">Скасувати</button>
+                <button type="submit" class="btn btn-primary">Створити комірку</button>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
@@ -530,16 +703,42 @@
 function openQuickOpModal() {
     document.getElementById('quickOpModal').style.display = 'flex';
 }
-
 function closeQuickOpModal() {
     document.getElementById('quickOpModal').style.display = 'none';
 }
 
+function openAddRowModal(boxName) {
+    document.getElementById('addRowModal').style.display = 'flex';
+    document.getElementById('rowBoxInput').value = boxName || '';
+}
+function closeAddRowModal() {
+    document.getElementById('addRowModal').style.display = 'none';
+}
+
+function openAddCellModal(boxName, shelfName) {
+    document.getElementById('addCellModal').style.display = 'flex';
+    document.getElementById('cellBoxInput').value = boxName || '';
+    document.getElementById('cellShelfInput').value = shelfName || '';
+}
+function closeAddCellModal() {
+    document.getElementById('addCellModal').style.display = 'none';
+}
+
 function closeModalOnBackdrop(event) {
-    if (event.target === document.getElementById('quickOpModal')) {
-        closeQuickOpModal();
+    if (event.target.classList.contains('modal-backdrop')) {
+        event.target.style.display = 'none';
     }
 }
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-backdrop').forEach(function(m) {
+            m.style.display = 'none';
+        });
+    }
+});
+
+
 
 function prefillQuickOp(componentId, locationId, opType) {
     openQuickOpModal();

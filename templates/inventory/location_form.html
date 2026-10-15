@@ -10,14 +10,23 @@
             <span class="breadcrumb-separator">/</span>
             <span class="breadcrumb-current">{{ title }}</span>
         </nav>
-        <div class="detail-header-actions">
-            <a href="{% url 'inventory:dashboard' %}" class="btn btn-secondary">Скасувати</a>
-        </div>
     </div>
 
     <div class="form-card">
         <h2 class="form-title">{{ title }}</h2>
-        <p class="catalog-subtitle" style="margin-bottom: 1.5rem;">Вкажіть назву органайзера, секцію та унікальний код комірки</p>
+        <p class="catalog-subtitle" style="margin-bottom: 1.25rem;">Вкажіть назву органайзера, секцію та унікальний код комірки</p>
+
+        <!-- Explanatory / Warning Notice as requested -->
+        <div class="cell-creation-notice" style="margin-bottom: 1.5rem;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="notice-svg">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <div class="notice-text">
+                <strong>Зверніть увагу:</strong> для систематизації деталей спочатку рекомендується <strong>створити ряд</strong> (кнопка «+ Додати ряд»), а потім наповнювати його комірками. Також ви можете <strong>створити самостійну комірку без ряду</strong> (поле «Полиця / Секція» залиште порожнім).
+            </div>
+        </div>
 
         <form method="post">
             {% csrf_token %}
@@ -42,8 +51,8 @@
             </div>
 
             <div class="form-actions" style="margin-top: 2rem;">
-                <button type="submit" class="btn btn-primary">Зберегти комірку</button>
-                <a href="{% url 'inventory:dashboard' %}" class="btn btn-secondary">Скасувати</a>
+                <button type="submit" class="btn btn-primary btn-form-submit">Зберегти комірку</button>
+                <a href="{% url 'inventory:dashboard' %}" class="btn btn-secondary btn-form-cancel">Скасувати</a>
             </div>
         </form>
     </div>

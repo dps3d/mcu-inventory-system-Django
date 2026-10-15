@@ -92,21 +92,41 @@ def dashboard(request):
                 .order_by('shelf')
             )
 
-        # Precompute pills and stats for locations to guarantee instant rendering
+        # Precompute pills, stats, and group cells by rows/shelves
         locations_data = []
+        shelves_grouped = {}
         occupied_count = 0
         for loc in locations:
             pill = loc.get_category_pill()
             active_stocks = [s for s in loc.stocks.all() if s.quantity_on_hand > 0]
             if active_stocks:
                 occupied_count += 1
-            locations_data.append({
+            item = {
                 'location': loc,
                 'pill': pill,
                 'active_stocks': active_stocks,
                 'total_qty': sum(s.quantity_on_hand for s in active_stocks),
                 'free_qty': sum(s.free_stock for s in active_stocks),
-            })
+            }
+            locations_data.append(item)
+
+            sh_key = (loc.shelf or '').strip()
+            display_name = sh_key if sh_key else "Самостійні комірки (без ряду)"
+            if sh_key not in shelves_grouped:
+                shelves_grouped[sh_key] = {
+                    'shelf_name': display_name,
+                    'raw_shelf': sh_key,
+                    'is_standalone': not bool(sh_key),
+                    'items': [],
+                    'occupied_count': 0,
+                    'total_qty': 0,
+                }
+            shelves_grouped[sh_key]['items'].append(item)
+            if active_stocks:
+                shelves_grouped[sh_key]['occupied_count'] += 1
+            shelves_grouped[sh_key]['total_qty'] += item['total_qty']
+
+        rows_data = list(shelves_grouped.values())
 
         context.update({
             'organizers_list': organizers_list,
@@ -114,6 +134,7 @@ def dashboard(request):
             'shelves_list': shelves_list,
             'selected_shelf': selected_shelf,
             'locations_data': locations_data,
+            'rows_data': rows_data,
             'total_in_box': len(locations_data),
             'occupied_in_box': occupied_count,
             'empty_in_box': len(locations_data) - occupied_count,
@@ -367,3 +388,207 @@ def supplier_create(request):
         'form': form,
         'title': 'Додати постачальника',
     })
+
+
+@staff_member_required
+def row_create(request):
+    """
+    Інтуїтивне додавання нового ряду комірок до органайзера.
+    Створює ряд із зазначеною кількістю комірок (наприклад 4, 6, 8, 10).
+    """
+    if request.method == 'POST':
+        box_number = request.POST.get('box_number', '').strip()
+        shelf_name = request.POST.get('shelf_name', '').strip()
+        raw_count = (request.POST.get('cell_count') or request.POST.get('cells_count') or '8').strip()
+        prefix = request.POST.get('prefix', '').strip()
+
+        if not box_number:
+            messages.error(request, "Вкажіть назву органайзера.")
+            return redirect('inventory:dashboard')
+
+        try:
+            cell_count = int(raw_count)
+        except ValueError:
+            cell_count = 8
+        cell_count = max(1, min(cell_count, 50))
+
+        if not shelf_name:
+            existing_count = (
+                StorageLocations.objects.filter(box_number=box_number)
+                .values('shelf')
+                .distinct()
+                .count()
+            )
+            shelf_name = f"Ряд {existing_count + 1}"
+
+        if not prefix:
+            prefix = "C"
+
+        created = 0
+        with transaction.atomic():
+            for i in range(1, cell_count + 1):
+                code = f"{prefix}-{i:02d}"
+                counter = i
+                while StorageLocations.objects.filter(box_number=box_number, shelf=shelf_name, cell_code=code).exists():
+                    counter += 1
+                    code = f"{prefix}-{counter:02d}"
+
+                StorageLocations.objects.create(
+                    box_number=box_number,
+                    shelf=shelf_name,
+                    cell_code=code
+                )
+                created += 1
+
+        messages.success(request, f"Успішно створено «{shelf_name}» ({created} комірок) в органайзері «{box_number}».")
+        return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
+
+    return redirect('inventory:dashboard')
+
+
+@staff_member_required
+def row_delete(request):
+    """
+    Видалення порожнього ряду комірок з органайзера.
+    Якщо в ряду є хоча б одна деталь, видалення блокується із попередженням.
+    """
+    if request.method == 'POST':
+        box_number = request.POST.get('box_number', '').strip()
+        shelf_name = request.POST.get('shelf_name', '').strip()
+
+        if not box_number or not shelf_name:
+            messages.error(request, "Некоректні параметри ряду.")
+            return redirect('inventory:dashboard')
+
+        row_locs = StorageLocations.objects.filter(box_number=box_number, shelf=shelf_name)
+        occupied_locs = row_locs.filter(stocks__quantity_on_hand__gt=0).distinct()
+
+        if occupied_locs.exists():
+            messages.error(request, f"Неможливо видалити ряд «{shelf_name}»: у ньому є зайняті комірки з деталями!")
+            return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
+
+        count = row_locs.count()
+        row_locs.delete()
+        messages.success(request, f"Ряд «{shelf_name}» ({count} комірок) успішно видалено.")
+        return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
+
+    return redirect('inventory:dashboard')
+
+
+@staff_member_required
+def location_quick_add(request):
+    """Швидке додавання однієї комірки в існуючий ряд органайзера"""
+    if request.method == 'POST':
+        box_number = request.POST.get('box_number', '').strip()
+        shelf_name = request.POST.get('shelf_name', '').strip()
+        cell_code = request.POST.get('cell_code', '').strip()
+
+        if not box_number:
+            messages.error(request, "Вкажіть назву органайзера.")
+            return redirect('inventory:dashboard')
+
+        if not cell_code:
+            existing = StorageLocations.objects.filter(box_number=box_number, shelf=shelf_name).count()
+            prefix = "CELL" if not shelf_name else "C"
+            cell_code = f"{prefix}-{(existing + 1):02d}"
+
+        if StorageLocations.objects.filter(box_number=box_number, shelf=shelf_name, cell_code=cell_code).exists():
+            loc_desc = f"в ряду «{shelf_name}»" if shelf_name else "(самостійна)"
+            messages.error(request, f"Комірка «{cell_code}» вже існує {loc_desc}!")
+        else:
+            StorageLocations.objects.create(box_number=box_number, shelf=shelf_name, cell_code=cell_code)
+            if shelf_name:
+                messages.success(request, f"Комірку «{cell_code}» успішно додано до ряду «{shelf_name}».")
+            else:
+                messages.success(request, f"Самостійну комірку «{cell_code}» (без ряду) успішно створено.")
+
+        return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
+
+    return redirect('inventory:dashboard')
+
+
+@staff_member_required
+def location_delete(request, pk):
+    """Видалення окремої комірки (тільки якщо вона порожня)"""
+    location = get_object_or_404(StorageLocations, pk=pk)
+    box_number = location.box_number
+
+    if request.method == 'POST':
+        if location.stocks.filter(quantity_on_hand__gt=0).exists():
+            messages.error(request, f"Неможливо видалити комірку «{location.cell_code}», оскільки в ній є деталі.")
+            return redirect('inventory:location_detail', pk=location.pk)
+
+        location.delete()
+        messages.success(request, f"Порожню комірку «{location.cell_code}» успішно видалено.")
+        return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
+
+    return redirect('inventory:location_detail', pk=location.pk)
+
+
+@staff_member_required
+def organizer_create(request):
+    """Створення нового органайзера з початковою сіткою рядів і комірок"""
+    if request.method == 'POST':
+        box_number = request.POST.get('box_number', '').strip()
+        raw_rows = request.POST.get('rows_count', '2').strip()
+        raw_cells = request.POST.get('cells_per_row', '8').strip()
+        prefix = request.POST.get('prefix', '').strip()
+
+        if not box_number:
+            messages.error(request, "Вкажіть назву органайзера.")
+            return redirect('inventory:dashboard')
+
+        if StorageLocations.objects.filter(box_number=box_number).exists():
+            messages.error(request, f"Органайзер «{box_number}» вже існує!")
+            return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
+
+        try:
+            rows_count = int(raw_rows)
+        except ValueError:
+            rows_count = 2
+        try:
+            cells_per_row = int(raw_cells)
+        except ValueError:
+            cells_per_row = 8
+
+        rows_count = max(1, min(rows_count, 10))
+        cells_per_row = max(1, min(cells_per_row, 30))
+        if not prefix:
+            prefix = "C"
+
+        with transaction.atomic():
+            for r in range(1, rows_count + 1):
+                shelf_name = f"Ряд {r}"
+                for c in range(1, cells_per_row + 1):
+                    code = f"{prefix}{r}-{c:02d}"
+                    StorageLocations.objects.create(
+                        box_number=box_number,
+                        shelf=shelf_name,
+                        cell_code=code
+                    )
+
+        messages.success(request, f"Органайзер «{box_number}» успішно створено ({rows_count} рядів по {cells_per_row} комірок).")
+        return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
+
+    return redirect('inventory:dashboard')
+
+
+@staff_member_required
+def organizer_delete(request):
+    """Видалення всього органайзера, якщо всі його комірки вільні"""
+    if request.method == 'POST':
+        box_number = request.POST.get('box_number', '').strip()
+        if not box_number:
+            return redirect('inventory:dashboard')
+
+        org_locs = StorageLocations.objects.filter(box_number=box_number)
+        if org_locs.filter(stocks__quantity_on_hand__gt=0).exists():
+            messages.error(request, f"Неможливо видалити органайзер «{box_number}»: у ньому є деталі!")
+            return redirect(f"{reverse('inventory:dashboard')}?tab=locations&box={box_number}")
+
+        count = org_locs.count()
+        org_locs.delete()
+        messages.success(request, f"Органайзер «{box_number}» ({count} комірок) видалено.")
+        return redirect('inventory:dashboard')
+
+    return redirect('inventory:dashboard')

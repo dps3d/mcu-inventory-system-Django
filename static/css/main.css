@@ -3124,11 +3124,12 @@ svg.organizer-chip-svg {
 /* Inventory Navigation Tabs */
 .inventory-tabs-bar {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     border-bottom: 1px solid var(--border-subtle);
-    margin-bottom: 1.75rem;
-    padding-bottom: 2px;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0;
     flex-wrap: wrap;
+    position: relative;
 }
 
 .inv-tab-btn {
@@ -3141,7 +3142,9 @@ svg.organizer-chip-svg {
     color: var(--text-muted);
     text-decoration: none;
     border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    border: 1px solid transparent;
     border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
     transition: all 0.15s ease;
 }
 
@@ -3163,7 +3166,8 @@ svg.tab-icon-svg {
 .inv-tab-btn.active {
     color: var(--accent-bone);
     font-weight: 600;
-    border-bottom-color: var(--accent-bone);
+    border-color: var(--border-subtle) var(--border-subtle) transparent var(--border-subtle);
+    border-bottom: 2px solid var(--accent-bone);
     background: var(--bg-surface);
 }
 
@@ -3173,7 +3177,7 @@ svg.tab-icon-svg {
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
     padding: 1.25rem 1.5rem;
-    margin-bottom: 1.75rem;
+    margin-bottom: 1.5rem;
 }
 
 .organizers-nav-header {
@@ -3182,6 +3186,20 @@ svg.tab-icon-svg {
     align-items: center;
     margin-bottom: 1rem;
     gap: 12px;
+    flex-wrap: wrap;
+}
+
+.org-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.org-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     flex-wrap: wrap;
 }
 
@@ -3198,6 +3216,31 @@ svg.tab-icon-svg {
     padding: 3px 10px;
     border-radius: var(--radius-sm);
     font-family: var(--font-mono);
+}
+
+.empty-org-inline {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+}
+
+.btn-danger-subtle {
+    background: rgba(220, 70, 70, 0.12);
+    border: 1px solid rgba(220, 70, 70, 0.35);
+    color: #fca5a5;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-danger-subtle:hover {
+    background: rgba(220, 70, 70, 0.22);
+    border-color: rgba(220, 70, 70, 0.5);
+    color: #fff;
 }
 
 .organizers-chips-row {
@@ -3298,6 +3341,16 @@ svg.tab-icon-svg {
     gap: 12px;
 }
 
+.organizers-nav-card .pills-legend-bar {
+    padding: 12px 0 0 0;
+    background: transparent;
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    border-radius: 0;
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+}
+
 .legend-heading {
     font-weight: 600;
     color: var(--text-muted);
@@ -3364,11 +3417,195 @@ svg.tab-icon-svg {
     font-weight: 500;
 }
 
-/* Visual Cells Matrix (Organizers Physical Compartments Grid) */
+/* Organizer Row Blocks & Cassette Grid */
+.organizer-row-block {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+}
+
+.organizer-row-block:hover {
+    border-color: rgba(216, 207, 188, 0.22);
+}
+
+.row-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: var(--bg-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.row-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.row-indicator-bullet {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-olive-light);
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.row-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.row-count-badge {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    background: rgba(0, 0, 0, 0.25);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+}
+
+.row-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-row-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 11px;
+    font-size: 11.5px;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-canvas);
+    color: var(--text-secondary);
+}
+
+.btn-row-action:hover {
+    background: var(--bg-surface-hover);
+    color: var(--text-primary);
+    border-color: rgba(216, 207, 188, 0.3);
+}
+
+.btn-row-action.btn-row-del {
+    color: #e57373;
+    border-color: rgba(220, 70, 70, 0.25);
+    background: rgba(220, 70, 70, 0.08);
+}
+
+.btn-row-action.btn-row-del:hover {
+    background: rgba(220, 70, 70, 0.2);
+    border-color: rgba(220, 70, 70, 0.45);
+    color: #ffcdd2;
+}
+
+/* Snug Cassette Row Grid (Contiguous compartments fitting tight to one another) */
+.cassette-row-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 6px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.18);
+    box-sizing: border-box;
+}
+
+.cassette-row-grid .cell-card {
+    background: var(--bg-surface);
+    border: 1px solid rgba(216, 207, 188, 0.12);
+    border-radius: 4px;
+    padding: 8px 10px;
+    min-height: 96px;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.cassette-row-grid .cell-card:hover {
+    background: var(--bg-surface-hover);
+    border-color: rgba(216, 207, 188, 0.35);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    z-index: 2;
+}
+
+.cassette-row-grid .cell-card.cell-occupied {
+    background: var(--bg-surface);
+    border: 1px solid rgba(216, 207, 188, 0.16);
+    border-top: 2px solid #8bb381;
+}
+
+.cassette-row-grid .cell-card.cell-vacant {
+    background: rgba(25, 22, 24, 0.6);
+    border: 1px dashed rgba(216, 207, 188, 0.14);
+}
+
+.cassette-row-grid .cell-card.cell-vacant:hover {
+    background: var(--bg-surface-hover);
+    border-color: var(--accent-bone);
+    border-style: solid;
+}
+
+.cell-click-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+}
+
+.cell-del-form {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+.cell-quick-del-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    padding: 1px 5px;
+    border-radius: 3px;
+    opacity: 0.35;
+    transition: all 0.15s ease;
+}
+
+.cell-card:hover .cell-quick-del-btn {
+    opacity: 0.85;
+}
+
+.cell-quick-del-btn:hover {
+    opacity: 1 !important;
+    color: #ff6b6b;
+    background: rgba(220, 70, 70, 0.2);
+}
+
+/* Visual Cells Matrix (Fallback Organizers Grid) */
 .cells-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(136px, 1fr));
-    gap: 12px;
+    gap: 10px;
     margin-bottom: 2.5rem;
     min-width: 0;
     width: 100%;
@@ -3414,6 +3651,97 @@ svg.tab-icon-svg {
     background: var(--bg-surface-hover);
     border-color: var(--accent-bone);
     border-style: solid;
+}
+
+/* Form Card & Uniform Action Buttons */
+.form-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.form-actions .btn-form-submit,
+.form-actions .btn-form-cancel {
+    min-width: 170px;
+    height: 42px;
+    padding: 0 24px;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    box-sizing: border-box;
+    text-align: center;
+    text-decoration: none;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-form-submit {
+    background: var(--accent-olive);
+    border: 1px solid var(--accent-olive-light);
+    color: var(--text-primary);
+}
+
+.btn-form-submit:hover {
+    background: var(--accent-olive-light);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.btn-form-cancel {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+}
+
+.btn-form-cancel:hover {
+    background: var(--bg-surface-hover);
+    color: var(--text-primary);
+    border-color: rgba(216, 207, 188, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Cell Creation Notice Banner */
+.cell-creation-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    background: rgba(222, 194, 98, 0.08);
+    border: 1px solid rgba(222, 194, 98, 0.28);
+    border-radius: var(--radius-sm);
+    color: var(--text-body);
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+.cell-creation-notice .notice-svg {
+    flex-shrink: 0;
+    color: #deb262;
+    margin-top: 2px;
+}
+
+.cell-creation-notice .notice-text {
+    color: var(--text-body);
+}
+
+.cell-creation-notice .notice-text strong {
+    color: #fef08a;
+}
+
+.row-indicator-bullet.bullet-standalone {
+    background: var(--text-muted);
 }
 
 .cell-top {
