@@ -1,0 +1,3388 @@
+[
+  {
+    "model": "catalog.categories",
+    "pk": 6,
+    "fields": {
+      "name": "Мікроконтролери та процесори",
+      "parent": null,
+      "description": "MCU, SoC, процесорні модулі та одноплатні комп'ютери"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 12,
+    "fields": {
+      "name": "Сенсори та датчики",
+      "parent": null,
+      "description": "Аналогові та цифрові первинні перетворювачі фізичних величин"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 19,
+    "fields": {
+      "name": "Драйвери та силова комутація",
+      "parent": null,
+      "description": "Керування навантаженням, двигунами, реле та силовими ключами"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 24,
+    "fields": {
+      "name": "Джерела живлення та перетворювачі",
+      "parent": null,
+      "description": "Стабілізація, перетворення напруги та керування живленням"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 29,
+    "fields": {
+      "name": "Інтерфейсні мікросхеми та зв'язок",
+      "parent": null,
+      "description": "Перетворювачі шин даних, трансивери та бездротові модулі"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 35,
+    "fields": {
+      "name": "Логічні мікросхеми",
+      "parent": null,
+      "description": "Стандартна цифрова логіка 74HC/CD4000"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 39,
+    "fields": {
+      "name": "Дисплеї та засоби індикації",
+      "parent": null,
+      "description": "Екрани, матриці та світлодіодні індикатори"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 44,
+    "fields": {
+      "name": "Пасивні компоненти",
+      "parent": null,
+      "description": "Резистори, конденсатори, індуктивності та кварцові резонатори"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 48,
+    "fields": {
+      "name": "Комутація та роз'єми",
+      "parent": null,
+      "description": "Монтажні роз'єми, клемники, перемикачі"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 7,
+    "fields": {
+      "name": "STM32 (ARM Cortex-M)",
+      "parent": 6,
+      "description": "Мікроконтролери сімейств F1, F4, G0, L4 на ядрі ARM Cortex-M"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 8,
+    "fields": {
+      "name": "AVR / ATmega / ATtiny",
+      "parent": 6,
+      "description": "Класичні 8-бітні мікроконтролери Microchip/Atmel"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 9,
+    "fields": {
+      "name": "ESP32 / ESP8266 (Wi-Fi/BLE)",
+      "parent": 6,
+      "description": "Бездротові SoC та готові модулі Espressif Systems"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 10,
+    "fields": {
+      "name": "Raspberry Pi / RP2040",
+      "parent": 6,
+      "description": "Двоядерні ARM Cortex-M0+ чіпи RP2040 та модулі Pico"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 11,
+    "fields": {
+      "name": "PIC / dsPIC",
+      "parent": 6,
+      "description": "Мікроконтролери серій PIC16, PIC18, dsPIC"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 13,
+    "fields": {
+      "name": "Датчики температури та вологості",
+      "parent": 12,
+      "description": "BME280, DHT22, DS18B20, SHT31, AHT10"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 14,
+    "fields": {
+      "name": "Акселерометри, гіроскопи та IMU",
+      "parent": 12,
+      "description": "MPU6050, ADXL345, LSM6DS3, BNO055"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 15,
+    "fields": {
+      "name": "Датчики відстані та наближення",
+      "parent": 12,
+      "description": "Ультразвукові HC-SR04, лазерні ToF VL53L0X"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 16,
+    "fields": {
+      "name": "Датчики тиску та висоти",
+      "parent": 12,
+      "description": "BMP280, MS5611, DPS310"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 17,
+    "fields": {
+      "name": "Датчики газу та якості повітря",
+      "parent": 12,
+      "description": "MQ серія, CCS811, SGP30"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 18,
+    "fields": {
+      "name": "Оптичні сенсори та струм",
+      "parent": 12,
+      "description": "Датчики освітленості BH1750, датчики струму ACS712, INA219"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 20,
+    "fields": {
+      "name": "Драйвери крокових двигунів",
+      "parent": 19,
+      "description": "A4988, DRV8825, TMC2208, TMC2209"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 21,
+    "fields": {
+      "name": "H-мостові драйвери двигунів",
+      "parent": 19,
+      "description": "L298N, L293D, TB6612FNG, BTS7960"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 22,
+    "fields": {
+      "name": "Модулі реле та твердотільні ключі",
+      "parent": 19,
+      "description": "Оптоізольовані реле 5V/12V, SSR модулі"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 23,
+    "fields": {
+      "name": "Драйвери польових транзисторів (MOSFET)",
+      "parent": 19,
+      "description": "TC4420, IR2104, IR2110"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 25,
+    "fields": {
+      "name": "Лінійні регулятори LDO",
+      "parent": 24,
+      "description": "AMS1117 3.3V/5V, LM7805, LM317, LP2985"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 26,
+    "fields": {
+      "name": "Понижувальні DC-DC (Step-Down)",
+      "parent": 24,
+      "description": "LM2596, MP1584, MP2307, Mini360"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 27,
+    "fields": {
+      "name": "Підвищувальні DC-DC (Step-Up)",
+      "parent": 24,
+      "description": "MT3608, XL6009, SX1308"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 28,
+    "fields": {
+      "name": "Контролери заряду Li-Ion / BMS",
+      "parent": 24,
+      "description": "TP4056 з захистом, BMS 2S/3S/4S"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 30,
+    "fields": {
+      "name": "Перетворювачі USB-UART / COM",
+      "parent": 29,
+      "description": "CH340G, CP2102, FT232RL, PL2303"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 31,
+    "fields": {
+      "name": "Трансивери RS-485 / RS-232",
+      "parent": 29,
+      "description": "MAX485, SP3485, MAX232, SP3232"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 32,
+    "fields": {
+      "name": "Контролери та трансивери CAN-шини",
+      "parent": 29,
+      "description": "MCP2515, MCP2551, TJA1050"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 33,
+    "fields": {
+      "name": "Бездротові радіомодулі (RF / LoRa)",
+      "parent": 29,
+      "description": "NRF24L01+, LoRa SX1278, CC1101"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 34,
+    "fields": {
+      "name": "Bluetooth / BLE модулі",
+      "parent": 29,
+      "description": "HC-05, HC-06, JDY-31, AT-09"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 36,
+    "fields": {
+      "name": "Зсувні регістри",
+      "parent": 35,
+      "description": "74HC595 (SIPO), 74HC165 (PISO)"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 37,
+    "fields": {
+      "name": "Мультиплексори / демультиплексори",
+      "parent": 35,
+      "description": "74HC4051 (8-ch), 74HC4067 (16-ch)"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 38,
+    "fields": {
+      "name": "Буфери та логічні інвертори",
+      "parent": 35,
+      "description": "74HC245, 74HC14 (тригер Шмітта), 74HC00"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 40,
+    "fields": {
+      "name": "OLED дисплеї I2C / SPI",
+      "parent": 39,
+      "description": "0.96\" SSD1306, 1.3\" SH1106"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 41,
+    "fields": {
+      "name": "РК дисплеї символьні",
+      "parent": 39,
+      "description": "LCD 1602, LCD 2004 з I2C рюкзаком"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 42,
+    "fields": {
+      "name": "Світлодіодні матриці та сегментні індикатори",
+      "parent": 39,
+      "description": "MAX7219 8x8 матриці, TM1637 4-digit"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 43,
+    "fields": {
+      "name": "Кольорові TFT дисплеї",
+      "parent": 39,
+      "description": "ST7735 1.8\", ILI9341 2.4\" SPI"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 45,
+    "fields": {
+      "name": "Резистори та потенціометри",
+      "parent": 44,
+      "description": "Вивідні 0.25W, SMD 0805/0603, підстроєчні 3296W"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 46,
+    "fields": {
+      "name": "Конденсатори керамічні та електролітичні",
+      "parent": 44,
+      "description": "Кераміка 0.1uF, електроліти 100uF/470uF"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 47,
+    "fields": {
+      "name": "Кварцові резонатори",
+      "parent": 44,
+      "description": "16MHz, 8MHz, часовий кварц 32.768kHz"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 49,
+    "fields": {
+      "name": "Кнопки та перемикачі",
+      "parent": 48,
+      "description": "Тактові кнопки 6x6, тумблери, dip-перемикачі"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 50,
+    "fields": {
+      "name": "Штирьові роз'єми (Headers)",
+      "parent": 48,
+      "description": "Прямі та кутові рейки 2.54mm (PLS, PBS)"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 51,
+    "fields": {
+      "name": "Клемники гвинтові та живлення",
+      "parent": 48,
+      "description": "Гвинтові клемники 5.08mm, гнізда 5.5x2.1mm"
+    }
+  },
+  {
+    "model": "inventory.suppliers",
+    "pk": 1,
+    "fields": {
+      "name": "ТОВ «Космодром»",
+      "url": "https://kosmodrom.ua",
+      "contact_notes": "Харків, Україна. Швидка відправка Новою Поштою, роздріб та дрібний гурт."
+    }
+  },
+  {
+    "model": "inventory.suppliers",
+    "pk": 2,
+    "fields": {
+      "name": "RC-Go Electronics",
+      "url": "https://rc-go.com.ua",
+      "contact_notes": "Київ, Україна. Робототехніка, модулі сенсорів, мотори та приводи."
+    }
+  },
+  {
+    "model": "inventory.suppliers",
+    "pk": 3,
+    "fields": {
+      "name": "Biukop Electronics",
+      "url": "https://biukop.com.ua",
+      "contact_notes": "Одеса, Україна. Електронні компоненти, мікросхеми, роз'єми."
+    }
+  },
+  {
+    "model": "inventory.suppliers",
+    "pk": 4,
+    "fields": {
+      "name": "LCSC Electronics",
+      "url": "https://lcsc.com",
+      "contact_notes": "Шеньчжень, Китай. Офіційний дистриб'ютор SMD пасивів та мікроконтролерів."
+    }
+  },
+  {
+    "model": "inventory.suppliers",
+    "pk": 5,
+    "fields": {
+      "name": "Mouser Electronics",
+      "url": "https://mouser.com",
+      "contact_notes": "США / Європа. Оригінальні напівпровідники, сенсори та інструменти."
+    }
+  },
+  {
+    "model": "inventory.suppliers",
+    "pk": 6,
+    "fields": {
+      "name": "Digi-Key Electronics",
+      "url": "https://www.digikey.ua",
+      "contact_notes": "Міжнародний каталог електронних компонентів та розробницьких плат."
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 12,
+    "fields": {
+      "category": 9,
+      "part_number": "ESP 32 WROOM",
+      "package_type": "Module SMD-38",
+      "value_nominal": "240 MHz 4MB",
+      "specifications": "Xtensa Dual-Core 32-bit LX6 @ 240MHz, 4MB SPI Flash, Wi-Fi 802.11 b/g/n, Bluetooth v4.2 BR/EDR & BLE, 38-pin SMD module",
+      "min_threshold": 10,
+      "datasheet_url": "https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32d_esp32-wroom-32u_datasheet_en.pdf",
+      "image_path": "/media/components/esp32_wroom.jpg",
+      "image_file": "components/esp32_wroom.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 13,
+    "fields": {
+      "category": 7,
+      "part_number": "STM32F103C8T6",
+      "package_type": "LQFP-48",
+      "value_nominal": "72 MHz 64KB",
+      "specifications": "ARM 32-bit Cortex-M3 @ 72MHz, 64KB Flash, 20KB SRAM, USB 2.0 Full Speed, CAN 2.0B, 2x 12-bit ADC (16 channels), 7 таймерів",
+      "min_threshold": 5,
+      "datasheet_url": "https://www.st.com/resource/en/datasheet/stm32f103c8.pdf",
+      "image_path": "/media/components/stm32f103c8t6.jpg",
+      "image_file": "components/stm32f103c8t6.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 14,
+    "fields": {
+      "category": 7,
+      "part_number": "STM32F401CCU6",
+      "package_type": "UFQFPN-48",
+      "value_nominal": "84 MHz 256KB",
+      "specifications": "ARM Cortex-M4 @ 84MHz з FPU та DSP інструкціями, 256KB Flash, 64KB SRAM, USB OTG FS, 1x 12-bit ADC 2.4 MSPS",
+      "min_threshold": 3,
+      "datasheet_url": "https://www.st.com/resource/en/datasheet/stm32f401cc.pdf",
+      "image_path": "/media/components/stm32f401.png",
+      "image_file": "components/stm32f401.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 15,
+    "fields": {
+      "category": 8,
+      "part_number": "ATmega328P-PU",
+      "package_type": "DIP-28",
+      "value_nominal": "20 MHz 32KB",
+      "specifications": "8-bit AVR RISC мікроконтролер, 32KB Flash, 2KB SRAM, 1KB EEPROM, 6 PWM, 8-channel 10-bit ADC, UART, SPI, I2C",
+      "min_threshold": 8,
+      "datasheet_url": "https://ww1.microchip.com/downloads/en/DeviceDoc/ATmega48A-PA-88A-PA-168A-PA-328-P-DS-DS40002061B.pdf",
+      "image_path": "/media/components/atmega328p.jpg",
+      "image_file": "components/atmega328p.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 16,
+    "fields": {
+      "category": 8,
+      "part_number": "ATtiny85-20PU",
+      "package_type": "DIP-8",
+      "value_nominal": "20 MHz 8KB",
+      "specifications": "Високоефективний низькоспоживаючий 8-бітний AVR мікроконтролер, 8KB Flash, 512B EEPROM, 512B SRAM, 6 I/O ліній",
+      "min_threshold": 10,
+      "datasheet_url": "https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-2586-AVR-8-bit-Microcontroller-ATtiny25-ATtiny45-ATtiny85_Datasheet.pdf",
+      "image_path": "/media/components/attiny85.png",
+      "image_file": "components/attiny85.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 17,
+    "fields": {
+      "category": 10,
+      "part_number": "Raspberry Pi RP2040",
+      "package_type": "QFN-56",
+      "value_nominal": "133 MHz Dual Core",
+      "specifications": "Двоядерний ARM Cortex-M0+ з гнучкою частотою до 133MHz, 264KB SRAM, 8 програмованих I/O (PIO) кінцевих автоматів",
+      "min_threshold": 5,
+      "datasheet_url": "https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf",
+      "image_path": "/media/components/rp2040.jpg",
+      "image_file": "components/rp2040.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 18,
+    "fields": {
+      "category": 9,
+      "part_number": "ESP8266 ESP-12F",
+      "package_type": "SMD-16",
+      "value_nominal": "80/160 MHz 4MB",
+      "specifications": "Wi-Fi модуль на базі SoC ESP8266EX з антеною PCB, 4MB Flash, підтримка режимів AP/STA/AP+STA",
+      "min_threshold": 10,
+      "datasheet_url": "https://docs.ai-thinker.com/_media/esp8266/docs/esp-12f_product_specification_en.pdf",
+      "image_path": "/media/components/esp8266.png",
+      "image_file": "components/esp8266.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 19,
+    "fields": {
+      "category": 13,
+      "part_number": "BME280",
+      "package_type": "LGA-8",
+      "value_nominal": "I2C / SPI",
+      "specifications": "Комбінований цифровий датчик температури (-40..+85°C), відносної вологості (0..100%) та атмосферного тиску (300..1100 hPa)",
+      "min_threshold": 5,
+      "datasheet_url": "https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf",
+      "image_path": "/media/components/bme280.jpg",
+      "image_file": "components/bme280.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 20,
+    "fields": {
+      "category": 13,
+      "part_number": "DHT22 (AM2302)",
+      "package_type": "4-pin Module",
+      "value_nominal": "1-Wire",
+      "specifications": "Високоточний цифровий датчик температури (-40..+80°C, ±0.5°C) та вологості повітря (0..100%, ±2%), однопровідний інтерфейс",
+      "min_threshold": 4,
+      "datasheet_url": "https://www.sparkfun.com/datasheets/Sensors/Temperature/DHT22.pdf",
+      "image_path": "/media/components/dht22.jpg",
+      "image_file": "components/dht22.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 21,
+    "fields": {
+      "category": 14,
+      "part_number": "MPU-6050",
+      "package_type": "QFN-24 / Breakout",
+      "value_nominal": "6-DOF IMU",
+      "specifications": "6-осьовий інерційний модуль: 3-осьовий гіроскоп (до ±2000°/s) та 3-осьовий акселерометр (до ±16g) з апаратним процесором DMP, I2C",
+      "min_threshold": 4,
+      "datasheet_url": "https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-6000-Datasheet1.pdf",
+      "image_path": "/media/components/mpu6050.jpg",
+      "image_file": "components/mpu6050.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 22,
+    "fields": {
+      "category": 15,
+      "part_number": "HC-SR04",
+      "package_type": "Module",
+      "value_nominal": "2 - 400 см",
+      "specifications": "Ультразвуковий модуль вимірювання відстані від 2 см до 400 см, точність до 3 мм, кут випромінювання 15°, живлення 5V",
+      "min_threshold": 5,
+      "datasheet_url": "https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf",
+      "image_path": "/media/components/hcsr04.jpg",
+      "image_file": "components/hcsr04.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 23,
+    "fields": {
+      "category": 15,
+      "part_number": "VL53L0X",
+      "package_type": "LGA-12 / Module",
+      "value_nominal": "ToF Laser 2m",
+      "specifications": "Лазерний далекомір Time-of-Flight (ToF) нового покоління, безпечний VCSEL лазер 940nm, точне вимірювання до 2 метрів, I2C",
+      "min_threshold": 3,
+      "datasheet_url": "https://www.st.com/resource/en/datasheet/vl53l0x.pdf",
+      "image_path": "/media/components/vl53l0x.png",
+      "image_file": "components/vl53l0x.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 24,
+    "fields": {
+      "category": 17,
+      "part_number": "MQ-135",
+      "package_type": "DIP Module",
+      "value_nominal": "Air Quality",
+      "specifications": "Газовий сенсор для контролю якості повітря в приміщеннях: чутливий до NH3, оксидів азоту NOx, алкоголю, бензолу, диму та CO2",
+      "min_threshold": 2,
+      "datasheet_url": "https://www.futurlec.com/Datasheet/Sensor/MQ-135.pdf",
+      "image_path": "/media/components/mq135.png",
+      "image_file": "components/mq135.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 25,
+    "fields": {
+      "category": 18,
+      "part_number": "INA219",
+      "package_type": "SOT-23 / Module",
+      "value_nominal": "I2C 0-26V 3.2A",
+      "specifications": "Цифровий двоспрямований монітор струму та напруги по шині живлення до 26V, вбудований прецизійний шунт 0.1 Ом, 12-бітний АЦП",
+      "min_threshold": 4,
+      "datasheet_url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+      "image_path": "/media/components/ina219.jpg",
+      "image_file": "components/ina219.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 26,
+    "fields": {
+      "category": 20,
+      "part_number": "A4988",
+      "package_type": "QFN-28 / Module",
+      "value_nominal": "2A 35V 1/16",
+      "specifications": "Драйвер біполярного крокового двигуна з вбудованим транслятором, струм до 2A, мікрокрок: повний, 1/2, 1/4, 1/8, 1/16",
+      "min_threshold": 6,
+      "datasheet_url": "https://www.allegromicro.com/en/products/motor-drivers/bldc-drivers/a4988",
+      "image_path": "/media/components/a4988.jpg",
+      "image_file": "components/a4988.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 27,
+    "fields": {
+      "category": 20,
+      "part_number": "DRV8825",
+      "package_type": "HTSSOP-28 / Module",
+      "value_nominal": "2.5A 45V 1/32",
+      "specifications": "Драйвер крокових двигунів Texas Instruments до 2.5A при напрузі до 45V, підтримка надтихого мікрокроку до 1/32 кроку",
+      "min_threshold": 4,
+      "datasheet_url": "https://www.ti.com/lit/ds/symlink/drv8825.pdf",
+      "image_path": "/media/components/drv8825.jpg",
+      "image_file": "components/drv8825.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 28,
+    "fields": {
+      "category": 21,
+      "part_number": "L298N",
+      "package_type": "Multiwatt-15 / Module",
+      "value_nominal": "Dual H-Bridge 2A",
+      "specifications": "Подвійний мостовий драйвер високої потужності для керування двома колекторними двигунами DC або 4-фазним кроковим двигуном",
+      "min_threshold": 3,
+      "datasheet_url": "https://www.sparkfun.com/datasheets/Robotics/L298_H_Bridge.pdf",
+      "image_path": "/media/components/l298n.jpg",
+      "image_file": "components/l298n.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 29,
+    "fields": {
+      "category": 23,
+      "part_number": "IRLZ44N",
+      "package_type": "TO-220",
+      "value_nominal": "55V 47A N-Ch",
+      "specifications": "N-канальний польовий силовий транзистор HEXFET Logic-Level (відкривається від 3.3V/5V логіки), 55V, 47A, Rds(on)=0.022 Ом",
+      "min_threshold": 15,
+      "datasheet_url": "https://www.infineon.com/dgdl/irlz44npbf.pdf?fileId=5546d462533600a40153566b0a172718",
+      "image_path": "/media/components/irlz44n.jpg",
+      "image_file": "components/irlz44n.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 30,
+    "fields": {
+      "category": 22,
+      "part_number": "Релейний модуль 5V (1 канал)",
+      "package_type": "Module",
+      "value_nominal": "5V 250VAC 10A",
+      "specifications": "Електромагнітне реле з опторозв'язкою PC817, комутує струм до 10A при 250VAC або 30VDC, світлодіодна індикація спрацювання",
+      "min_threshold": 6,
+      "datasheet_url": "https://components101.com/switches/5v-single-channel-relay-module-pinout-features",
+      "image_path": "/media/components/relay_5v.jpg",
+      "image_file": "components/relay_5v.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 31,
+    "fields": {
+      "category": 25,
+      "part_number": "AMS1117-3.3",
+      "package_type": "SOT-223",
+      "value_nominal": "3.3V 1.0A",
+      "specifications": "Лінійний LDO стабілізатор фіксованої вихідної напруги 3.3V, максимальний струм 1000мА, падіння напруги 1.1V при 1A",
+      "min_threshold": 20,
+      "datasheet_url": "http://www.advanced-monolithic.com/pdf/ds1117.pdf",
+      "image_path": "/media/components/ams1117.jpg",
+      "image_file": "components/ams1117.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 32,
+    "fields": {
+      "category": 25,
+      "part_number": "LM7805",
+      "package_type": "TO-220",
+      "value_nominal": "5.0V 1.5A",
+      "specifications": "Класичний лінійний стабілізатор позитивної напруги +5.0V зі струмом до 1.5A, захист від перегріву та короткого замикання",
+      "min_threshold": 10,
+      "datasheet_url": "https://www.sparkfun.com/datasheets/Components/LM7805.pdf",
+      "image_path": "/media/components/lm7805.jpg",
+      "image_file": "components/lm7805.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 33,
+    "fields": {
+      "category": 26,
+      "part_number": "LM2596S-ADJ",
+      "package_type": "TO-263-5 / Module",
+      "value_nominal": "Step-Down 3A",
+      "specifications": "Імпульсний понижувальний стабілізатор DC-DC, частота 150kHz, вхідна напруга 4.5V-40V, регульований вихід 1.23V-37V до 3A",
+      "min_threshold": 5,
+      "datasheet_url": "https://www.ti.com/lit/ds/symlink/lm2596.pdf",
+      "image_path": "/media/components/lm2596.jpg",
+      "image_file": "components/lm2596.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 34,
+    "fields": {
+      "category": 28,
+      "part_number": "TP4056 з захистом",
+      "package_type": "SOP-8 / Module",
+      "value_nominal": "1A Li-Ion 4.2V",
+      "specifications": "Модуль контролера заряду одного Li-Ion/Li-Po акумулятора 1A з роз'ємом USB Type-C, захистом від перерозряду DW01A та перевантаження FS8205A",
+      "min_threshold": 10,
+      "datasheet_url": "https://dlnmh9ip6v2uc.cloudfront.net/datasheets/Prototyping/TP4056.pdf",
+      "image_path": "/media/components/tp4056.jpg",
+      "image_file": "components/tp4056.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 35,
+    "fields": {
+      "category": 30,
+      "part_number": "CH340G",
+      "package_type": "SOP-16",
+      "value_nominal": "USB-to-UART",
+      "specifications": "Мікросхема USB-UART моста, повна підтримка ліній керування модемом CTS, DSR, RI, DCD, DTR, RTS, швидкість 50bps..2Mbps",
+      "min_threshold": 10,
+      "datasheet_url": "https://www.mpja.com/download/35227cpdata.pdf",
+      "image_path": "/media/components/ch340g.jpg",
+      "image_file": "components/ch340g.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 36,
+    "fields": {
+      "category": 30,
+      "part_number": "CP2102",
+      "package_type": "QFN-28",
+      "value_nominal": "USB-to-UART",
+      "specifications": "Одночіповий високоінтегрований контролер перетворення USB у послідовний порт UART Silicon Labs, вбудовані генератор та EEPROM 1024B",
+      "min_threshold": 5,
+      "datasheet_url": "https://www.silabs.com/documents/public/data-sheets/CP2102-9.pdf",
+      "image_path": "/media/components/cp2102.png",
+      "image_file": "components/cp2102.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 37,
+    "fields": {
+      "category": 31,
+      "part_number": "MAX485",
+      "package_type": "DIP-8",
+      "value_nominal": "RS-485 / RS-422",
+      "specifications": "Диференціальний напівдуплексний трансивер промислової шини RS-485/RS-422, максимальна швидкість 2.5 Mbps, живлення 5V",
+      "min_threshold": 8,
+      "datasheet_url": "https://datasheets.maximintegrated.com/en/ds/MAX1487-MAX491.pdf",
+      "image_path": "/media/components/max485.png",
+      "image_file": "components/max485.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 38,
+    "fields": {
+      "category": 32,
+      "part_number": "MCP2515",
+      "package_type": "DIP-18 / Module",
+      "value_nominal": "CAN 2.0B SPI",
+      "specifications": "Автономний контролер мережі CAN специфікації 2.0B активний, швидкість до 1 Мбіт/с, інтерфейс підключення до MCU SPI до 10 МГц",
+      "min_threshold": 4,
+      "datasheet_url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP2515-Stand-Alone-CAN-Controller-with-SPI-20001801J.pdf",
+      "image_path": "/media/components/mcp2515.jpg",
+      "image_file": "components/mcp2515.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 39,
+    "fields": {
+      "category": 33,
+      "part_number": "SX1278 LoRa 433MHz",
+      "package_type": "SMD Module",
+      "value_nominal": "433 MHz +20dBm",
+      "specifications": "Трансивер ультрадалекого бездротового зв'язку за технологією LoRa Semtech SX1278, частотний діапазон 433MHz, чутливість до -148dBm",
+      "min_threshold": 4,
+      "datasheet_url": "https://www.semtech.com/products/wireless-rf/lora-connect/sx1278",
+      "image_path": "/media/components/sx1278.png",
+      "image_file": "components/sx1278.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 40,
+    "fields": {
+      "category": 36,
+      "part_number": "74HC595",
+      "package_type": "DIP-16",
+      "value_nominal": "8-bit SIPO Shift",
+      "specifications": "8-розрядний зсувний регістр з послідовним вводом і паралельним виводом з тристабільними вихідними регістрами-защіпками",
+      "min_threshold": 12,
+      "datasheet_url": "https://www.ti.com/lit/ds/symlink/sn74hc595.pdf",
+      "image_path": "/media/components/74hc595.jpg",
+      "image_file": "components/74hc595.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 41,
+    "fields": {
+      "category": 40,
+      "part_number": "SSD1306 0.96\" OLED (I2C)",
+      "package_type": "Module 4-pin",
+      "value_nominal": "128x64 White I2C",
+      "specifications": "Монохромний графічний OLED дисплей діагоналлю 0.96 дюйма, роздільна здатність 128x64 точок, контролер SSD1306, інтерфейс I2C (0x3C)",
+      "min_threshold": 5,
+      "datasheet_url": "https://cdn-shop.adafruit.com/datasheets/SSD1306.pdf",
+      "image_path": "/media/components/ssd1306.png",
+      "image_file": "components/ssd1306.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 42,
+    "fields": {
+      "category": 41,
+      "part_number": "LCD 1602 I2C",
+      "package_type": "Module 16x2",
+      "value_nominal": "16x2 Blue/White",
+      "specifications": "Символьний рідкокристалічний матричний дисплей 16x2 із синім підсвічуванням та встановленим перехідником I2C PCF8574T (адреса 0x27)",
+      "min_threshold": 3,
+      "datasheet_url": "https://www.sparkfun.com/datasheets/LCD/HD44780.pdf",
+      "image_path": "/media/components/lcd1602.png",
+      "image_file": "components/lcd1602.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 43,
+    "fields": {
+      "category": 42,
+      "part_number": "TM1637",
+      "package_type": "Module 4-pin",
+      "value_nominal": "4-digit 0.36\"",
+      "specifications": "4-розрядний 7-сегментний цифровий світлодіодний індикатор з двопровідною шиною керування чіпом TM1637 та регулюванням яскравості",
+      "min_threshold": 4,
+      "datasheet_url": "https://www.titanmicro.net/media/productpdf/TM1637_V2.4_EN.pdf",
+      "image_path": "/media/components/tm1637.png",
+      "image_file": "components/tm1637.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 44,
+    "fields": {
+      "category": 45,
+      "part_number": "Резистор SMD 0805 10k",
+      "package_type": "0805",
+      "value_nominal": "10 кОм ±1%",
+      "specifications": "Прецизійний товстоплівковий SMD чіп-резистор 10 kOhm ±1%, потужність 0.125W (1/8W), робоча напруга 150V",
+      "min_threshold": 100,
+      "datasheet_url": "https://www.yageo.com/upload/products/datasheet/rchip/PYu-RC_Group_51_RoHS_L_12.pdf",
+      "image_path": "/media/components/resistor_0805.jpg",
+      "image_file": "components/resistor_0805.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 45,
+    "fields": {
+      "category": 45,
+      "part_number": "Резистор SMD 0805 220R",
+      "package_type": "0805",
+      "value_nominal": "220 Ом ±1%",
+      "specifications": "Товстоплівковий SMD резистор 220 Ohm ±1%, 0.125W, стандартний струмообмежувач для світлодіодів при 3.3V/5V",
+      "min_threshold": 100,
+      "datasheet_url": "https://www.yageo.com/upload/products/datasheet/rchip/PYu-RC_Group_51_RoHS_L_12.pdf",
+      "image_path": "/media/components/resistor_220r.jpg",
+      "image_file": "components/resistor_220r.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 46,
+    "fields": {
+      "category": 45,
+      "part_number": "Резистор SMD 0805 4.7k",
+      "package_type": "0805",
+      "value_nominal": "4.7 кОм ±1%",
+      "specifications": "SMD чіп-резистор 4.7 kOhm ±1%, 0.125W, рекомендований pull-up резистор для шин даних I2C та 1-Wire",
+      "min_threshold": 100,
+      "datasheet_url": "https://www.yageo.com/upload/products/datasheet/rchip/PYu-RC_Group_51_RoHS_L_12.pdf",
+      "image_path": "/media/components/resistor_4k7.jpg",
+      "image_file": "components/resistor_4k7.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 47,
+    "fields": {
+      "category": 46,
+      "part_number": "Конденсатор SMD 0805 100nF",
+      "package_type": "0805",
+      "value_nominal": "100 нФ 50V",
+      "specifications": "Керамічний багатошаровий конденсатор SMD (MLCC) 0.1 мкФ (100nF) 50V диелектрик X7R ±10%, блокувальний конденсатор живлення IC",
+      "min_threshold": 150,
+      "datasheet_url": "https://content.kemet.com/datasheets/KEM_C1002_X7R_SMD.pdf",
+      "image_path": "/media/components/capacitor_0805.jpg",
+      "image_file": "components/capacitor_0805.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 48,
+    "fields": {
+      "category": 46,
+      "part_number": "Конденсатор 100uF 25V",
+      "package_type": "Radial 5x11",
+      "value_nominal": "100 мкФ 25V",
+      "specifications": "Радіальний електролітичний конденсатор 100 мкФ 25V, температурний діапазон -40..+105°C, фільтрація імпульсних завад",
+      "min_threshold": 25,
+      "datasheet_url": "https://industrial.panasonic.com/cdbs/www-data/pdf/RDF0000/ABA0000C1185.pdf",
+      "image_path": "/media/components/capacitor_100uf.png",
+      "image_file": "components/capacitor_100uf.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 49,
+    "fields": {
+      "category": 47,
+      "part_number": "Кварцовий резонатор 16.000 MHz",
+      "package_type": "HC-49S",
+      "value_nominal": "16.000 МГц",
+      "specifications": "Низькопрофільний кварцовий кристал 16.000 MHz в металевому корпусі HC-49/S, точність ±20ppm, ємність навантаження 20pF",
+      "min_threshold": 15,
+      "datasheet_url": "https://www.ecsxtal.com/store/pdf/hc-49us.pdf",
+      "image_path": "/media/components/crystal_16mhz.jpg",
+      "image_file": "components/crystal_16mhz.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 50,
+    "fields": {
+      "category": 51,
+      "part_number": "Клемник гвинтовий KF301-2P",
+      "package_type": "5.08mm 2-pin",
+      "value_nominal": "2-pin 5.08mm",
+      "specifications": "Монтажний гвинтовий клемник для друкованих плат KF301-2P, крок між контактами 5.08 мм, синій PBT, до 300V 16A",
+      "min_threshold": 20,
+      "datasheet_url": "https://www.sparkfun.com/datasheets/Prototyping/ScrewTerminal-5mm.pdf",
+      "image_path": "/media/components/kf301.png",
+      "image_file": "components/kf301.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 51,
+    "fields": {
+      "category": 50,
+      "part_number": "Штирьовий роз'єм PLS-40",
+      "package_type": "1x40 2.54mm",
+      "value_nominal": "1x40 Male",
+      "specifications": "Однорядна лінійка вилок штирьових прямого монтажу (папа) 40 контактів, стандартний крок 2.54 мм, латунне золочення",
+      "min_threshold": 20,
+      "datasheet_url": "https://cdn.sparkfun.com/datasheets/Prototyping/Header.pdf",
+      "image_path": "/media/components/pls40.png",
+      "image_file": "components/pls40.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 52,
+    "fields": {
+      "category": 49,
+      "part_number": "Тактова кнопка 6x6x5 мм",
+      "package_type": "DIP-4 / 6x6",
+      "value_nominal": "6x6x5 mm",
+      "specifications": "Тактовий мікрокнопковий перемикач 6х6 мм висотою 5 мм, 4 контакти для надійного монтажу на плату, 12V 50mA",
+      "min_threshold": 30,
+      "datasheet_url": "https://www.ckswitches.com/media/1471/pts645.pdf",
+      "image_path": "/media/components/tactile_switch.jpg",
+      "image_file": "components/tactile_switch.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 1,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 1,
+      "pin_label": "3V3",
+      "signal_type": "Power",
+      "description": "Напруга живлення 3.3V"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 2,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 2,
+      "pin_label": "EN",
+      "signal_type": "Reset",
+      "description": "Скидання мікроконтролера (Active LOW)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 3,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 3,
+      "pin_label": "GPIO36 / VP",
+      "signal_type": "ADC",
+      "description": "АЦП 1_CH0, сенсорний вхід"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 4,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 4,
+      "pin_label": "GPIO39 / VN",
+      "signal_type": "ADC",
+      "description": "АЦП 1_CH3, сенсорний вхід"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 5,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 5,
+      "pin_label": "GPIO34",
+      "signal_type": "ADC",
+      "description": "Вхід АЦП 1_CH6 (лише вхід)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 6,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 6,
+      "pin_label": "GPIO35",
+      "signal_type": "ADC",
+      "description": "Вхід АЦП 1_CH7 (лише вхід)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 7,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 7,
+      "pin_label": "GPIO32",
+      "signal_type": "GPIO",
+      "description": "АЦП 1_CH4, сенсор Touch9"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 8,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 8,
+      "pin_label": "GPIO33",
+      "signal_type": "GPIO",
+      "description": "АЦП 1_CH5, сенсор Touch8"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 9,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 9,
+      "pin_label": "GPIO25",
+      "signal_type": "GPIO",
+      "description": "ЦАП 1 (DAC1), АЦП 2_CH8"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 10,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 10,
+      "pin_label": "GPIO26",
+      "signal_type": "GPIO",
+      "description": "ЦАП 2 (DAC2), АЦП 2_CH9"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 11,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 11,
+      "pin_label": "GPIO27",
+      "signal_type": "GPIO",
+      "description": "АЦП 2_CH7, Touch7"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 12,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 12,
+      "pin_label": "GPIO14",
+      "signal_type": "SPI",
+      "description": "HSPI_CLK, Touch6, ADC2_CH6"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 13,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 13,
+      "pin_label": "GPIO12",
+      "signal_type": "SPI",
+      "description": "HSPI_MISO, Touch5, ADC2_CH5"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 14,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 14,
+      "pin_label": "GND",
+      "signal_type": "Ground",
+      "description": "Спільний провідник (Земля)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 15,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 15,
+      "pin_label": "GPIO13",
+      "signal_type": "SPI",
+      "description": "HSPI_MOSI, Touch4, ADC2_CH4"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 16,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 16,
+      "pin_label": "GPIO9 / D2",
+      "signal_type": "GPIO",
+      "description": "Flash SPI Data 2"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 17,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 17,
+      "pin_label": "GPIO10 / D3",
+      "signal_type": "GPIO",
+      "description": "Flash SPI Data 3"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 18,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 18,
+      "pin_label": "GPIO11 / CMD",
+      "signal_type": "GPIO",
+      "description": "Flash SPI Command"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 19,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 19,
+      "pin_label": "VIN / 5V",
+      "signal_type": "Power",
+      "description": "Вхід живлення від USB або зовнішнього джерела 5V"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 20,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 1,
+      "pin_label": "GND",
+      "signal_type": "Ground",
+      "description": "Спільний провідник (Земля)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 21,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 2,
+      "pin_label": "GPIO23",
+      "signal_type": "SPI",
+      "description": "VSPI_MOSI"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 22,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 3,
+      "pin_label": "GPIO22",
+      "signal_type": "I2C",
+      "description": "I2C SCL (Апаратна лінія тактування I2C)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 23,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 4,
+      "pin_label": "GPIO1 / TXD0",
+      "signal_type": "UART",
+      "description": "UART0 Transmit (Логування / Завантаження)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 24,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 5,
+      "pin_label": "GPIO3 / RXD0",
+      "signal_type": "UART",
+      "description": "UART0 Receive (Завантаження коду)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 25,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 6,
+      "pin_label": "GPIO21",
+      "signal_type": "I2C",
+      "description": "I2C SDA (Апаратна лінія даних I2C)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 26,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 7,
+      "pin_label": "GND",
+      "signal_type": "Ground",
+      "description": "Спільний провідник (Земля)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 27,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 8,
+      "pin_label": "GPIO19",
+      "signal_type": "SPI",
+      "description": "VSPI_MISO"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 28,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 9,
+      "pin_label": "GPIO18",
+      "signal_type": "SPI",
+      "description": "VSPI_SCK"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 29,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 10,
+      "pin_label": "GPIO5",
+      "signal_type": "SPI",
+      "description": "VSPI_CS"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 30,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 11,
+      "pin_label": "GPIO17",
+      "signal_type": "UART",
+      "description": "UART2 TXD"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 31,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 12,
+      "pin_label": "GPIO16",
+      "signal_type": "UART",
+      "description": "UART2 RXD"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 32,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 13,
+      "pin_label": "GPIO4",
+      "signal_type": "GPIO",
+      "description": "АЦП 2_CH0, Touch0"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 33,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 14,
+      "pin_label": "GPIO0",
+      "signal_type": "Reset",
+      "description": "Boot-режим: LOW для прошивки, Touch1"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 34,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 15,
+      "pin_label": "GPIO2",
+      "signal_type": "GPIO",
+      "description": "Вбудований світлодіод, Boot-пін, Touch2"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 35,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 16,
+      "pin_label": "GPIO15",
+      "signal_type": "SPI",
+      "description": "HSPI_CS, ADC2_CH3, Touch3"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 36,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 17,
+      "pin_label": "GPIO8 / D1",
+      "signal_type": "GPIO",
+      "description": "Flash SPI Data 1"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 37,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 18,
+      "pin_label": "GPIO7 / D0",
+      "signal_type": "GPIO",
+      "description": "Flash SPI Data 0"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 38,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 19,
+      "pin_label": "GPIO6 / CLK",
+      "signal_type": "SPI",
+      "description": "Flash SPI Clock"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 39,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 1,
+      "pin_label": "PC6 / RESET",
+      "signal_type": "Reset",
+      "description": "Зовнішнє скидання Active Low"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 40,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 2,
+      "pin_label": "PD0 / RXD",
+      "signal_type": "UART",
+      "description": "USART Receive"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 41,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 3,
+      "pin_label": "PD1 / TXD",
+      "signal_type": "UART",
+      "description": "USART Transmit"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 42,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 4,
+      "pin_label": "PD2 / INT0",
+      "signal_type": "GPIO",
+      "description": "Зовнішнє переривання 0"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 43,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 5,
+      "pin_label": "PD3 / INT1",
+      "signal_type": "GPIO",
+      "description": "Зовнішнє переривання 1 / PWM"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 44,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 6,
+      "pin_label": "PD4 / T0",
+      "signal_type": "GPIO",
+      "description": "Вхід лічильника Timer0"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 45,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 7,
+      "pin_label": "VCC",
+      "signal_type": "Power",
+      "description": "Напруга живлення цифрової логіки (+5V)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 46,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 8,
+      "pin_label": "GND",
+      "signal_type": "Ground",
+      "description": "Земля"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 47,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 9,
+      "pin_label": "PB6 / XTAL1",
+      "signal_type": "GPIO",
+      "description": "Вхід тактового кварцового генератора"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 48,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 10,
+      "pin_label": "PB7 / XTAL2",
+      "signal_type": "GPIO",
+      "description": "Вихід тактового кварцового генератора"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 49,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 11,
+      "pin_label": "PD5 / T1",
+      "signal_type": "GPIO",
+      "description": "Вхід лічильника Timer1 / PWM"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 50,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 12,
+      "pin_label": "PD6 / AIN0",
+      "signal_type": "GPIO",
+      "description": "Аналоговий компаратор 0 / PWM"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 51,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 13,
+      "pin_label": "PD7 / AIN1",
+      "signal_type": "GPIO",
+      "description": "Аналоговий компаратор 1"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 52,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 14,
+      "pin_label": "PB0 / ICP1",
+      "signal_type": "GPIO",
+      "description": "Вхід захоплення таймера 1"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 53,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 1,
+      "pin_label": "PC5 / SCL",
+      "signal_type": "I2C",
+      "description": "I2C Serial Clock / АЦП вхід ADC5"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 54,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 2,
+      "pin_label": "PC4 / SDA",
+      "signal_type": "I2C",
+      "description": "I2C Serial Data / АЦП вхід ADC4"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 55,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 3,
+      "pin_label": "PC3 / ADC3",
+      "signal_type": "ADC",
+      "description": "АЦП канал 3"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 56,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 4,
+      "pin_label": "PC2 / ADC2",
+      "signal_type": "ADC",
+      "description": "АЦП канал 2"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 57,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 5,
+      "pin_label": "PC1 / ADC1",
+      "signal_type": "ADC",
+      "description": "АЦП канал 1"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 58,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 6,
+      "pin_label": "PC0 / ADC0",
+      "signal_type": "ADC",
+      "description": "АЦП канал 0"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 59,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 7,
+      "pin_label": "GND",
+      "signal_type": "Ground",
+      "description": "Аналогова земля"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 60,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 8,
+      "pin_label": "AREF",
+      "signal_type": "Power",
+      "description": "Опорна напруга для АЦП"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 61,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 9,
+      "pin_label": "AVCC",
+      "signal_type": "Power",
+      "description": "Напруга живлення АЦП (+5V)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 62,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 10,
+      "pin_label": "PB5 / SCK",
+      "signal_type": "SPI",
+      "description": "SPI тактування / системний LED D13"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 63,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 11,
+      "pin_label": "PB4 / MISO",
+      "signal_type": "SPI",
+      "description": "SPI Master In Slave Out"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 64,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 12,
+      "pin_label": "PB3 / MOSI",
+      "signal_type": "SPI",
+      "description": "SPI Master Out Slave In / PWM"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 65,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 13,
+      "pin_label": "PB2 / SS",
+      "signal_type": "SPI",
+      "description": "SPI Slave Select / PWM"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 66,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 14,
+      "pin_label": "PB1 / OC1A",
+      "signal_type": "GPIO",
+      "description": "Вихід таймера Timer1A / PWM"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 67,
+    "fields": {
+      "component": 41,
+      "side": "left",
+      "pin_number": 1,
+      "pin_label": "GND",
+      "signal_type": "Ground",
+      "description": "Спільний провідник (Земля)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 68,
+    "fields": {
+      "component": 41,
+      "side": "left",
+      "pin_number": 2,
+      "pin_label": "VCC",
+      "signal_type": "Power",
+      "description": "Живлення дисплея 3.3V - 5V"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 69,
+    "fields": {
+      "component": 41,
+      "side": "right",
+      "pin_number": 1,
+      "pin_label": "SCL",
+      "signal_type": "I2C",
+      "description": "Лінія тактування I2C Clock"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 70,
+    "fields": {
+      "component": 41,
+      "side": "right",
+      "pin_number": 2,
+      "pin_label": "SDA",
+      "signal_type": "I2C",
+      "description": "Лінія даних I2C Data"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 71,
+    "fields": {
+      "component": 19,
+      "side": "left",
+      "pin_number": 1,
+      "pin_label": "VCC",
+      "signal_type": "Power",
+      "description": "Живлення 3.3V"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 72,
+    "fields": {
+      "component": 19,
+      "side": "left",
+      "pin_number": 2,
+      "pin_label": "GND",
+      "signal_type": "Ground",
+      "description": "Земля"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 73,
+    "fields": {
+      "component": 19,
+      "side": "left",
+      "pin_number": 3,
+      "pin_label": "SCL",
+      "signal_type": "I2C",
+      "description": "I2C / SPI Тактова лінія SCK"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 74,
+    "fields": {
+      "component": 19,
+      "side": "right",
+      "pin_number": 1,
+      "pin_label": "SDA",
+      "signal_type": "I2C",
+      "description": "I2C / SPI Лінія даних SDI"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 75,
+    "fields": {
+      "component": 19,
+      "side": "right",
+      "pin_number": 2,
+      "pin_label": "CSB",
+      "signal_type": "SPI",
+      "description": "Chip Select SPI (Active Low)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 76,
+    "fields": {
+      "component": 19,
+      "side": "right",
+      "pin_number": 3,
+      "pin_label": "SDO",
+      "signal_type": "SPI",
+      "description": "SPI Data Out / I2C адреса вибір (0x76/0x77)"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 127,
+    "fields": {
+      "box_number": "Касетниця SMD",
+      "shelf": "Ряд 1",
+      "cell_code": "SMD1-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 128,
+    "fields": {
+      "box_number": "Касетниця SMD",
+      "shelf": "Ряд 1",
+      "cell_code": "SMD1-02"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 129,
+    "fields": {
+      "box_number": "Касетниця SMD",
+      "shelf": "Ряд 1",
+      "cell_code": "SMD1-03"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 130,
+    "fields": {
+      "box_number": "Касетниця SMD",
+      "shelf": "Ряд 2",
+      "cell_code": "SMD2-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 131,
+    "fields": {
+      "box_number": "Касетниця SMD",
+      "shelf": "Ряд 2",
+      "cell_code": "SMD2-02"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 132,
+    "fields": {
+      "box_number": "Касетниця SMD",
+      "shelf": "Ряд 2",
+      "cell_code": "SMD2-03"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 101,
+    "fields": {
+      "box_number": "Органайзер A (MCU & Модулі)",
+      "shelf": "Полиця 1",
+      "cell_code": "A1-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 102,
+    "fields": {
+      "box_number": "Органайзер A (MCU & Модулі)",
+      "shelf": "Полиця 1",
+      "cell_code": "A1-02"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 103,
+    "fields": {
+      "box_number": "Органайзер A (MCU & Модулі)",
+      "shelf": "Полиця 2",
+      "cell_code": "A2-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 104,
+    "fields": {
+      "box_number": "Органайзер A (MCU & Модулі)",
+      "shelf": "Полиця 2",
+      "cell_code": "A2-02"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 105,
+    "fields": {
+      "box_number": "Органайзер B (Сенсори & Дисплеї)",
+      "shelf": "Полиця 1",
+      "cell_code": "B1-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 106,
+    "fields": {
+      "box_number": "Органайзер B (Сенсори & Дисплеї)",
+      "shelf": "Полиця 1",
+      "cell_code": "B1-02"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 107,
+    "fields": {
+      "box_number": "Органайзер B (Сенсори & Дисплеї)",
+      "shelf": "Полиця 2",
+      "cell_code": "B2-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 108,
+    "fields": {
+      "box_number": "Органайзер B (Сенсори & Дисплеї)",
+      "shelf": "Полиця 2",
+      "cell_code": "B2-02"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 109,
+    "fields": {
+      "box_number": "Стелаж C (Силова частина & Живлення)",
+      "shelf": "Секція 1",
+      "cell_code": "C1-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 110,
+    "fields": {
+      "box_number": "Стелаж C (Силова частина & Живлення)",
+      "shelf": "Секція 1",
+      "cell_code": "C1-02"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 111,
+    "fields": {
+      "box_number": "Стелаж C (Силова частина & Живлення)",
+      "shelf": "Секція 2",
+      "cell_code": "C2-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 112,
+    "fields": {
+      "box_number": "Стелаж C (Силова частина & Живлення)",
+      "shelf": "Секція 2",
+      "cell_code": "C2-02"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 113,
+    "fields": {
+      "box_number": "Органайзер D (Комутація & Зв'язок)",
+      "shelf": "Полиця 1",
+      "cell_code": "D1-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 114,
+    "fields": {
+      "box_number": "Органайзер D (Комутація & Зв'язок)",
+      "shelf": "Полиця 1",
+      "cell_code": "D1-02"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 12,
+    "fields": {
+      "component": 12,
+      "location": 127,
+      "quantity_on_hand": 14,
+      "quantity_reserved": 0,
+      "unit_price": "165.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 13,
+    "fields": {
+      "component": 13,
+      "location": 101,
+      "quantity_on_hand": 15,
+      "quantity_reserved": 1,
+      "unit_price": "88.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 14,
+    "fields": {
+      "component": 14,
+      "location": 101,
+      "quantity_on_hand": 8,
+      "quantity_reserved": 0,
+      "unit_price": "145.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 15,
+    "fields": {
+      "component": 15,
+      "location": 102,
+      "quantity_on_hand": 4,
+      "quantity_reserved": 0,
+      "unit_price": "95.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 16,
+    "fields": {
+      "component": 16,
+      "location": 102,
+      "quantity_on_hand": 18,
+      "quantity_reserved": 0,
+      "unit_price": "42.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 17,
+    "fields": {
+      "component": 17,
+      "location": 103,
+      "quantity_on_hand": 12,
+      "quantity_reserved": 1,
+      "unit_price": "68.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 18,
+    "fields": {
+      "component": 18,
+      "location": 104,
+      "quantity_on_hand": 20,
+      "quantity_reserved": 0,
+      "unit_price": "75.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 19,
+    "fields": {
+      "component": 19,
+      "location": 105,
+      "quantity_on_hand": 11,
+      "quantity_reserved": 1,
+      "unit_price": "120.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 20,
+    "fields": {
+      "component": 20,
+      "location": 105,
+      "quantity_on_hand": 6,
+      "quantity_reserved": 0,
+      "unit_price": "85.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 21,
+    "fields": {
+      "component": 21,
+      "location": 106,
+      "quantity_on_hand": 7,
+      "quantity_reserved": 1,
+      "unit_price": "65.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 22,
+    "fields": {
+      "component": 22,
+      "location": 106,
+      "quantity_on_hand": 10,
+      "quantity_reserved": 0,
+      "unit_price": "45.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 23,
+    "fields": {
+      "component": 23,
+      "location": 107,
+      "quantity_on_hand": 5,
+      "quantity_reserved": 0,
+      "unit_price": "130.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 24,
+    "fields": {
+      "component": 24,
+      "location": 107,
+      "quantity_on_hand": 0,
+      "quantity_reserved": 0,
+      "unit_price": "70.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 25,
+    "fields": {
+      "component": 25,
+      "location": 108,
+      "quantity_on_hand": 8,
+      "quantity_reserved": 0,
+      "unit_price": "90.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 26,
+    "fields": {
+      "component": 26,
+      "location": 109,
+      "quantity_on_hand": 14,
+      "quantity_reserved": 0,
+      "unit_price": "48.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 27,
+    "fields": {
+      "component": 27,
+      "location": 109,
+      "quantity_on_hand": 2,
+      "quantity_reserved": 2,
+      "unit_price": "72.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 28,
+    "fields": {
+      "component": 28,
+      "location": 110,
+      "quantity_on_hand": 5,
+      "quantity_reserved": 0,
+      "unit_price": "85.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 29,
+    "fields": {
+      "component": 29,
+      "location": 110,
+      "quantity_on_hand": 30,
+      "quantity_reserved": 0,
+      "unit_price": "24.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 30,
+    "fields": {
+      "component": 30,
+      "location": 111,
+      "quantity_on_hand": 12,
+      "quantity_reserved": 1,
+      "unit_price": "38.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 31,
+    "fields": {
+      "component": 31,
+      "location": 111,
+      "quantity_on_hand": 65,
+      "quantity_reserved": 0,
+      "unit_price": "6.50"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 32,
+    "fields": {
+      "component": 32,
+      "location": 111,
+      "quantity_on_hand": 25,
+      "quantity_reserved": 0,
+      "unit_price": "14.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 33,
+    "fields": {
+      "component": 33,
+      "location": 112,
+      "quantity_on_hand": 8,
+      "quantity_reserved": 1,
+      "unit_price": "45.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 34,
+    "fields": {
+      "component": 34,
+      "location": 112,
+      "quantity_on_hand": 22,
+      "quantity_reserved": 1,
+      "unit_price": "22.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 35,
+    "fields": {
+      "component": 35,
+      "location": 113,
+      "quantity_on_hand": 25,
+      "quantity_reserved": 0,
+      "unit_price": "18.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 36,
+    "fields": {
+      "component": 36,
+      "location": 113,
+      "quantity_on_hand": 9,
+      "quantity_reserved": 0,
+      "unit_price": "62.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 37,
+    "fields": {
+      "component": 37,
+      "location": 114,
+      "quantity_on_hand": 15,
+      "quantity_reserved": 0,
+      "unit_price": "16.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 38,
+    "fields": {
+      "component": 38,
+      "location": 114,
+      "quantity_on_hand": 6,
+      "quantity_reserved": 0,
+      "unit_price": "78.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 39,
+    "fields": {
+      "component": 39,
+      "location": 114,
+      "quantity_on_hand": 8,
+      "quantity_reserved": 0,
+      "unit_price": "140.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 40,
+    "fields": {
+      "component": 40,
+      "location": 114,
+      "quantity_on_hand": 20,
+      "quantity_reserved": 0,
+      "unit_price": "12.50"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 41,
+    "fields": {
+      "component": 41,
+      "location": 108,
+      "quantity_on_hand": 9,
+      "quantity_reserved": 1,
+      "unit_price": "115.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 42,
+    "fields": {
+      "component": 42,
+      "location": 108,
+      "quantity_on_hand": 1,
+      "quantity_reserved": 0,
+      "unit_price": "145.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 43,
+    "fields": {
+      "component": 43,
+      "location": 107,
+      "quantity_on_hand": 7,
+      "quantity_reserved": 0,
+      "unit_price": "55.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 44,
+    "fields": {
+      "component": 44,
+      "location": 128,
+      "quantity_on_hand": 650,
+      "quantity_reserved": 2,
+      "unit_price": "0.35"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 45,
+    "fields": {
+      "component": 45,
+      "location": 128,
+      "quantity_on_hand": 400,
+      "quantity_reserved": 0,
+      "unit_price": "0.35"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 46,
+    "fields": {
+      "component": 46,
+      "location": 129,
+      "quantity_on_hand": 500,
+      "quantity_reserved": 0,
+      "unit_price": "0.35"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 47,
+    "fields": {
+      "component": 47,
+      "location": 129,
+      "quantity_on_hand": 800,
+      "quantity_reserved": 3,
+      "unit_price": "0.45"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 48,
+    "fields": {
+      "component": 48,
+      "location": 130,
+      "quantity_on_hand": 45,
+      "quantity_reserved": 0,
+      "unit_price": "3.20"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 49,
+    "fields": {
+      "component": 49,
+      "location": 130,
+      "quantity_on_hand": 24,
+      "quantity_reserved": 0,
+      "unit_price": "6.80"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 50,
+    "fields": {
+      "component": 50,
+      "location": 131,
+      "quantity_on_hand": 35,
+      "quantity_reserved": 0,
+      "unit_price": "8.50"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 51,
+    "fields": {
+      "component": 51,
+      "location": 131,
+      "quantity_on_hand": 40,
+      "quantity_reserved": 0,
+      "unit_price": "11.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 52,
+    "fields": {
+      "component": 52,
+      "location": 132,
+      "quantity_on_hand": 80,
+      "quantity_reserved": 0,
+      "unit_price": "2.20"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 101,
+    "fields": {
+      "stock": 13,
+      "transaction_type": "purchase_in",
+      "quantity_change": 15,
+      "reference_id": null,
+      "notes": "Надходження замовлення #101 від Космодром",
+      "created_at": "2026-10-01T11:00:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 102,
+    "fields": {
+      "stock": 19,
+      "transaction_type": "purchase_in",
+      "quantity_change": 12,
+      "reference_id": null,
+      "notes": "Партія сенсорів тиску BME280 від Biukop",
+      "created_at": "2026-10-02T14:30:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 103,
+    "fields": {
+      "stock": 19,
+      "transaction_type": "consumption_out",
+      "quantity_change": -1,
+      "reference_id": null,
+      "notes": "Списання на монтаж прототипу метеостанції",
+      "created_at": "2026-10-05T09:40:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 104,
+    "fields": {
+      "stock": 26,
+      "transaction_type": "purchase_in",
+      "quantity_change": 20,
+      "reference_id": null,
+      "notes": "Поповнення запасів драйверів A4988",
+      "created_at": "2026-10-08T16:15:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 105,
+    "fields": {
+      "stock": 26,
+      "transaction_type": "consumption_out",
+      "quantity_change": -6,
+      "reference_id": null,
+      "notes": "Видача в лабораторію ЧПУ станків",
+      "created_at": "2026-10-09T17:20:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 106,
+    "fields": {
+      "stock": 44,
+      "transaction_type": "purchase_in",
+      "quantity_change": 1000,
+      "reference_id": null,
+      "notes": "Котушка резисторів 0805 10k від LCSC",
+      "created_at": "2026-10-10T12:00:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 107,
+    "fields": {
+      "stock": 44,
+      "transaction_type": "consumption_out",
+      "quantity_change": -350,
+      "reference_id": null,
+      "notes": "Серійний монтаж плат телеметрії",
+      "created_at": "2026-10-12T15:10:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 108,
+    "fields": {
+      "stock": 31,
+      "transaction_type": "purchase_in",
+      "quantity_change": 100,
+      "reference_id": null,
+      "notes": "Стрічка стабілізаторів AMS1117-3.3 від LCSC",
+      "created_at": "2026-10-14T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 109,
+    "fields": {
+      "stock": 31,
+      "transaction_type": "consumption_out",
+      "quantity_change": -35,
+      "reference_id": null,
+      "notes": "Монтаж плат контролерів",
+      "created_at": "2026-10-14T14:25:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 110,
+    "fields": {
+      "stock": 27,
+      "transaction_type": "consumption_out",
+      "quantity_change": -8,
+      "reference_id": null,
+      "notes": "Видача на робототехнічний гурток",
+      "created_at": "2026-10-15T16:00:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.orders",
+    "pk": 1,
+    "fields": {
+      "supplier": 1,
+      "tracking_number": "20450892019342",
+      "status": "delivered",
+      "order_date": "2026-09-15T11:20:00+03:00",
+      "expected_delivery": "2026-09-18"
+    }
+  },
+  {
+    "model": "inventory.orders",
+    "pk": 2,
+    "fields": {
+      "supplier": 4,
+      "tracking_number": "LCSC849201844",
+      "status": "shipped",
+      "order_date": "2026-10-04T16:45:00+03:00",
+      "expected_delivery": "2026-10-22"
+    }
+  },
+  {
+    "model": "inventory.orders",
+    "pk": 3,
+    "fields": {
+      "supplier": 3,
+      "tracking_number": "59000847291038",
+      "status": "ordered",
+      "order_date": "2026-10-13T09:30:00+03:00",
+      "expected_delivery": "2026-10-18"
+    }
+  },
+  {
+    "model": "inventory.orders",
+    "pk": 4,
+    "fields": {
+      "supplier": 5,
+      "tracking_number": null,
+      "status": "pending",
+      "order_date": "2026-10-15T18:10:00+03:00",
+      "expected_delivery": "2026-10-30"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 1,
+    "fields": {
+      "order": 1,
+      "component": 12,
+      "quantity_ordered": 10,
+      "unit_price": "150.00"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 2,
+    "fields": {
+      "order": 1,
+      "component": 19,
+      "quantity_ordered": 10,
+      "unit_price": "110.00"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 3,
+    "fields": {
+      "order": 1,
+      "component": 30,
+      "quantity_ordered": 15,
+      "unit_price": "32.00"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 4,
+    "fields": {
+      "order": 2,
+      "component": 13,
+      "quantity_ordered": 20,
+      "unit_price": "72.50"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 5,
+    "fields": {
+      "order": 2,
+      "component": 31,
+      "quantity_ordered": 100,
+      "unit_price": "4.80"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 6,
+    "fields": {
+      "order": 2,
+      "component": 44,
+      "quantity_ordered": 1000,
+      "unit_price": "0.18"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 7,
+    "fields": {
+      "order": 2,
+      "component": 47,
+      "quantity_ordered": 1000,
+      "unit_price": "0.22"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 8,
+    "fields": {
+      "order": 3,
+      "component": 41,
+      "quantity_ordered": 10,
+      "unit_price": "98.00"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 9,
+    "fields": {
+      "order": 3,
+      "component": 27,
+      "quantity_ordered": 10,
+      "unit_price": "62.00"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 10,
+    "fields": {
+      "order": 3,
+      "component": 24,
+      "quantity_ordered": 5,
+      "unit_price": "58.00"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 11,
+    "fields": {
+      "order": 4,
+      "component": 14,
+      "quantity_ordered": 5,
+      "unit_price": "135.00"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 12,
+    "fields": {
+      "order": 4,
+      "component": 23,
+      "quantity_ordered": 10,
+      "unit_price": "115.00"
+    }
+  },
+  {
+    "model": "projects.projects",
+    "pk": 1,
+    "fields": {
+      "name": "Автономна метеостанція (IoT Weather Station)",
+      "description": "Метеостанція з сонячною панеллю та батареєю Li-Ion 18650. Вимірює температуру, вологість і атмосферний тиск, виводить показники на OLED дисплей та надсилає дані на брокер MQTT по Wi-Fi.",
+      "created_by": 1,
+      "image_path": null,
+      "image_file": "",
+      "status": "in_progress",
+      "is_private": false,
+      "created_at": "2026-10-10T11:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projects",
+    "pk": 2,
+    "fields": {
+      "name": "ESP-32-TEST-PROJECT",
+      "description": "Тестовий проект для верифікації резервування та списання деталей зі складу.",
+      "created_by": 1,
+      "image_path": null,
+      "image_file": "",
+      "status": "planning",
+      "is_private": true,
+      "created_at": "2026-10-14T12:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projects",
+    "pk": 3,
+    "fields": {
+      "name": "Контролер розумної теплиці (Greenhouse Automation)",
+      "description": "Автоматизована система мікроклімату для зимової теплиці: терморегуляція, зволоження повітря, крапельний полив та підсвічування фітолампами.",
+      "created_by": 2,
+      "image_path": null,
+      "image_file": "",
+      "status": "planning",
+      "is_private": false,
+      "created_at": "2026-10-12T15:30:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projects",
+    "pk": 4,
+    "fields": {
+      "name": "Двоколісний балансуючий робот (Self-Balancing Robot)",
+      "description": "Компактна двоколісна самобалансуюча платформа на базі RP2040, гіро-акселерометра MPU-6050 та крокових моторів NEMA17 з драйверами DRV8825.",
+      "created_by": 3,
+      "image_path": null,
+      "image_file": "",
+      "status": "in_progress",
+      "is_private": true,
+      "created_at": "2026-10-13T18:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projects",
+    "pk": 5,
+    "fields": {
+      "name": "Бездротовий LoRa трекер GPS",
+      "description": "Портативний енергоефективний трекер на ATmega328P та модулі Semtech SX1278. Передає координати на базову станцію на відстань до 10 км.",
+      "created_by": 1,
+      "image_path": null,
+      "image_file": "",
+      "status": "completed",
+      "is_private": false,
+      "created_at": "2026-10-01T09:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 1,
+    "fields": {
+      "project": 1,
+      "component": 12,
+      "quantity_required": 1,
+      "designator": "U1 (MCU)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 2,
+    "fields": {
+      "project": 1,
+      "component": 19,
+      "quantity_required": 1,
+      "designator": "SEN1 (BME280)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 3,
+    "fields": {
+      "project": 1,
+      "component": 41,
+      "quantity_required": 1,
+      "designator": "DISP1 (OLED)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 4,
+    "fields": {
+      "project": 1,
+      "component": 34,
+      "quantity_required": 1,
+      "designator": "MOD1 (TP4056)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 5,
+    "fields": {
+      "project": 1,
+      "component": 44,
+      "quantity_required": 2,
+      "designator": "R1, R2 (10k Pull-up)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 6,
+    "fields": {
+      "project": 1,
+      "component": 47,
+      "quantity_required": 3,
+      "designator": "C1, C2, C3 (100nF Decoupling)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 7,
+    "fields": {
+      "project": 2,
+      "component": 12,
+      "quantity_required": 1,
+      "designator": "U1"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 8,
+    "fields": {
+      "project": 3,
+      "component": 13,
+      "quantity_required": 1,
+      "designator": "U1 (STM32)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 9,
+    "fields": {
+      "project": 3,
+      "component": 20,
+      "quantity_required": 2,
+      "designator": "SEN1, SEN2 (DHT22)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 10,
+    "fields": {
+      "project": 3,
+      "component": 30,
+      "quantity_required": 1,
+      "designator": "REL1 (Relay Module)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 11,
+    "fields": {
+      "project": 3,
+      "component": 42,
+      "quantity_required": 1,
+      "designator": "DISP1 (LCD 1602 I2C)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 12,
+    "fields": {
+      "project": 3,
+      "component": 50,
+      "quantity_required": 4,
+      "designator": "TB1-TB4 (KF301)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 13,
+    "fields": {
+      "project": 4,
+      "component": 17,
+      "quantity_required": 1,
+      "designator": "U1 (RP2040)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 14,
+    "fields": {
+      "project": 4,
+      "component": 21,
+      "quantity_required": 1,
+      "designator": "IMU1 (MPU-6050)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 15,
+    "fields": {
+      "project": 4,
+      "component": 27,
+      "quantity_required": 2,
+      "designator": "DRV1, DRV2 (DRV8825)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 16,
+    "fields": {
+      "project": 4,
+      "component": 33,
+      "quantity_required": 1,
+      "designator": "PWR1 (Step-Down)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 17,
+    "fields": {
+      "project": 5,
+      "component": 15,
+      "quantity_required": 1,
+      "designator": "U1 (ATmega328P)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 18,
+    "fields": {
+      "project": 5,
+      "component": 39,
+      "quantity_required": 1,
+      "designator": "RF1 (SX1278)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 19,
+    "fields": {
+      "project": 5,
+      "component": 31,
+      "quantity_required": 1,
+      "designator": "VR1 (AMS1117-3.3)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 20,
+    "fields": {
+      "project": 5,
+      "component": 49,
+      "quantity_required": 1,
+      "designator": "Y1 (16MHz Crystal)"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 1,
+    "fields": {
+      "bom": 2,
+      "stock": 19,
+      "allocated_quantity": 1,
+      "status": "reserved",
+      "allocated_at": "2026-10-12T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 2,
+    "fields": {
+      "bom": 3,
+      "stock": 41,
+      "allocated_quantity": 1,
+      "status": "reserved",
+      "allocated_at": "2026-10-12T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 3,
+    "fields": {
+      "bom": 4,
+      "stock": 34,
+      "allocated_quantity": 1,
+      "status": "reserved",
+      "allocated_at": "2026-10-12T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 4,
+    "fields": {
+      "bom": 5,
+      "stock": 44,
+      "allocated_quantity": 2,
+      "status": "reserved",
+      "allocated_at": "2026-10-12T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 5,
+    "fields": {
+      "bom": 6,
+      "stock": 47,
+      "allocated_quantity": 3,
+      "status": "reserved",
+      "allocated_at": "2026-10-12T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 6,
+    "fields": {
+      "bom": 8,
+      "stock": 13,
+      "allocated_quantity": 1,
+      "status": "reserved",
+      "allocated_at": "2026-10-14T11:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 7,
+    "fields": {
+      "bom": 10,
+      "stock": 30,
+      "allocated_quantity": 1,
+      "status": "reserved",
+      "allocated_at": "2026-10-14T11:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 8,
+    "fields": {
+      "bom": 13,
+      "stock": 17,
+      "allocated_quantity": 1,
+      "status": "reserved",
+      "allocated_at": "2026-10-14T15:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 9,
+    "fields": {
+      "bom": 14,
+      "stock": 21,
+      "allocated_quantity": 1,
+      "status": "reserved",
+      "allocated_at": "2026-10-14T15:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 10,
+    "fields": {
+      "bom": 15,
+      "stock": 27,
+      "allocated_quantity": 2,
+      "status": "reserved",
+      "allocated_at": "2026-10-14T15:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 11,
+    "fields": {
+      "bom": 16,
+      "stock": 33,
+      "allocated_quantity": 1,
+      "status": "reserved",
+      "allocated_at": "2026-10-14T15:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 12,
+    "fields": {
+      "bom": 17,
+      "stock": 15,
+      "allocated_quantity": 1,
+      "status": "consumed",
+      "allocated_at": "2026-10-05T12:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 13,
+    "fields": {
+      "bom": 18,
+      "stock": 39,
+      "allocated_quantity": 1,
+      "status": "consumed",
+      "allocated_at": "2026-10-05T12:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 14,
+    "fields": {
+      "bom": 19,
+      "stock": 31,
+      "allocated_quantity": 1,
+      "status": "consumed",
+      "allocated_at": "2026-10-05T12:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 15,
+    "fields": {
+      "bom": 20,
+      "stock": 49,
+      "allocated_quantity": 1,
+      "status": "consumed",
+      "allocated_at": "2026-10-05T12:00:00+03:00"
+    }
+  }
+]

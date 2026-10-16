@@ -1,0 +1,182 @@
+[
+  {
+    "model": "inventory.storagelocations",
+    "pk": 127,
+    "fields": {
+      "box_number": "Касетниця SMD",
+      "shelf": "Ряд 1",
+      "cell_code": "SMD1-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 128,
+    "fields": {
+      "box_number": "Касетниця SMD",
+      "shelf": "Ряд 1",
+      "cell_code": "SMD1-02"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 129,
+    "fields": {
+      "box_number": "Касетниця SMD",
+      "shelf": "Ряд 1",
+      "cell_code": "SMD1-03"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 130,
+    "fields": {
+      "box_number": "Касетниця SMD",
+      "shelf": "Ряд 2",
+      "cell_code": "SMD2-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 131,
+    "fields": {
+      "box_number": "Касетниця SMD",
+      "shelf": "Ряд 2",
+      "cell_code": "SMD2-02"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 132,
+    "fields": {
+      "box_number": "Касетниця SMD",
+      "shelf": "Ряд 2",
+      "cell_code": "SMD2-03"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 101,
+    "fields": {
+      "box_number": "Органайзер A (MCU & Модулі)",
+      "shelf": "Полиця 1",
+      "cell_code": "A1-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 102,
+    "fields": {
+      "box_number": "Органайзер A (MCU & Модулі)",
+      "shelf": "Полиця 1",
+      "cell_code": "A1-02"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 103,
+    "fields": {
+      "box_number": "Органайзер A (MCU & Модулі)",
+      "shelf": "Полиця 2",
+      "cell_code": "A2-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 104,
+    "fields": {
+      "box_number": "Органайзер A (MCU & Модулі)",
+      "shelf": "Полиця 2",
+      "cell_code": "A2-02"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 105,
+    "fields": {
+      "box_number": "Органайзер B (Сенсори & Дисплеї)",
+      "shelf": "Полиця 1",
+      "cell_code": "B1-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 106,
+    "fields": {
+      "box_number": "Органайзер B (Сенсори & Дисплеї)",
+      "shelf": "Полиця 1",
+      "cell_code": "B1-02"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 107,
+    "fields": {
+      "box_number": "Органайзер B (Сенсори & Дисплеї)",
+      "shelf": "Полиця 2",
+      "cell_code": "B2-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 108,
+    "fields": {
+      "box_number": "Органайзер B (Сенсори & Дисплеї)",
+      "shelf": "Полиця 2",
+      "cell_code": "B2-02"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 109,
+    "fields": {
+      "box_number": "Стелаж C (Силова частина & Живлення)",
+      "shelf": "Секція 1",
+      "cell_code": "C1-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 110,
+    "fields": {
+      "box_number": "Стелаж C (Силова частина & Живлення)",
+      "shelf": "Секція 1",
+      "cell_code": "C1-02"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 111,
+    "fields": {
+      "box_number": "Стелаж C (Силова частина & Живлення)",
+      "shelf": "Секція 2",
+      "cell_code": "C2-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 112,
+    "fields": {
+      "box_number": "Стелаж C (Силова частина & Живлення)",
+      "shelf": "Секція 2",
+      "cell_code": "C2-02"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 113,
+    "fields": {
+      "box_number": "Органайзер D (Комутація & Зв'язок)",
+      "shelf": "Полиця 1",
+      "cell_code": "D1-01"
+    }
+  },
+  {
+    "model": "inventory.storagelocations",
+    "pk": 114,
+    "fields": {
+      "box_number": "Органайзер D (Комутація & Зв'язок)",
+      "shelf": "Полиця 1",
+      "cell_code": "D1-02"
+    }
+  }
+]

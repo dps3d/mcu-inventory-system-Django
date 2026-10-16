@@ -35,6 +35,7 @@ class StorageLocations(models.Model):
         else:
             cat_ids = list(
                 self.stocks.filter(quantity_on_hand__gt=0)
+                .order_by()
                 .values_list('component__category_id', 'component__category__name')
                 .distinct()
             )

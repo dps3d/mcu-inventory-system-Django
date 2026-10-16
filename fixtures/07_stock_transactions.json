@@ -1,0 +1,122 @@
+[
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 101,
+    "fields": {
+      "stock": 13,
+      "transaction_type": "purchase_in",
+      "quantity_change": 15,
+      "reference_id": null,
+      "notes": "Надходження замовлення #101 від Космодром",
+      "created_at": "2026-10-01T11:00:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 102,
+    "fields": {
+      "stock": 19,
+      "transaction_type": "purchase_in",
+      "quantity_change": 12,
+      "reference_id": null,
+      "notes": "Партія сенсорів тиску BME280 від Biukop",
+      "created_at": "2026-10-02T14:30:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 103,
+    "fields": {
+      "stock": 19,
+      "transaction_type": "consumption_out",
+      "quantity_change": -1,
+      "reference_id": null,
+      "notes": "Списання на монтаж прототипу метеостанції",
+      "created_at": "2026-10-05T09:40:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 104,
+    "fields": {
+      "stock": 26,
+      "transaction_type": "purchase_in",
+      "quantity_change": 20,
+      "reference_id": null,
+      "notes": "Поповнення запасів драйверів A4988",
+      "created_at": "2026-10-08T16:15:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 105,
+    "fields": {
+      "stock": 26,
+      "transaction_type": "consumption_out",
+      "quantity_change": -6,
+      "reference_id": null,
+      "notes": "Видача в лабораторію ЧПУ станків",
+      "created_at": "2026-10-09T17:20:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 106,
+    "fields": {
+      "stock": 44,
+      "transaction_type": "purchase_in",
+      "quantity_change": 1000,
+      "reference_id": null,
+      "notes": "Котушка резисторів 0805 10k від LCSC",
+      "created_at": "2026-10-10T12:00:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 107,
+    "fields": {
+      "stock": 44,
+      "transaction_type": "consumption_out",
+      "quantity_change": -350,
+      "reference_id": null,
+      "notes": "Серійний монтаж плат телеметрії",
+      "created_at": "2026-10-12T15:10:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 108,
+    "fields": {
+      "stock": 31,
+      "transaction_type": "purchase_in",
+      "quantity_change": 100,
+      "reference_id": null,
+      "notes": "Стрічка стабілізаторів AMS1117-3.3 від LCSC",
+      "created_at": "2026-10-14T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 109,
+    "fields": {
+      "stock": 31,
+      "transaction_type": "consumption_out",
+      "quantity_change": -35,
+      "reference_id": null,
+      "notes": "Монтаж плат контролерів",
+      "created_at": "2026-10-14T14:25:00+03:00"
+    }
+  },
+  {
+    "model": "inventory.stocktransactions",
+    "pk": 110,
+    "fields": {
+      "stock": 27,
+      "transaction_type": "consumption_out",
+      "quantity_change": -8,
+      "reference_id": null,
+      "notes": "Видача на робототехнічний гурток",
+      "created_at": "2026-10-15T16:00:00+03:00"
+    }
+  }
+]

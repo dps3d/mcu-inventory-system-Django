@@ -1,0 +1,56 @@
+[
+  {
+    "model": "inventory.suppliers",
+    "pk": 1,
+    "fields": {
+      "name": "ТОВ «Космодром»",
+      "url": "https://kosmodrom.ua",
+      "contact_notes": "Харків, Україна. Швидка відправка Новою Поштою, роздріб та дрібний гурт."
+    }
+  },
+  {
+    "model": "inventory.suppliers",
+    "pk": 2,
+    "fields": {
+      "name": "RC-Go Electronics",
+      "url": "https://rc-go.com.ua",
+      "contact_notes": "Київ, Україна. Робототехніка, модулі сенсорів, мотори та приводи."
+    }
+  },
+  {
+    "model": "inventory.suppliers",
+    "pk": 3,
+    "fields": {
+      "name": "Biukop Electronics",
+      "url": "https://biukop.com.ua",
+      "contact_notes": "Одеса, Україна. Електронні компоненти, мікросхеми, роз'єми."
+    }
+  },
+  {
+    "model": "inventory.suppliers",
+    "pk": 4,
+    "fields": {
+      "name": "LCSC Electronics",
+      "url": "https://lcsc.com",
+      "contact_notes": "Шеньчжень, Китай. Офіційний дистриб'ютор SMD пасивів та мікроконтролерів."
+    }
+  },
+  {
+    "model": "inventory.suppliers",
+    "pk": 5,
+    "fields": {
+      "name": "Mouser Electronics",
+      "url": "https://mouser.com",
+      "contact_notes": "США / Європа. Оригінальні напівпровідники, сенсори та інструменти."
+    }
+  },
+  {
+    "model": "inventory.suppliers",
+    "pk": 6,
+    "fields": {
+      "name": "Digi-Key Electronics",
+      "url": "https://www.digikey.ua",
+      "contact_notes": "Міжнародний каталог електронних компонентів та розробницьких плат."
+    }
+  }
+]

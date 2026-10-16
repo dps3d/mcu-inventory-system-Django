@@ -1,0 +1,167 @@
+[
+  {
+    "model": "projects.projectallocations",
+    "pk": 1,
+    "fields": {
+      "bom": 2,
+      "stock": 19,
+      "allocated_quantity": 1,
+      "status": "reserved",
+      "allocated_at": "2026-10-12T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 2,
+    "fields": {
+      "bom": 3,
+      "stock": 41,
+      "allocated_quantity": 1,
+      "status": "reserved",
+      "allocated_at": "2026-10-12T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 3,
+    "fields": {
+      "bom": 4,
+      "stock": 34,
+      "allocated_quantity": 1,
+      "status": "reserved",
+      "allocated_at": "2026-10-12T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 4,
+    "fields": {
+      "bom": 5,
+      "stock": 44,
+      "allocated_quantity": 2,
+      "status": "reserved",
+      "allocated_at": "2026-10-12T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 5,
+    "fields": {
+      "bom": 6,
+      "stock": 47,
+      "allocated_quantity": 3,
+      "status": "reserved",
+      "allocated_at": "2026-10-12T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 6,
+    "fields": {
+      "bom": 8,
+      "stock": 13,
+      "allocated_quantity": 1,
+      "status": "reserved",
+      "allocated_at": "2026-10-14T11:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 7,
+    "fields": {
+      "bom": 10,
+      "stock": 30,
+      "allocated_quantity": 1,
+      "status": "reserved",
+      "allocated_at": "2026-10-14T11:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 8,
+    "fields": {
+      "bom": 13,
+      "stock": 17,
+      "allocated_quantity": 1,
+      "status": "reserved",
+      "allocated_at": "2026-10-14T15:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 9,
+    "fields": {
+      "bom": 14,
+      "stock": 21,
+      "allocated_quantity": 1,
+      "status": "reserved",
+      "allocated_at": "2026-10-14T15:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 10,
+    "fields": {
+      "bom": 15,
+      "stock": 27,
+      "allocated_quantity": 2,
+      "status": "reserved",
+      "allocated_at": "2026-10-14T15:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 11,
+    "fields": {
+      "bom": 16,
+      "stock": 33,
+      "allocated_quantity": 1,
+      "status": "reserved",
+      "allocated_at": "2026-10-14T15:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 12,
+    "fields": {
+      "bom": 17,
+      "stock": 15,
+      "allocated_quantity": 1,
+      "status": "consumed",
+      "allocated_at": "2026-10-05T12:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 13,
+    "fields": {
+      "bom": 18,
+      "stock": 39,
+      "allocated_quantity": 1,
+      "status": "consumed",
+      "allocated_at": "2026-10-05T12:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 14,
+    "fields": {
+      "bom": 19,
+      "stock": 31,
+      "allocated_quantity": 1,
+      "status": "consumed",
+      "allocated_at": "2026-10-05T12:00:00+03:00"
+    }
+  },
+  {
+    "model": "projects.projectallocations",
+    "pk": 15,
+    "fields": {
+      "bom": 20,
+      "stock": 49,
+      "allocated_quantity": 1,
+      "status": "consumed",
+      "allocated_at": "2026-10-05T12:00:00+03:00"
+    }
+  }
+]

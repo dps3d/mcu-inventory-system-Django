@@ -1,0 +1,202 @@
+[
+  {
+    "model": "projects.projectboms",
+    "pk": 1,
+    "fields": {
+      "project": 1,
+      "component": 12,
+      "quantity_required": 1,
+      "designator": "U1 (MCU)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 2,
+    "fields": {
+      "project": 1,
+      "component": 19,
+      "quantity_required": 1,
+      "designator": "SEN1 (BME280)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 3,
+    "fields": {
+      "project": 1,
+      "component": 41,
+      "quantity_required": 1,
+      "designator": "DISP1 (OLED)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 4,
+    "fields": {
+      "project": 1,
+      "component": 34,
+      "quantity_required": 1,
+      "designator": "MOD1 (TP4056)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 5,
+    "fields": {
+      "project": 1,
+      "component": 44,
+      "quantity_required": 2,
+      "designator": "R1, R2 (10k Pull-up)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 6,
+    "fields": {
+      "project": 1,
+      "component": 47,
+      "quantity_required": 3,
+      "designator": "C1, C2, C3 (100nF Decoupling)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 7,
+    "fields": {
+      "project": 2,
+      "component": 12,
+      "quantity_required": 1,
+      "designator": "U1"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 8,
+    "fields": {
+      "project": 3,
+      "component": 13,
+      "quantity_required": 1,
+      "designator": "U1 (STM32)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 9,
+    "fields": {
+      "project": 3,
+      "component": 20,
+      "quantity_required": 2,
+      "designator": "SEN1, SEN2 (DHT22)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 10,
+    "fields": {
+      "project": 3,
+      "component": 30,
+      "quantity_required": 1,
+      "designator": "REL1 (Relay Module)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 11,
+    "fields": {
+      "project": 3,
+      "component": 42,
+      "quantity_required": 1,
+      "designator": "DISP1 (LCD 1602 I2C)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 12,
+    "fields": {
+      "project": 3,
+      "component": 50,
+      "quantity_required": 4,
+      "designator": "TB1-TB4 (KF301)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 13,
+    "fields": {
+      "project": 4,
+      "component": 17,
+      "quantity_required": 1,
+      "designator": "U1 (RP2040)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 14,
+    "fields": {
+      "project": 4,
+      "component": 21,
+      "quantity_required": 1,
+      "designator": "IMU1 (MPU-6050)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 15,
+    "fields": {
+      "project": 4,
+      "component": 27,
+      "quantity_required": 2,
+      "designator": "DRV1, DRV2 (DRV8825)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 16,
+    "fields": {
+      "project": 4,
+      "component": 33,
+      "quantity_required": 1,
+      "designator": "PWR1 (Step-Down)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 17,
+    "fields": {
+      "project": 5,
+      "component": 15,
+      "quantity_required": 1,
+      "designator": "U1 (ATmega328P)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 18,
+    "fields": {
+      "project": 5,
+      "component": 39,
+      "quantity_required": 1,
+      "designator": "RF1 (SX1278)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 19,
+    "fields": {
+      "project": 5,
+      "component": 31,
+      "quantity_required": 1,
+      "designator": "VR1 (AMS1117-3.3)"
+    }
+  },
+  {
+    "model": "projects.projectboms",
+    "pk": 20,
+    "fields": {
+      "project": 5,
+      "component": 49,
+      "quantity_required": 1,
+      "designator": "Y1 (16MHz Crystal)"
+    }
+  }
+]

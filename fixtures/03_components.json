@@ -1,0 +1,658 @@
+[
+  {
+    "model": "catalog.components",
+    "pk": 12,
+    "fields": {
+      "category": 9,
+      "part_number": "ESP 32 WROOM",
+      "package_type": "Module SMD-38",
+      "value_nominal": "240 MHz 4MB",
+      "specifications": "Xtensa Dual-Core 32-bit LX6 @ 240MHz, 4MB SPI Flash, Wi-Fi 802.11 b/g/n, Bluetooth v4.2 BR/EDR & BLE, 38-pin SMD module",
+      "min_threshold": 10,
+      "datasheet_url": "https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32d_esp32-wroom-32u_datasheet_en.pdf",
+      "image_path": "/media/components/esp32_wroom.jpg",
+      "image_file": "components/esp32_wroom.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 13,
+    "fields": {
+      "category": 7,
+      "part_number": "STM32F103C8T6",
+      "package_type": "LQFP-48",
+      "value_nominal": "72 MHz 64KB",
+      "specifications": "ARM 32-bit Cortex-M3 @ 72MHz, 64KB Flash, 20KB SRAM, USB 2.0 Full Speed, CAN 2.0B, 2x 12-bit ADC (16 channels), 7 таймерів",
+      "min_threshold": 5,
+      "datasheet_url": "https://www.st.com/resource/en/datasheet/stm32f103c8.pdf",
+      "image_path": "/media/components/stm32f103c8t6.jpg",
+      "image_file": "components/stm32f103c8t6.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 14,
+    "fields": {
+      "category": 7,
+      "part_number": "STM32F401CCU6",
+      "package_type": "UFQFPN-48",
+      "value_nominal": "84 MHz 256KB",
+      "specifications": "ARM Cortex-M4 @ 84MHz з FPU та DSP інструкціями, 256KB Flash, 64KB SRAM, USB OTG FS, 1x 12-bit ADC 2.4 MSPS",
+      "min_threshold": 3,
+      "datasheet_url": "https://www.st.com/resource/en/datasheet/stm32f401cc.pdf",
+      "image_path": "/media/components/stm32f401.png",
+      "image_file": "components/stm32f401.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 15,
+    "fields": {
+      "category": 8,
+      "part_number": "ATmega328P-PU",
+      "package_type": "DIP-28",
+      "value_nominal": "20 MHz 32KB",
+      "specifications": "8-bit AVR RISC мікроконтролер, 32KB Flash, 2KB SRAM, 1KB EEPROM, 6 PWM, 8-channel 10-bit ADC, UART, SPI, I2C",
+      "min_threshold": 8,
+      "datasheet_url": "https://ww1.microchip.com/downloads/en/DeviceDoc/ATmega48A-PA-88A-PA-168A-PA-328-P-DS-DS40002061B.pdf",
+      "image_path": "/media/components/atmega328p.jpg",
+      "image_file": "components/atmega328p.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 16,
+    "fields": {
+      "category": 8,
+      "part_number": "ATtiny85-20PU",
+      "package_type": "DIP-8",
+      "value_nominal": "20 MHz 8KB",
+      "specifications": "Високоефективний низькоспоживаючий 8-бітний AVR мікроконтролер, 8KB Flash, 512B EEPROM, 512B SRAM, 6 I/O ліній",
+      "min_threshold": 10,
+      "datasheet_url": "https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-2586-AVR-8-bit-Microcontroller-ATtiny25-ATtiny45-ATtiny85_Datasheet.pdf",
+      "image_path": "/media/components/attiny85.png",
+      "image_file": "components/attiny85.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 17,
+    "fields": {
+      "category": 10,
+      "part_number": "Raspberry Pi RP2040",
+      "package_type": "QFN-56",
+      "value_nominal": "133 MHz Dual Core",
+      "specifications": "Двоядерний ARM Cortex-M0+ з гнучкою частотою до 133MHz, 264KB SRAM, 8 програмованих I/O (PIO) кінцевих автоматів",
+      "min_threshold": 5,
+      "datasheet_url": "https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf",
+      "image_path": "/media/components/rp2040.jpg",
+      "image_file": "components/rp2040.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 18,
+    "fields": {
+      "category": 9,
+      "part_number": "ESP8266 ESP-12F",
+      "package_type": "SMD-16",
+      "value_nominal": "80/160 MHz 4MB",
+      "specifications": "Wi-Fi модуль на базі SoC ESP8266EX з антеною PCB, 4MB Flash, підтримка режимів AP/STA/AP+STA",
+      "min_threshold": 10,
+      "datasheet_url": "https://docs.ai-thinker.com/_media/esp8266/docs/esp-12f_product_specification_en.pdf",
+      "image_path": "/media/components/esp8266.png",
+      "image_file": "components/esp8266.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 19,
+    "fields": {
+      "category": 13,
+      "part_number": "BME280",
+      "package_type": "LGA-8",
+      "value_nominal": "I2C / SPI",
+      "specifications": "Комбінований цифровий датчик температури (-40..+85°C), відносної вологості (0..100%) та атмосферного тиску (300..1100 hPa)",
+      "min_threshold": 5,
+      "datasheet_url": "https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf",
+      "image_path": "/media/components/bme280.jpg",
+      "image_file": "components/bme280.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 20,
+    "fields": {
+      "category": 13,
+      "part_number": "DHT22 (AM2302)",
+      "package_type": "4-pin Module",
+      "value_nominal": "1-Wire",
+      "specifications": "Високоточний цифровий датчик температури (-40..+80°C, ±0.5°C) та вологості повітря (0..100%, ±2%), однопровідний інтерфейс",
+      "min_threshold": 4,
+      "datasheet_url": "https://www.sparkfun.com/datasheets/Sensors/Temperature/DHT22.pdf",
+      "image_path": "/media/components/dht22.jpg",
+      "image_file": "components/dht22.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 21,
+    "fields": {
+      "category": 14,
+      "part_number": "MPU-6050",
+      "package_type": "QFN-24 / Breakout",
+      "value_nominal": "6-DOF IMU",
+      "specifications": "6-осьовий інерційний модуль: 3-осьовий гіроскоп (до ±2000°/s) та 3-осьовий акселерометр (до ±16g) з апаратним процесором DMP, I2C",
+      "min_threshold": 4,
+      "datasheet_url": "https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-6000-Datasheet1.pdf",
+      "image_path": "/media/components/mpu6050.jpg",
+      "image_file": "components/mpu6050.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 22,
+    "fields": {
+      "category": 15,
+      "part_number": "HC-SR04",
+      "package_type": "Module",
+      "value_nominal": "2 - 400 см",
+      "specifications": "Ультразвуковий модуль вимірювання відстані від 2 см до 400 см, точність до 3 мм, кут випромінювання 15°, живлення 5V",
+      "min_threshold": 5,
+      "datasheet_url": "https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf",
+      "image_path": "/media/components/hcsr04.jpg",
+      "image_file": "components/hcsr04.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 23,
+    "fields": {
+      "category": 15,
+      "part_number": "VL53L0X",
+      "package_type": "LGA-12 / Module",
+      "value_nominal": "ToF Laser 2m",
+      "specifications": "Лазерний далекомір Time-of-Flight (ToF) нового покоління, безпечний VCSEL лазер 940nm, точне вимірювання до 2 метрів, I2C",
+      "min_threshold": 3,
+      "datasheet_url": "https://www.st.com/resource/en/datasheet/vl53l0x.pdf",
+      "image_path": "/media/components/vl53l0x.png",
+      "image_file": "components/vl53l0x.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 24,
+    "fields": {
+      "category": 17,
+      "part_number": "MQ-135",
+      "package_type": "DIP Module",
+      "value_nominal": "Air Quality",
+      "specifications": "Газовий сенсор для контролю якості повітря в приміщеннях: чутливий до NH3, оксидів азоту NOx, алкоголю, бензолу, диму та CO2",
+      "min_threshold": 2,
+      "datasheet_url": "https://www.futurlec.com/Datasheet/Sensor/MQ-135.pdf",
+      "image_path": "/media/components/mq135.png",
+      "image_file": "components/mq135.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 25,
+    "fields": {
+      "category": 18,
+      "part_number": "INA219",
+      "package_type": "SOT-23 / Module",
+      "value_nominal": "I2C 0-26V 3.2A",
+      "specifications": "Цифровий двоспрямований монітор струму та напруги по шині живлення до 26V, вбудований прецизійний шунт 0.1 Ом, 12-бітний АЦП",
+      "min_threshold": 4,
+      "datasheet_url": "https://www.ti.com/lit/ds/symlink/ina219.pdf",
+      "image_path": "/media/components/ina219.jpg",
+      "image_file": "components/ina219.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 26,
+    "fields": {
+      "category": 20,
+      "part_number": "A4988",
+      "package_type": "QFN-28 / Module",
+      "value_nominal": "2A 35V 1/16",
+      "specifications": "Драйвер біполярного крокового двигуна з вбудованим транслятором, струм до 2A, мікрокрок: повний, 1/2, 1/4, 1/8, 1/16",
+      "min_threshold": 6,
+      "datasheet_url": "https://www.allegromicro.com/en/products/motor-drivers/bldc-drivers/a4988",
+      "image_path": "/media/components/a4988.jpg",
+      "image_file": "components/a4988.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 27,
+    "fields": {
+      "category": 20,
+      "part_number": "DRV8825",
+      "package_type": "HTSSOP-28 / Module",
+      "value_nominal": "2.5A 45V 1/32",
+      "specifications": "Драйвер крокових двигунів Texas Instruments до 2.5A при напрузі до 45V, підтримка надтихого мікрокроку до 1/32 кроку",
+      "min_threshold": 4,
+      "datasheet_url": "https://www.ti.com/lit/ds/symlink/drv8825.pdf",
+      "image_path": "/media/components/drv8825.jpg",
+      "image_file": "components/drv8825.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 28,
+    "fields": {
+      "category": 21,
+      "part_number": "L298N",
+      "package_type": "Multiwatt-15 / Module",
+      "value_nominal": "Dual H-Bridge 2A",
+      "specifications": "Подвійний мостовий драйвер високої потужності для керування двома колекторними двигунами DC або 4-фазним кроковим двигуном",
+      "min_threshold": 3,
+      "datasheet_url": "https://www.sparkfun.com/datasheets/Robotics/L298_H_Bridge.pdf",
+      "image_path": "/media/components/l298n.jpg",
+      "image_file": "components/l298n.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 29,
+    "fields": {
+      "category": 23,
+      "part_number": "IRLZ44N",
+      "package_type": "TO-220",
+      "value_nominal": "55V 47A N-Ch",
+      "specifications": "N-канальний польовий силовий транзистор HEXFET Logic-Level (відкривається від 3.3V/5V логіки), 55V, 47A, Rds(on)=0.022 Ом",
+      "min_threshold": 15,
+      "datasheet_url": "https://www.infineon.com/dgdl/irlz44npbf.pdf?fileId=5546d462533600a40153566b0a172718",
+      "image_path": "/media/components/irlz44n.jpg",
+      "image_file": "components/irlz44n.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 30,
+    "fields": {
+      "category": 22,
+      "part_number": "Релейний модуль 5V (1 канал)",
+      "package_type": "Module",
+      "value_nominal": "5V 250VAC 10A",
+      "specifications": "Електромагнітне реле з опторозв'язкою PC817, комутує струм до 10A при 250VAC або 30VDC, світлодіодна індикація спрацювання",
+      "min_threshold": 6,
+      "datasheet_url": "https://components101.com/switches/5v-single-channel-relay-module-pinout-features",
+      "image_path": "/media/components/relay_5v.jpg",
+      "image_file": "components/relay_5v.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 31,
+    "fields": {
+      "category": 25,
+      "part_number": "AMS1117-3.3",
+      "package_type": "SOT-223",
+      "value_nominal": "3.3V 1.0A",
+      "specifications": "Лінійний LDO стабілізатор фіксованої вихідної напруги 3.3V, максимальний струм 1000мА, падіння напруги 1.1V при 1A",
+      "min_threshold": 20,
+      "datasheet_url": "http://www.advanced-monolithic.com/pdf/ds1117.pdf",
+      "image_path": "/media/components/ams1117.jpg",
+      "image_file": "components/ams1117.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 32,
+    "fields": {
+      "category": 25,
+      "part_number": "LM7805",
+      "package_type": "TO-220",
+      "value_nominal": "5.0V 1.5A",
+      "specifications": "Класичний лінійний стабілізатор позитивної напруги +5.0V зі струмом до 1.5A, захист від перегріву та короткого замикання",
+      "min_threshold": 10,
+      "datasheet_url": "https://www.sparkfun.com/datasheets/Components/LM7805.pdf",
+      "image_path": "/media/components/lm7805.jpg",
+      "image_file": "components/lm7805.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 33,
+    "fields": {
+      "category": 26,
+      "part_number": "LM2596S-ADJ",
+      "package_type": "TO-263-5 / Module",
+      "value_nominal": "Step-Down 3A",
+      "specifications": "Імпульсний понижувальний стабілізатор DC-DC, частота 150kHz, вхідна напруга 4.5V-40V, регульований вихід 1.23V-37V до 3A",
+      "min_threshold": 5,
+      "datasheet_url": "https://www.ti.com/lit/ds/symlink/lm2596.pdf",
+      "image_path": "/media/components/lm2596.jpg",
+      "image_file": "components/lm2596.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 34,
+    "fields": {
+      "category": 28,
+      "part_number": "TP4056 з захистом",
+      "package_type": "SOP-8 / Module",
+      "value_nominal": "1A Li-Ion 4.2V",
+      "specifications": "Модуль контролера заряду одного Li-Ion/Li-Po акумулятора 1A з роз'ємом USB Type-C, захистом від перерозряду DW01A та перевантаження FS8205A",
+      "min_threshold": 10,
+      "datasheet_url": "https://dlnmh9ip6v2uc.cloudfront.net/datasheets/Prototyping/TP4056.pdf",
+      "image_path": "/media/components/tp4056.jpg",
+      "image_file": "components/tp4056.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 35,
+    "fields": {
+      "category": 30,
+      "part_number": "CH340G",
+      "package_type": "SOP-16",
+      "value_nominal": "USB-to-UART",
+      "specifications": "Мікросхема USB-UART моста, повна підтримка ліній керування модемом CTS, DSR, RI, DCD, DTR, RTS, швидкість 50bps..2Mbps",
+      "min_threshold": 10,
+      "datasheet_url": "https://www.mpja.com/download/35227cpdata.pdf",
+      "image_path": "/media/components/ch340g.jpg",
+      "image_file": "components/ch340g.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 36,
+    "fields": {
+      "category": 30,
+      "part_number": "CP2102",
+      "package_type": "QFN-28",
+      "value_nominal": "USB-to-UART",
+      "specifications": "Одночіповий високоінтегрований контролер перетворення USB у послідовний порт UART Silicon Labs, вбудовані генератор та EEPROM 1024B",
+      "min_threshold": 5,
+      "datasheet_url": "https://www.silabs.com/documents/public/data-sheets/CP2102-9.pdf",
+      "image_path": "/media/components/cp2102.png",
+      "image_file": "components/cp2102.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 37,
+    "fields": {
+      "category": 31,
+      "part_number": "MAX485",
+      "package_type": "DIP-8",
+      "value_nominal": "RS-485 / RS-422",
+      "specifications": "Диференціальний напівдуплексний трансивер промислової шини RS-485/RS-422, максимальна швидкість 2.5 Mbps, живлення 5V",
+      "min_threshold": 8,
+      "datasheet_url": "https://datasheets.maximintegrated.com/en/ds/MAX1487-MAX491.pdf",
+      "image_path": "/media/components/max485.png",
+      "image_file": "components/max485.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 38,
+    "fields": {
+      "category": 32,
+      "part_number": "MCP2515",
+      "package_type": "DIP-18 / Module",
+      "value_nominal": "CAN 2.0B SPI",
+      "specifications": "Автономний контролер мережі CAN специфікації 2.0B активний, швидкість до 1 Мбіт/с, інтерфейс підключення до MCU SPI до 10 МГц",
+      "min_threshold": 4,
+      "datasheet_url": "https://ww1.microchip.com/downloads/en/DeviceDoc/MCP2515-Stand-Alone-CAN-Controller-with-SPI-20001801J.pdf",
+      "image_path": "/media/components/mcp2515.jpg",
+      "image_file": "components/mcp2515.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 39,
+    "fields": {
+      "category": 33,
+      "part_number": "SX1278 LoRa 433MHz",
+      "package_type": "SMD Module",
+      "value_nominal": "433 MHz +20dBm",
+      "specifications": "Трансивер ультрадалекого бездротового зв'язку за технологією LoRa Semtech SX1278, частотний діапазон 433MHz, чутливість до -148dBm",
+      "min_threshold": 4,
+      "datasheet_url": "https://www.semtech.com/products/wireless-rf/lora-connect/sx1278",
+      "image_path": "/media/components/sx1278.png",
+      "image_file": "components/sx1278.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 40,
+    "fields": {
+      "category": 36,
+      "part_number": "74HC595",
+      "package_type": "DIP-16",
+      "value_nominal": "8-bit SIPO Shift",
+      "specifications": "8-розрядний зсувний регістр з послідовним вводом і паралельним виводом з тристабільними вихідними регістрами-защіпками",
+      "min_threshold": 12,
+      "datasheet_url": "https://www.ti.com/lit/ds/symlink/sn74hc595.pdf",
+      "image_path": "/media/components/74hc595.jpg",
+      "image_file": "components/74hc595.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 41,
+    "fields": {
+      "category": 40,
+      "part_number": "SSD1306 0.96\" OLED (I2C)",
+      "package_type": "Module 4-pin",
+      "value_nominal": "128x64 White I2C",
+      "specifications": "Монохромний графічний OLED дисплей діагоналлю 0.96 дюйма, роздільна здатність 128x64 точок, контролер SSD1306, інтерфейс I2C (0x3C)",
+      "min_threshold": 5,
+      "datasheet_url": "https://cdn-shop.adafruit.com/datasheets/SSD1306.pdf",
+      "image_path": "/media/components/ssd1306.png",
+      "image_file": "components/ssd1306.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 42,
+    "fields": {
+      "category": 41,
+      "part_number": "LCD 1602 I2C",
+      "package_type": "Module 16x2",
+      "value_nominal": "16x2 Blue/White",
+      "specifications": "Символьний рідкокристалічний матричний дисплей 16x2 із синім підсвічуванням та встановленим перехідником I2C PCF8574T (адреса 0x27)",
+      "min_threshold": 3,
+      "datasheet_url": "https://www.sparkfun.com/datasheets/LCD/HD44780.pdf",
+      "image_path": "/media/components/lcd1602.png",
+      "image_file": "components/lcd1602.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 43,
+    "fields": {
+      "category": 42,
+      "part_number": "TM1637",
+      "package_type": "Module 4-pin",
+      "value_nominal": "4-digit 0.36\"",
+      "specifications": "4-розрядний 7-сегментний цифровий світлодіодний індикатор з двопровідною шиною керування чіпом TM1637 та регулюванням яскравості",
+      "min_threshold": 4,
+      "datasheet_url": "https://www.titanmicro.net/media/productpdf/TM1637_V2.4_EN.pdf",
+      "image_path": "/media/components/tm1637.png",
+      "image_file": "components/tm1637.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 44,
+    "fields": {
+      "category": 45,
+      "part_number": "Резистор SMD 0805 10k",
+      "package_type": "0805",
+      "value_nominal": "10 кОм ±1%",
+      "specifications": "Прецизійний товстоплівковий SMD чіп-резистор 10 kOhm ±1%, потужність 0.125W (1/8W), робоча напруга 150V",
+      "min_threshold": 100,
+      "datasheet_url": "https://www.yageo.com/upload/products/datasheet/rchip/PYu-RC_Group_51_RoHS_L_12.pdf",
+      "image_path": "/media/components/resistor_0805.jpg",
+      "image_file": "components/resistor_0805.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 45,
+    "fields": {
+      "category": 45,
+      "part_number": "Резистор SMD 0805 220R",
+      "package_type": "0805",
+      "value_nominal": "220 Ом ±1%",
+      "specifications": "Товстоплівковий SMD резистор 220 Ohm ±1%, 0.125W, стандартний струмообмежувач для світлодіодів при 3.3V/5V",
+      "min_threshold": 100,
+      "datasheet_url": "https://www.yageo.com/upload/products/datasheet/rchip/PYu-RC_Group_51_RoHS_L_12.pdf",
+      "image_path": "/media/components/resistor_220r.jpg",
+      "image_file": "components/resistor_220r.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 46,
+    "fields": {
+      "category": 45,
+      "part_number": "Резистор SMD 0805 4.7k",
+      "package_type": "0805",
+      "value_nominal": "4.7 кОм ±1%",
+      "specifications": "SMD чіп-резистор 4.7 kOhm ±1%, 0.125W, рекомендований pull-up резистор для шин даних I2C та 1-Wire",
+      "min_threshold": 100,
+      "datasheet_url": "https://www.yageo.com/upload/products/datasheet/rchip/PYu-RC_Group_51_RoHS_L_12.pdf",
+      "image_path": "/media/components/resistor_4k7.jpg",
+      "image_file": "components/resistor_4k7.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 47,
+    "fields": {
+      "category": 46,
+      "part_number": "Конденсатор SMD 0805 100nF",
+      "package_type": "0805",
+      "value_nominal": "100 нФ 50V",
+      "specifications": "Керамічний багатошаровий конденсатор SMD (MLCC) 0.1 мкФ (100nF) 50V диелектрик X7R ±10%, блокувальний конденсатор живлення IC",
+      "min_threshold": 150,
+      "datasheet_url": "https://content.kemet.com/datasheets/KEM_C1002_X7R_SMD.pdf",
+      "image_path": "/media/components/capacitor_0805.jpg",
+      "image_file": "components/capacitor_0805.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 48,
+    "fields": {
+      "category": 46,
+      "part_number": "Конденсатор 100uF 25V",
+      "package_type": "Radial 5x11",
+      "value_nominal": "100 мкФ 25V",
+      "specifications": "Радіальний електролітичний конденсатор 100 мкФ 25V, температурний діапазон -40..+105°C, фільтрація імпульсних завад",
+      "min_threshold": 25,
+      "datasheet_url": "https://industrial.panasonic.com/cdbs/www-data/pdf/RDF0000/ABA0000C1185.pdf",
+      "image_path": "/media/components/capacitor_100uf.png",
+      "image_file": "components/capacitor_100uf.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 49,
+    "fields": {
+      "category": 47,
+      "part_number": "Кварцовий резонатор 16.000 MHz",
+      "package_type": "HC-49S",
+      "value_nominal": "16.000 МГц",
+      "specifications": "Низькопрофільний кварцовий кристал 16.000 MHz в металевому корпусі HC-49/S, точність ±20ppm, ємність навантаження 20pF",
+      "min_threshold": 15,
+      "datasheet_url": "https://www.ecsxtal.com/store/pdf/hc-49us.pdf",
+      "image_path": "/media/components/crystal_16mhz.jpg",
+      "image_file": "components/crystal_16mhz.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 50,
+    "fields": {
+      "category": 51,
+      "part_number": "Клемник гвинтовий KF301-2P",
+      "package_type": "5.08mm 2-pin",
+      "value_nominal": "2-pin 5.08mm",
+      "specifications": "Монтажний гвинтовий клемник для друкованих плат KF301-2P, крок між контактами 5.08 мм, синій PBT, до 300V 16A",
+      "min_threshold": 20,
+      "datasheet_url": "https://www.sparkfun.com/datasheets/Prototyping/ScrewTerminal-5mm.pdf",
+      "image_path": "/media/components/kf301.png",
+      "image_file": "components/kf301.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 51,
+    "fields": {
+      "category": 50,
+      "part_number": "Штирьовий роз'єм PLS-40",
+      "package_type": "1x40 2.54mm",
+      "value_nominal": "1x40 Male",
+      "specifications": "Однорядна лінійка вилок штирьових прямого монтажу (папа) 40 контактів, стандартний крок 2.54 мм, латунне золочення",
+      "min_threshold": 20,
+      "datasheet_url": "https://cdn.sparkfun.com/datasheets/Prototyping/Header.pdf",
+      "image_path": "/media/components/pls40.png",
+      "image_file": "components/pls40.png",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  },
+  {
+    "model": "catalog.components",
+    "pk": 52,
+    "fields": {
+      "category": 49,
+      "part_number": "Тактова кнопка 6x6x5 мм",
+      "package_type": "DIP-4 / 6x6",
+      "value_nominal": "6x6x5 mm",
+      "specifications": "Тактовий мікрокнопковий перемикач 6х6 мм висотою 5 мм, 4 контакти для надійного монтажу на плату, 12V 50mA",
+      "min_threshold": 30,
+      "datasheet_url": "https://www.ckswitches.com/media/1471/pts645.pdf",
+      "image_path": "/media/components/tactile_switch.jpg",
+      "image_file": "components/tactile_switch.jpg",
+      "created_at": "2026-10-15T10:00:00+03:00"
+    }
+  }
+]

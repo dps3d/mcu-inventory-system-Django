@@ -1,0 +1,416 @@
+[
+  {
+    "model": "catalog.categories",
+    "pk": 6,
+    "fields": {
+      "name": "Мікроконтролери та процесори",
+      "parent": null,
+      "description": "MCU, SoC, процесорні модулі та одноплатні комп'ютери"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 12,
+    "fields": {
+      "name": "Сенсори та датчики",
+      "parent": null,
+      "description": "Аналогові та цифрові первинні перетворювачі фізичних величин"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 19,
+    "fields": {
+      "name": "Драйвери та силова комутація",
+      "parent": null,
+      "description": "Керування навантаженням, двигунами, реле та силовими ключами"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 24,
+    "fields": {
+      "name": "Джерела живлення та перетворювачі",
+      "parent": null,
+      "description": "Стабілізація, перетворення напруги та керування живленням"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 29,
+    "fields": {
+      "name": "Інтерфейсні мікросхеми та зв'язок",
+      "parent": null,
+      "description": "Перетворювачі шин даних, трансивери та бездротові модулі"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 35,
+    "fields": {
+      "name": "Логічні мікросхеми",
+      "parent": null,
+      "description": "Стандартна цифрова логіка 74HC/CD4000"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 39,
+    "fields": {
+      "name": "Дисплеї та засоби індикації",
+      "parent": null,
+      "description": "Екрани, матриці та світлодіодні індикатори"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 44,
+    "fields": {
+      "name": "Пасивні компоненти",
+      "parent": null,
+      "description": "Резистори, конденсатори, індуктивності та кварцові резонатори"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 48,
+    "fields": {
+      "name": "Комутація та роз'єми",
+      "parent": null,
+      "description": "Монтажні роз'єми, клемники, перемикачі"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 7,
+    "fields": {
+      "name": "STM32 (ARM Cortex-M)",
+      "parent": 6,
+      "description": "Мікроконтролери сімейств F1, F4, G0, L4 на ядрі ARM Cortex-M"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 8,
+    "fields": {
+      "name": "AVR / ATmega / ATtiny",
+      "parent": 6,
+      "description": "Класичні 8-бітні мікроконтролери Microchip/Atmel"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 9,
+    "fields": {
+      "name": "ESP32 / ESP8266 (Wi-Fi/BLE)",
+      "parent": 6,
+      "description": "Бездротові SoC та готові модулі Espressif Systems"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 10,
+    "fields": {
+      "name": "Raspberry Pi / RP2040",
+      "parent": 6,
+      "description": "Двоядерні ARM Cortex-M0+ чіпи RP2040 та модулі Pico"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 11,
+    "fields": {
+      "name": "PIC / dsPIC",
+      "parent": 6,
+      "description": "Мікроконтролери серій PIC16, PIC18, dsPIC"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 13,
+    "fields": {
+      "name": "Датчики температури та вологості",
+      "parent": 12,
+      "description": "BME280, DHT22, DS18B20, SHT31, AHT10"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 14,
+    "fields": {
+      "name": "Акселерометри, гіроскопи та IMU",
+      "parent": 12,
+      "description": "MPU6050, ADXL345, LSM6DS3, BNO055"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 15,
+    "fields": {
+      "name": "Датчики відстані та наближення",
+      "parent": 12,
+      "description": "Ультразвукові HC-SR04, лазерні ToF VL53L0X"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 16,
+    "fields": {
+      "name": "Датчики тиску та висоти",
+      "parent": 12,
+      "description": "BMP280, MS5611, DPS310"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 17,
+    "fields": {
+      "name": "Датчики газу та якості повітря",
+      "parent": 12,
+      "description": "MQ серія, CCS811, SGP30"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 18,
+    "fields": {
+      "name": "Оптичні сенсори та струм",
+      "parent": 12,
+      "description": "Датчики освітленості BH1750, датчики струму ACS712, INA219"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 20,
+    "fields": {
+      "name": "Драйвери крокових двигунів",
+      "parent": 19,
+      "description": "A4988, DRV8825, TMC2208, TMC2209"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 21,
+    "fields": {
+      "name": "H-мостові драйвери двигунів",
+      "parent": 19,
+      "description": "L298N, L293D, TB6612FNG, BTS7960"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 22,
+    "fields": {
+      "name": "Модулі реле та твердотільні ключі",
+      "parent": 19,
+      "description": "Оптоізольовані реле 5V/12V, SSR модулі"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 23,
+    "fields": {
+      "name": "Драйвери польових транзисторів (MOSFET)",
+      "parent": 19,
+      "description": "TC4420, IR2104, IR2110"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 25,
+    "fields": {
+      "name": "Лінійні регулятори LDO",
+      "parent": 24,
+      "description": "AMS1117 3.3V/5V, LM7805, LM317, LP2985"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 26,
+    "fields": {
+      "name": "Понижувальні DC-DC (Step-Down)",
+      "parent": 24,
+      "description": "LM2596, MP1584, MP2307, Mini360"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 27,
+    "fields": {
+      "name": "Підвищувальні DC-DC (Step-Up)",
+      "parent": 24,
+      "description": "MT3608, XL6009, SX1308"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 28,
+    "fields": {
+      "name": "Контролери заряду Li-Ion / BMS",
+      "parent": 24,
+      "description": "TP4056 з захистом, BMS 2S/3S/4S"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 30,
+    "fields": {
+      "name": "Перетворювачі USB-UART / COM",
+      "parent": 29,
+      "description": "CH340G, CP2102, FT232RL, PL2303"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 31,
+    "fields": {
+      "name": "Трансивери RS-485 / RS-232",
+      "parent": 29,
+      "description": "MAX485, SP3485, MAX232, SP3232"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 32,
+    "fields": {
+      "name": "Контролери та трансивери CAN-шини",
+      "parent": 29,
+      "description": "MCP2515, MCP2551, TJA1050"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 33,
+    "fields": {
+      "name": "Бездротові радіомодулі (RF / LoRa)",
+      "parent": 29,
+      "description": "NRF24L01+, LoRa SX1278, CC1101"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 34,
+    "fields": {
+      "name": "Bluetooth / BLE модулі",
+      "parent": 29,
+      "description": "HC-05, HC-06, JDY-31, AT-09"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 36,
+    "fields": {
+      "name": "Зсувні регістри",
+      "parent": 35,
+      "description": "74HC595 (SIPO), 74HC165 (PISO)"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 37,
+    "fields": {
+      "name": "Мультиплексори / демультиплексори",
+      "parent": 35,
+      "description": "74HC4051 (8-ch), 74HC4067 (16-ch)"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 38,
+    "fields": {
+      "name": "Буфери та логічні інвертори",
+      "parent": 35,
+      "description": "74HC245, 74HC14 (тригер Шмітта), 74HC00"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 40,
+    "fields": {
+      "name": "OLED дисплеї I2C / SPI",
+      "parent": 39,
+      "description": "0.96\" SSD1306, 1.3\" SH1106"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 41,
+    "fields": {
+      "name": "РК дисплеї символьні",
+      "parent": 39,
+      "description": "LCD 1602, LCD 2004 з I2C рюкзаком"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 42,
+    "fields": {
+      "name": "Світлодіодні матриці та сегментні індикатори",
+      "parent": 39,
+      "description": "MAX7219 8x8 матриці, TM1637 4-digit"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 43,
+    "fields": {
+      "name": "Кольорові TFT дисплеї",
+      "parent": 39,
+      "description": "ST7735 1.8\", ILI9341 2.4\" SPI"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 45,
+    "fields": {
+      "name": "Резистори та потенціометри",
+      "parent": 44,
+      "description": "Вивідні 0.25W, SMD 0805/0603, підстроєчні 3296W"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 46,
+    "fields": {
+      "name": "Конденсатори керамічні та електролітичні",
+      "parent": 44,
+      "description": "Кераміка 0.1uF, електроліти 100uF/470uF"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 47,
+    "fields": {
+      "name": "Кварцові резонатори",
+      "parent": 44,
+      "description": "16MHz, 8MHz, часовий кварц 32.768kHz"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 49,
+    "fields": {
+      "name": "Кнопки та перемикачі",
+      "parent": 48,
+      "description": "Тактові кнопки 6x6, тумблери, dip-перемикачі"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 50,
+    "fields": {
+      "name": "Штирьові роз'єми (Headers)",
+      "parent": 48,
+      "description": "Прямі та кутові рейки 2.54mm (PLS, PBS)"
+    }
+  },
+  {
+    "model": "catalog.categories",
+    "pk": 51,
+    "fields": {
+      "name": "Клемники гвинтові та живлення",
+      "parent": 48,
+      "description": "Гвинтові клемники 5.08mm, гнізда 5.5x2.1mm"
+    }
+  }
+]

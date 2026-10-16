@@ -1,0 +1,914 @@
+[
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 1,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 1,
+      "pin_label": "3V3",
+      "signal_type": "Power",
+      "description": "Напруга живлення 3.3V"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 2,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 2,
+      "pin_label": "EN",
+      "signal_type": "Reset",
+      "description": "Скидання мікроконтролера (Active LOW)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 3,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 3,
+      "pin_label": "GPIO36 / VP",
+      "signal_type": "ADC",
+      "description": "АЦП 1_CH0, сенсорний вхід"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 4,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 4,
+      "pin_label": "GPIO39 / VN",
+      "signal_type": "ADC",
+      "description": "АЦП 1_CH3, сенсорний вхід"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 5,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 5,
+      "pin_label": "GPIO34",
+      "signal_type": "ADC",
+      "description": "Вхід АЦП 1_CH6 (лише вхід)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 6,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 6,
+      "pin_label": "GPIO35",
+      "signal_type": "ADC",
+      "description": "Вхід АЦП 1_CH7 (лише вхід)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 7,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 7,
+      "pin_label": "GPIO32",
+      "signal_type": "GPIO",
+      "description": "АЦП 1_CH4, сенсор Touch9"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 8,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 8,
+      "pin_label": "GPIO33",
+      "signal_type": "GPIO",
+      "description": "АЦП 1_CH5, сенсор Touch8"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 9,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 9,
+      "pin_label": "GPIO25",
+      "signal_type": "GPIO",
+      "description": "ЦАП 1 (DAC1), АЦП 2_CH8"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 10,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 10,
+      "pin_label": "GPIO26",
+      "signal_type": "GPIO",
+      "description": "ЦАП 2 (DAC2), АЦП 2_CH9"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 11,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 11,
+      "pin_label": "GPIO27",
+      "signal_type": "GPIO",
+      "description": "АЦП 2_CH7, Touch7"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 12,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 12,
+      "pin_label": "GPIO14",
+      "signal_type": "SPI",
+      "description": "HSPI_CLK, Touch6, ADC2_CH6"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 13,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 13,
+      "pin_label": "GPIO12",
+      "signal_type": "SPI",
+      "description": "HSPI_MISO, Touch5, ADC2_CH5"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 14,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 14,
+      "pin_label": "GND",
+      "signal_type": "Ground",
+      "description": "Спільний провідник (Земля)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 15,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 15,
+      "pin_label": "GPIO13",
+      "signal_type": "SPI",
+      "description": "HSPI_MOSI, Touch4, ADC2_CH4"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 16,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 16,
+      "pin_label": "GPIO9 / D2",
+      "signal_type": "GPIO",
+      "description": "Flash SPI Data 2"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 17,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 17,
+      "pin_label": "GPIO10 / D3",
+      "signal_type": "GPIO",
+      "description": "Flash SPI Data 3"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 18,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 18,
+      "pin_label": "GPIO11 / CMD",
+      "signal_type": "GPIO",
+      "description": "Flash SPI Command"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 19,
+    "fields": {
+      "component": 12,
+      "side": "left",
+      "pin_number": 19,
+      "pin_label": "VIN / 5V",
+      "signal_type": "Power",
+      "description": "Вхід живлення від USB або зовнішнього джерела 5V"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 20,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 1,
+      "pin_label": "GND",
+      "signal_type": "Ground",
+      "description": "Спільний провідник (Земля)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 21,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 2,
+      "pin_label": "GPIO23",
+      "signal_type": "SPI",
+      "description": "VSPI_MOSI"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 22,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 3,
+      "pin_label": "GPIO22",
+      "signal_type": "I2C",
+      "description": "I2C SCL (Апаратна лінія тактування I2C)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 23,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 4,
+      "pin_label": "GPIO1 / TXD0",
+      "signal_type": "UART",
+      "description": "UART0 Transmit (Логування / Завантаження)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 24,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 5,
+      "pin_label": "GPIO3 / RXD0",
+      "signal_type": "UART",
+      "description": "UART0 Receive (Завантаження коду)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 25,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 6,
+      "pin_label": "GPIO21",
+      "signal_type": "I2C",
+      "description": "I2C SDA (Апаратна лінія даних I2C)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 26,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 7,
+      "pin_label": "GND",
+      "signal_type": "Ground",
+      "description": "Спільний провідник (Земля)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 27,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 8,
+      "pin_label": "GPIO19",
+      "signal_type": "SPI",
+      "description": "VSPI_MISO"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 28,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 9,
+      "pin_label": "GPIO18",
+      "signal_type": "SPI",
+      "description": "VSPI_SCK"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 29,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 10,
+      "pin_label": "GPIO5",
+      "signal_type": "SPI",
+      "description": "VSPI_CS"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 30,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 11,
+      "pin_label": "GPIO17",
+      "signal_type": "UART",
+      "description": "UART2 TXD"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 31,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 12,
+      "pin_label": "GPIO16",
+      "signal_type": "UART",
+      "description": "UART2 RXD"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 32,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 13,
+      "pin_label": "GPIO4",
+      "signal_type": "GPIO",
+      "description": "АЦП 2_CH0, Touch0"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 33,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 14,
+      "pin_label": "GPIO0",
+      "signal_type": "Reset",
+      "description": "Boot-режим: LOW для прошивки, Touch1"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 34,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 15,
+      "pin_label": "GPIO2",
+      "signal_type": "GPIO",
+      "description": "Вбудований світлодіод, Boot-пін, Touch2"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 35,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 16,
+      "pin_label": "GPIO15",
+      "signal_type": "SPI",
+      "description": "HSPI_CS, ADC2_CH3, Touch3"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 36,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 17,
+      "pin_label": "GPIO8 / D1",
+      "signal_type": "GPIO",
+      "description": "Flash SPI Data 1"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 37,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 18,
+      "pin_label": "GPIO7 / D0",
+      "signal_type": "GPIO",
+      "description": "Flash SPI Data 0"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 38,
+    "fields": {
+      "component": 12,
+      "side": "right",
+      "pin_number": 19,
+      "pin_label": "GPIO6 / CLK",
+      "signal_type": "SPI",
+      "description": "Flash SPI Clock"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 39,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 1,
+      "pin_label": "PC6 / RESET",
+      "signal_type": "Reset",
+      "description": "Зовнішнє скидання Active Low"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 40,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 2,
+      "pin_label": "PD0 / RXD",
+      "signal_type": "UART",
+      "description": "USART Receive"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 41,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 3,
+      "pin_label": "PD1 / TXD",
+      "signal_type": "UART",
+      "description": "USART Transmit"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 42,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 4,
+      "pin_label": "PD2 / INT0",
+      "signal_type": "GPIO",
+      "description": "Зовнішнє переривання 0"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 43,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 5,
+      "pin_label": "PD3 / INT1",
+      "signal_type": "GPIO",
+      "description": "Зовнішнє переривання 1 / PWM"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 44,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 6,
+      "pin_label": "PD4 / T0",
+      "signal_type": "GPIO",
+      "description": "Вхід лічильника Timer0"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 45,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 7,
+      "pin_label": "VCC",
+      "signal_type": "Power",
+      "description": "Напруга живлення цифрової логіки (+5V)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 46,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 8,
+      "pin_label": "GND",
+      "signal_type": "Ground",
+      "description": "Земля"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 47,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 9,
+      "pin_label": "PB6 / XTAL1",
+      "signal_type": "GPIO",
+      "description": "Вхід тактового кварцового генератора"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 48,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 10,
+      "pin_label": "PB7 / XTAL2",
+      "signal_type": "GPIO",
+      "description": "Вихід тактового кварцового генератора"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 49,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 11,
+      "pin_label": "PD5 / T1",
+      "signal_type": "GPIO",
+      "description": "Вхід лічильника Timer1 / PWM"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 50,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 12,
+      "pin_label": "PD6 / AIN0",
+      "signal_type": "GPIO",
+      "description": "Аналоговий компаратор 0 / PWM"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 51,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 13,
+      "pin_label": "PD7 / AIN1",
+      "signal_type": "GPIO",
+      "description": "Аналоговий компаратор 1"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 52,
+    "fields": {
+      "component": 15,
+      "side": "left",
+      "pin_number": 14,
+      "pin_label": "PB0 / ICP1",
+      "signal_type": "GPIO",
+      "description": "Вхід захоплення таймера 1"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 53,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 1,
+      "pin_label": "PC5 / SCL",
+      "signal_type": "I2C",
+      "description": "I2C Serial Clock / АЦП вхід ADC5"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 54,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 2,
+      "pin_label": "PC4 / SDA",
+      "signal_type": "I2C",
+      "description": "I2C Serial Data / АЦП вхід ADC4"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 55,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 3,
+      "pin_label": "PC3 / ADC3",
+      "signal_type": "ADC",
+      "description": "АЦП канал 3"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 56,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 4,
+      "pin_label": "PC2 / ADC2",
+      "signal_type": "ADC",
+      "description": "АЦП канал 2"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 57,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 5,
+      "pin_label": "PC1 / ADC1",
+      "signal_type": "ADC",
+      "description": "АЦП канал 1"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 58,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 6,
+      "pin_label": "PC0 / ADC0",
+      "signal_type": "ADC",
+      "description": "АЦП канал 0"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 59,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 7,
+      "pin_label": "GND",
+      "signal_type": "Ground",
+      "description": "Аналогова земля"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 60,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 8,
+      "pin_label": "AREF",
+      "signal_type": "Power",
+      "description": "Опорна напруга для АЦП"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 61,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 9,
+      "pin_label": "AVCC",
+      "signal_type": "Power",
+      "description": "Напруга живлення АЦП (+5V)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 62,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 10,
+      "pin_label": "PB5 / SCK",
+      "signal_type": "SPI",
+      "description": "SPI тактування / системний LED D13"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 63,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 11,
+      "pin_label": "PB4 / MISO",
+      "signal_type": "SPI",
+      "description": "SPI Master In Slave Out"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 64,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 12,
+      "pin_label": "PB3 / MOSI",
+      "signal_type": "SPI",
+      "description": "SPI Master Out Slave In / PWM"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 65,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 13,
+      "pin_label": "PB2 / SS",
+      "signal_type": "SPI",
+      "description": "SPI Slave Select / PWM"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 66,
+    "fields": {
+      "component": 15,
+      "side": "right",
+      "pin_number": 14,
+      "pin_label": "PB1 / OC1A",
+      "signal_type": "GPIO",
+      "description": "Вихід таймера Timer1A / PWM"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 67,
+    "fields": {
+      "component": 41,
+      "side": "left",
+      "pin_number": 1,
+      "pin_label": "GND",
+      "signal_type": "Ground",
+      "description": "Спільний провідник (Земля)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 68,
+    "fields": {
+      "component": 41,
+      "side": "left",
+      "pin_number": 2,
+      "pin_label": "VCC",
+      "signal_type": "Power",
+      "description": "Живлення дисплея 3.3V - 5V"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 69,
+    "fields": {
+      "component": 41,
+      "side": "right",
+      "pin_number": 1,
+      "pin_label": "SCL",
+      "signal_type": "I2C",
+      "description": "Лінія тактування I2C Clock"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 70,
+    "fields": {
+      "component": 41,
+      "side": "right",
+      "pin_number": 2,
+      "pin_label": "SDA",
+      "signal_type": "I2C",
+      "description": "Лінія даних I2C Data"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 71,
+    "fields": {
+      "component": 19,
+      "side": "left",
+      "pin_number": 1,
+      "pin_label": "VCC",
+      "signal_type": "Power",
+      "description": "Живлення 3.3V"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 72,
+    "fields": {
+      "component": 19,
+      "side": "left",
+      "pin_number": 2,
+      "pin_label": "GND",
+      "signal_type": "Ground",
+      "description": "Земля"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 73,
+    "fields": {
+      "component": 19,
+      "side": "left",
+      "pin_number": 3,
+      "pin_label": "SCL",
+      "signal_type": "I2C",
+      "description": "I2C / SPI Тактова лінія SCK"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 74,
+    "fields": {
+      "component": 19,
+      "side": "right",
+      "pin_number": 1,
+      "pin_label": "SDA",
+      "signal_type": "I2C",
+      "description": "I2C / SPI Лінія даних SDI"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 75,
+    "fields": {
+      "component": 19,
+      "side": "right",
+      "pin_number": 2,
+      "pin_label": "CSB",
+      "signal_type": "SPI",
+      "description": "Chip Select SPI (Active Low)"
+    }
+  },
+  {
+    "model": "catalog.componentpinouts",
+    "pk": 76,
+    "fields": {
+      "component": 19,
+      "side": "right",
+      "pin_number": 3,
+      "pin_label": "SDO",
+      "signal_type": "SPI",
+      "description": "SPI Data Out / I2C адреса вибір (0x76/0x77)"
+    }
+  }
+]

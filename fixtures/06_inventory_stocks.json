@@ -1,0 +1,453 @@
+[
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 12,
+    "fields": {
+      "component": 12,
+      "location": 127,
+      "quantity_on_hand": 14,
+      "quantity_reserved": 0,
+      "unit_price": "165.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 13,
+    "fields": {
+      "component": 13,
+      "location": 101,
+      "quantity_on_hand": 15,
+      "quantity_reserved": 1,
+      "unit_price": "88.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 14,
+    "fields": {
+      "component": 14,
+      "location": 101,
+      "quantity_on_hand": 8,
+      "quantity_reserved": 0,
+      "unit_price": "145.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 15,
+    "fields": {
+      "component": 15,
+      "location": 102,
+      "quantity_on_hand": 4,
+      "quantity_reserved": 0,
+      "unit_price": "95.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 16,
+    "fields": {
+      "component": 16,
+      "location": 102,
+      "quantity_on_hand": 18,
+      "quantity_reserved": 0,
+      "unit_price": "42.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 17,
+    "fields": {
+      "component": 17,
+      "location": 103,
+      "quantity_on_hand": 12,
+      "quantity_reserved": 1,
+      "unit_price": "68.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 18,
+    "fields": {
+      "component": 18,
+      "location": 104,
+      "quantity_on_hand": 20,
+      "quantity_reserved": 0,
+      "unit_price": "75.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 19,
+    "fields": {
+      "component": 19,
+      "location": 105,
+      "quantity_on_hand": 11,
+      "quantity_reserved": 1,
+      "unit_price": "120.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 20,
+    "fields": {
+      "component": 20,
+      "location": 105,
+      "quantity_on_hand": 6,
+      "quantity_reserved": 0,
+      "unit_price": "85.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 21,
+    "fields": {
+      "component": 21,
+      "location": 106,
+      "quantity_on_hand": 7,
+      "quantity_reserved": 1,
+      "unit_price": "65.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 22,
+    "fields": {
+      "component": 22,
+      "location": 106,
+      "quantity_on_hand": 10,
+      "quantity_reserved": 0,
+      "unit_price": "45.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 23,
+    "fields": {
+      "component": 23,
+      "location": 107,
+      "quantity_on_hand": 5,
+      "quantity_reserved": 0,
+      "unit_price": "130.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 24,
+    "fields": {
+      "component": 24,
+      "location": 107,
+      "quantity_on_hand": 0,
+      "quantity_reserved": 0,
+      "unit_price": "70.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 25,
+    "fields": {
+      "component": 25,
+      "location": 108,
+      "quantity_on_hand": 8,
+      "quantity_reserved": 0,
+      "unit_price": "90.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 26,
+    "fields": {
+      "component": 26,
+      "location": 109,
+      "quantity_on_hand": 14,
+      "quantity_reserved": 0,
+      "unit_price": "48.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 27,
+    "fields": {
+      "component": 27,
+      "location": 109,
+      "quantity_on_hand": 2,
+      "quantity_reserved": 2,
+      "unit_price": "72.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 28,
+    "fields": {
+      "component": 28,
+      "location": 110,
+      "quantity_on_hand": 5,
+      "quantity_reserved": 0,
+      "unit_price": "85.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 29,
+    "fields": {
+      "component": 29,
+      "location": 110,
+      "quantity_on_hand": 30,
+      "quantity_reserved": 0,
+      "unit_price": "24.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 30,
+    "fields": {
+      "component": 30,
+      "location": 111,
+      "quantity_on_hand": 12,
+      "quantity_reserved": 1,
+      "unit_price": "38.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 31,
+    "fields": {
+      "component": 31,
+      "location": 111,
+      "quantity_on_hand": 65,
+      "quantity_reserved": 0,
+      "unit_price": "6.50"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 32,
+    "fields": {
+      "component": 32,
+      "location": 111,
+      "quantity_on_hand": 25,
+      "quantity_reserved": 0,
+      "unit_price": "14.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 33,
+    "fields": {
+      "component": 33,
+      "location": 112,
+      "quantity_on_hand": 8,
+      "quantity_reserved": 1,
+      "unit_price": "45.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 34,
+    "fields": {
+      "component": 34,
+      "location": 112,
+      "quantity_on_hand": 22,
+      "quantity_reserved": 1,
+      "unit_price": "22.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 35,
+    "fields": {
+      "component": 35,
+      "location": 113,
+      "quantity_on_hand": 25,
+      "quantity_reserved": 0,
+      "unit_price": "18.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 36,
+    "fields": {
+      "component": 36,
+      "location": 113,
+      "quantity_on_hand": 9,
+      "quantity_reserved": 0,
+      "unit_price": "62.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 37,
+    "fields": {
+      "component": 37,
+      "location": 114,
+      "quantity_on_hand": 15,
+      "quantity_reserved": 0,
+      "unit_price": "16.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 38,
+    "fields": {
+      "component": 38,
+      "location": 114,
+      "quantity_on_hand": 6,
+      "quantity_reserved": 0,
+      "unit_price": "78.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 39,
+    "fields": {
+      "component": 39,
+      "location": 114,
+      "quantity_on_hand": 8,
+      "quantity_reserved": 0,
+      "unit_price": "140.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 40,
+    "fields": {
+      "component": 40,
+      "location": 114,
+      "quantity_on_hand": 20,
+      "quantity_reserved": 0,
+      "unit_price": "12.50"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 41,
+    "fields": {
+      "component": 41,
+      "location": 108,
+      "quantity_on_hand": 9,
+      "quantity_reserved": 1,
+      "unit_price": "115.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 42,
+    "fields": {
+      "component": 42,
+      "location": 108,
+      "quantity_on_hand": 1,
+      "quantity_reserved": 0,
+      "unit_price": "145.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 43,
+    "fields": {
+      "component": 43,
+      "location": 107,
+      "quantity_on_hand": 7,
+      "quantity_reserved": 0,
+      "unit_price": "55.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 44,
+    "fields": {
+      "component": 44,
+      "location": 128,
+      "quantity_on_hand": 650,
+      "quantity_reserved": 2,
+      "unit_price": "0.35"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 45,
+    "fields": {
+      "component": 45,
+      "location": 128,
+      "quantity_on_hand": 400,
+      "quantity_reserved": 0,
+      "unit_price": "0.35"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 46,
+    "fields": {
+      "component": 46,
+      "location": 129,
+      "quantity_on_hand": 500,
+      "quantity_reserved": 0,
+      "unit_price": "0.35"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 47,
+    "fields": {
+      "component": 47,
+      "location": 129,
+      "quantity_on_hand": 800,
+      "quantity_reserved": 3,
+      "unit_price": "0.45"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 48,
+    "fields": {
+      "component": 48,
+      "location": 130,
+      "quantity_on_hand": 45,
+      "quantity_reserved": 0,
+      "unit_price": "3.20"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 49,
+    "fields": {
+      "component": 49,
+      "location": 130,
+      "quantity_on_hand": 24,
+      "quantity_reserved": 0,
+      "unit_price": "6.80"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 50,
+    "fields": {
+      "component": 50,
+      "location": 131,
+      "quantity_on_hand": 35,
+      "quantity_reserved": 0,
+      "unit_price": "8.50"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 51,
+    "fields": {
+      "component": 51,
+      "location": 131,
+      "quantity_on_hand": 40,
+      "quantity_reserved": 0,
+      "unit_price": "11.00"
+    }
+  },
+  {
+    "model": "inventory.inventorystocks",
+    "pk": 52,
+    "fields": {
+      "component": 52,
+      "location": 132,
+      "quantity_on_hand": 80,
+      "quantity_reserved": 0,
+      "unit_price": "2.20"
+    }
+  }
+]

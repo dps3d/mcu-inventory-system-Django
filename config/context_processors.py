@@ -4,8 +4,13 @@ from django.db import connection
 def db_health_status(request):
     """
     MariaDB Health Check context processor.
-    Pings the default database connection and returns whether it is healthy.
+    Returns whether the database is healthy.
     """
+    if hasattr(request, 'db_healthy'):
+        return {
+            'db_healthy': request.db_healthy,
+        }
+
     db_healthy = False
     try:
         connection.ensure_connection()

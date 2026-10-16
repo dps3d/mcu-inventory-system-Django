@@ -1,0 +1,166 @@
+[
+  {
+    "model": "inventory.orders",
+    "pk": 1,
+    "fields": {
+      "supplier": 1,
+      "tracking_number": "20450892019342",
+      "status": "delivered",
+      "order_date": "2026-09-15T11:20:00+03:00",
+      "expected_delivery": "2026-09-18"
+    }
+  },
+  {
+    "model": "inventory.orders",
+    "pk": 2,
+    "fields": {
+      "supplier": 4,
+      "tracking_number": "LCSC849201844",
+      "status": "shipped",
+      "order_date": "2026-10-04T16:45:00+03:00",
+      "expected_delivery": "2026-10-22"
+    }
+  },
+  {
+    "model": "inventory.orders",
+    "pk": 3,
+    "fields": {
+      "supplier": 3,
+      "tracking_number": "59000847291038",
+      "status": "ordered",
+      "order_date": "2026-10-13T09:30:00+03:00",
+      "expected_delivery": "2026-10-18"
+    }
+  },
+  {
+    "model": "inventory.orders",
+    "pk": 4,
+    "fields": {
+      "supplier": 5,
+      "tracking_number": null,
+      "status": "pending",
+      "order_date": "2026-10-15T18:10:00+03:00",
+      "expected_delivery": "2026-10-30"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 1,
+    "fields": {
+      "order": 1,
+      "component": 12,
+      "quantity_ordered": 10,
+      "unit_price": "150.00"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 2,
+    "fields": {
+      "order": 1,
+      "component": 19,
+      "quantity_ordered": 10,
+      "unit_price": "110.00"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 3,
+    "fields": {
+      "order": 1,
+      "component": 30,
+      "quantity_ordered": 15,
+      "unit_price": "32.00"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 4,
+    "fields": {
+      "order": 2,
+      "component": 13,
+      "quantity_ordered": 20,
+      "unit_price": "72.50"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 5,
+    "fields": {
+      "order": 2,
+      "component": 31,
+      "quantity_ordered": 100,
+      "unit_price": "4.80"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 6,
+    "fields": {
+      "order": 2,
+      "component": 44,
+      "quantity_ordered": 1000,
+      "unit_price": "0.18"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 7,
+    "fields": {
+      "order": 2,
+      "component": 47,
+      "quantity_ordered": 1000,
+      "unit_price": "0.22"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 8,
+    "fields": {
+      "order": 3,
+      "component": 41,
+      "quantity_ordered": 10,
+      "unit_price": "98.00"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 9,
+    "fields": {
+      "order": 3,
+      "component": 27,
+      "quantity_ordered": 10,
+      "unit_price": "62.00"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 10,
+    "fields": {
+      "order": 3,
+      "component": 24,
+      "quantity_ordered": 5,
+      "unit_price": "58.00"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 11,
+    "fields": {
+      "order": 4,
+      "component": 14,
+      "quantity_ordered": 5,
+      "unit_price": "135.00"
+    }
+  },
+  {
+    "model": "inventory.orderitems",
+    "pk": 12,
+    "fields": {
+      "order": 4,
+      "component": 23,
+      "quantity_ordered": 10,
+      "unit_price": "115.00"
+    }
+  }
+]
