@@ -5,14 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}MCU Inventory System{% endblock %}</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=20261016.1">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=20261016.6">
     {% block extra_head %}{% endblock %}
 </head>
 <body>
     <div class="app-shell">
-        <!-- Minimal Sidebar -->
-        <aside class="sidebar">
+        <!-- Mobile Sidebar Backdrop -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true" onclick="closeMobileSidebar(event)"></div>
+
+        <!-- Sidebar Drawer -->
+        <aside class="sidebar" id="appSidebar">
             <div class="sidebar-top">
+                <div class="sidebar-brand-mobile">
+                    <span class="mobile-brand-title">MCU Inventory</span>
+                    <button type="button" class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Закрити меню навігації" onclick="closeMobileSidebar(event)">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
                 {% if user.is_staff %}
                 <a href="/admin/" target="_blank" class="admin-top-btn" title="Перейти в панель адміністрування Django">
                     <div class="admin-btn-content">
@@ -112,6 +124,13 @@
             <!-- Command Topbar -->
             {% block topbar %}
             <header class="topbar">
+                <button type="button" class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Відкрити меню навігації" onclick="toggleMobileSidebar(event)">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
                 <div class="search-command-bar">
                     <svg width="16" height="16" class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
@@ -151,7 +170,61 @@
         </div>
     </div>
 
-    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        if (typeof window.__lastSidebarToggle === 'undefined') {
+            window.__lastSidebarToggle = 0;
+        }
+
+        function openMobileSidebar() {
+            var sidebar = document.getElementById('appSidebar');
+            var backdrop = document.getElementById('sidebarBackdrop');
+            var toggleBtn = document.getElementById('mobileMenuToggle');
+            if (!sidebar) return;
+            sidebar.classList.add('is-open');
+            if (backdrop) backdrop.classList.add('is-active');
+            document.body.classList.add('sidebar-locked');
+            if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'true');
+        }
+
+        function closeMobileSidebar() {
+            var sidebar = document.getElementById('appSidebar');
+            var backdrop = document.getElementById('sidebarBackdrop');
+            var toggleBtn = document.getElementById('mobileMenuToggle');
+            if (!sidebar) return;
+            sidebar.classList.remove('is-open');
+            if (backdrop) backdrop.classList.remove('is-active');
+            document.body.classList.remove('sidebar-locked');
+            if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+        }
+
+        function toggleMobileSidebar(e) {
+            if (e) {
+                if (typeof e.preventDefault === 'function') e.preventDefault();
+                if (typeof e.stopPropagation === 'function') e.stopPropagation();
+            }
+            var now = Date.now();
+            if (window.__lastSidebarToggle && (now - window.__lastSidebarToggle < 280)) return;
+            window.__lastSidebarToggle = now;
+
+            var sidebar = document.getElementById('appSidebar');
+            if (!sidebar) return;
+            if (sidebar.classList.contains('is-open')) {
+                closeMobileSidebar();
+            } else {
+                openMobileSidebar();
+            }
+        }
+
+        window.openMobileSidebar = openMobileSidebar;
+        window.closeMobileSidebar = closeMobileSidebar;
+        window.toggleMobileSidebar = toggleMobileSidebar;
+
+        // Clean up when navigating back via browser bfcache
+        window.addEventListener('pageshow', function() {
+            closeMobileSidebar();
+        });
+    </script>
+    <script src="{% static 'js/main.js' %}?v=20261016.6"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>
