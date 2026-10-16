@@ -9,8 +9,8 @@ class ProjectBomsInline(admin.TabularInline):
 
 @admin.register(Projects)
 class ProjectsAdmin(admin.ModelAdmin):
-    list_display = ('project_id', 'name', 'is_private', 'status', 'created_at')
-    list_filter = ('is_private', 'status', 'created_at')
+    list_display = ('project_id', 'name', 'created_by', 'is_private', 'status', 'created_at')
+    list_filter = ('is_private', 'status', 'created_at', 'created_by')
     search_fields = ('name', 'description')
     inlines = [ProjectBomsInline]
 

@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Projects(models.Model):
@@ -12,6 +13,15 @@ class Projects(models.Model):
     project_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=150, verbose_name="Назва проєкту")
     description = models.TextField(null=True, blank=True, verbose_name="Опис проєкту")
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='projects',
+        db_column='created_by_id',
+        verbose_name="Автор проєкту"
+    )
     image_path = models.CharField(max_length=255, null=True, blank=True, verbose_name="URL зображення")
     image_file = models.ImageField(upload_to='projects/', null=True, blank=True, verbose_name="Файл зображення")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='planning', verbose_name="Статус проєкту")

@@ -127,7 +127,7 @@
             </div>
         </a>
 
-        <a href="#projects" class="module-card">
+        <a href="{% url 'projects:list' %}" class="module-card">
             <div class="module-icon-wrap">
                 <svg width="22" height="22" class="module-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -142,7 +142,7 @@
                 <p class="module-desc">Двопанельний конструктор специфікацій, калькулятор готовності до збірки (Build Readiness) та резервування деталей інженером.</p>
             </div>
             <div class="module-footer">
-                <span class="module-tag">BOM Калькулятор</span>
+                <span class="module-tag">{{ projects_count }} проєктів</span>
                 <span class="module-arrow">&rarr;</span>
             </div>
         </a>

@@ -1,0 +1,338 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Проєкти та BOM — MCU Inventory System{% endblock %}
+
+{% block content %}
+<div class="catalog-page">
+    <!-- Header Banner -->
+    <div class="catalog-header">
+        <div class="catalog-header-text">
+            <h1 class="catalog-title">Проєкти та специфікації BOM</h1>
+            <p class="catalog-subtitle">Конструктор специфікацій виробів, розрахунок готовності до збірки (Build Readiness) та резервування деталей</p>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="catalog-header-actions">
+            <button type="button" class="btn btn-primary" onclick="openCreateProjectModal()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>Створити проєкт</span>
+            </button>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- KPI Metrics -->
+    <div class="kpi-stats-grid">
+        <div class="kpi-stat-card">
+            <div class="kpi-stat-icon icon-emerald">
+                <svg width="22" height="22" class="kpi-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+            </div>
+            <div class="kpi-stat-info">
+                <span class="kpi-stat-val">{{ total_projects }}</span>
+                <span class="kpi-stat-lbl">Всього проєктів</span>
+            </div>
+        </div>
+
+        <a href="?status=in_progress" class="kpi-stat-card">
+            <div class="kpi-stat-icon icon-blue">
+                <svg width="22" height="22" class="kpi-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+            </div>
+            <div class="kpi-stat-info">
+                <span class="kpi-stat-val">{{ active_projects }}</span>
+                <span class="kpi-stat-lbl">В розробці</span>
+            </div>
+        </a>
+
+        <div class="kpi-stat-card {% if fully_buildable_count > 0 %}stat-alert{% endif %}">
+            <div class="kpi-stat-icon icon-amber">
+                <svg width="22" height="22" class="kpi-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <div class="kpi-stat-info">
+                <span class="kpi-stat-val">{{ fully_buildable_count }}</span>
+                <span class="kpi-stat-lbl">100% готові до збірки</span>
+            </div>
+        </div>
+
+        <a href="?status=completed" class="kpi-stat-card">
+            <div class="kpi-stat-icon icon-purple">
+                <svg width="22" height="22" class="kpi-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+            </div>
+            <div class="kpi-stat-info">
+                <span class="kpi-stat-val">{{ completed_projects }}</span>
+                <span class="kpi-stat-lbl">Завершені</span>
+            </div>
+        </a>
+    </div>
+
+    <!-- Filter Bar -->
+    <form method="get" class="catalog-filter-bar">
+        <div class="filter-row">
+            <div class="filter-field search-field">
+                <svg width="16" height="16" class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" name="q" value="{{ query }}" placeholder="Пошук проєкту за назвою чи описом..." class="filter-input">
+                {% if query %}
+                <a href="{% url 'projects:list' %}" class="clear-search-btn" title="Очистити">&times;</a>
+                {% endif %}
+            </div>
+
+            <div class="filter-field">
+                <select name="status" class="filter-select" onchange="this.form.submit()">
+                    <option value="">Всі статуси</option>
+                    {% for code, label in status_choices %}
+                    <option value="{{ code }}" {% if status_filter == code %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            {% if user.is_authenticated %}
+            <div class="filter-field">
+                <select name="vis" class="filter-select" onchange="this.form.submit()">
+                    <option value="">Всі проєкти (Публічні + Приватні)</option>
+                    <option value="private" {% if visibility_filter == 'private' %}selected{% endif %}>Тільки приватні</option>
+                    <option value="public" {% if visibility_filter == 'public' %}selected{% endif %}>Тільки публічні</option>
+                </select>
+            </div>
+            {% endif %}
+
+            <div class="filter-field">
+                <select name="sort" class="filter-select" onchange="this.form.submit()">
+                    <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Найновіші спочатку</option>
+                    <option value="oldest" {% if sort_by == 'oldest' %}selected{% endif %}>Найстаріші спочатку</option>
+                    <option value="name_asc" {% if sort_by == 'name_asc' %}selected{% endif %}>Назва (А &rarr; Я)</option>
+                    <option value="name_desc" {% if sort_by == 'name_desc' %}selected{% endif %}>Назва (Я &rarr; А)</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-secondary btn-sm">Застосувати</button>
+            {% if query or status_filter or visibility_filter or sort_by != 'newest' %}
+            <a href="{% url 'projects:list' %}" class="btn btn-secondary btn-sm" style="text-decoration: none;">Скинути</a>
+            {% endif %}
+        </div>
+    </form>
+
+    <!-- Projects Grid -->
+    {% if page_obj %}
+    <div class="projects-cards-grid">
+        {% for item in page_obj %}
+        {% with project=item.project stats=item.stats %}
+        <div class="project-card">
+            <div class="project-card-header">
+                <div class="project-badge-wrap">
+                    <span class="project-status-badge status-{{ project.status }}">
+                        {{ project.get_status_display }}
+                    </span>
+                    {% if project.is_private %}
+                    <span class="project-vis-badge badge-private" title="Приватний проєкт">🔒 Приватний</span>
+                    {% else %}
+                    <span class="project-vis-badge badge-public" title="Публічний проєкт">🌐 Публічний</span>
+                    {% endif %}
+                <div class="project-header-meta" style="display: flex; align-items: center; gap: 8px;">
+                    <span class="project-author-tag" title="Автор проєкту">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span>{{ project.created_by.username|default:"Лабораторія" }}</span>
+                    </span>
+                    <span class="project-date">{{ project.created_at|date:"d.m.Y" }}</span>
+                </div>
+            </div>
+
+            <div class="project-card-body">
+                <h3 class="project-title">
+                    <a href="{% url 'projects:detail' project.pk %}" class="project-title-link">
+                        {{ project.name }}
+                    </a>
+                </h3>
+                <p class="project-desc">
+                    {{ project.description|default:"Опис проєкту ще не заповнено."|truncatewords:24 }}
+                </p>
+
+                <!-- Build Readiness Indicator -->
+                <div class="project-readiness-box">
+                    <div class="readiness-header">
+                        <span class="readiness-title">Готовність до збірки (1 шт):</span>
+                        <strong class="readiness-pct {% if stats.readiness_percent == 100 and stats.total_items > 0 %}pct-full{% elif stats.readiness_percent > 0 %}pct-partial{% else %}pct-zero{% endif %}">
+                            {% if stats.total_items > 0 %}{{ stats.readiness_percent }}%{% else %}—{% endif %}
+                        </strong>
+                    </div>
+
+                    <div class="readiness-bar-track">
+                        <div class="readiness-bar-fill {% if stats.readiness_percent == 100 and stats.total_items > 0 %}bar-full{% elif stats.readiness_percent > 0 %}bar-partial{% else %}bar-zero{% endif %}"
+                             style="width: {{ stats.readiness_percent }}%;"></div>
+                    </div>
+
+                    <div class="readiness-meta">
+                        {% if stats.total_items > 0 %}
+                        <span>Укомплектовано: <strong>{{ stats.covered_count }}</strong> з <strong>{{ stats.total_items }}</strong> поз.</span>
+                        <span class="buildable-badge {% if stats.max_buildable > 0 %}badge-can-build{% else %}badge-cannot-build{% endif %}">
+                            Можна зібрати: <strong>{{ stats.max_buildable }}</strong> шт
+                        </span>
+                        {% else %}
+                        <span class="text-muted">Специфікація BOM порожня</span>
+                        <span class="badge-dim">0 позицій</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card-footer">
+                <div class="project-bom-summary">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="summary-icon">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                    <span><strong>{{ stats.total_items }}</strong> в BOM (<strong>{{ stats.total_units_required }}</strong> шт)</span>
+                </div>
+                <a href="{% url 'projects:detail' project.pk %}" class="btn-open-bom">
+                    <span>Відкрити BOM</span>
+                    <span class="arrow">&rarr;</span>
+                </a>
+            </div>
+        </div>
+        {% endwith %}
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div class="pagination-bar" style="margin-top: 2rem;">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&q={{ query }}&status={{ status_filter }}&vis={{ visibility_filter }}&sort={{ sort_by }}" class="pagination-btn">
+            &larr; Попередня
+        </a>
+        {% else %}
+        <span class="pagination-btn disabled">&larr; Попередня</span>
+        {% endif %}
+
+        <div class="pagination-pages">
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <span class="page-number active">{{ num }}</span>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <a href="?page={{ num }}&q={{ query }}&status={{ status_filter }}&vis={{ visibility_filter }}&sort={{ sort_by }}" class="page-number">
+                        {{ num }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&q={{ query }}&status={{ status_filter }}&vis={{ visibility_filter }}&sort={{ sort_by }}" class="pagination-btn">
+            Наступна &rarr;
+        </a>
+        {% else %}
+        <span class="pagination-btn disabled">Наступна &rarr;</span>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="empty-state-box" style="padding: 4rem 1.5rem; text-align: center; margin-top: 1.5rem;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--text-muted); margin-bottom: 1rem;">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">
+            {% if query or status_filter %}Проєктів за обраними фільтрами не знайдено{% else %}Проєктів ще не створено{% endif %}
+        </h3>
+        <p class="empty-desc" style="max-width: 480px; margin: 0 auto 1.5rem;">
+            Створіть свій перший інженерний проєкт, додайте до нього деталі та розрахуйте можливість збірки з наявних компонентів лабораторії.
+        </p>
+        {% if user.is_authenticated %}
+        <button type="button" class="btn btn-primary" onclick="openCreateProjectModal()">
+            + Створити перший проєкт
+        </button>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- Modal: Create New Project -->
+{% if user.is_authenticated %}
+<div id="createProjectModal" class="modal-backdrop" style="display: none;" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">Створення інженерного проєкту</h3>
+            <button type="button" class="modal-close-btn" onclick="closeCreateProjectModal()">&times;</button>
+        </div>
+        <form method="post" action="{% url 'projects:create' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.name.id_for_label }}">Назва проєкту *</label>
+                    {{ form.name }}
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.description.id_for_label }}">Опис та призначення</label>
+                    {{ form.description }}
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.status.id_for_label }}">Початковий статус</label>
+                        {{ form.status }}
+                    </div>
+                    <div class="form-group" style="display: flex; flex-direction: column; justify-content: center; padding-top: 1.5rem;">
+                        <label class="checkbox-label" style="cursor: pointer;">
+                            {{ form.is_private }}
+                            <span style="font-weight: 500; font-size: 13.5px;">Приватний проєкт (видно тільки вам)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.image_file.id_for_label }}">Зображення / Фото схеми (опціонально)</label>
+                    {{ form.image_file }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeCreateProjectModal()">Скасувати</button>
+                <button type="submit" class="btn btn-primary">Створити проєкт і перейти до BOM</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<script>
+function openCreateProjectModal() {
+    const m = document.getElementById('createProjectModal');
+    if (m) m.style.display = 'flex';
+}
+function closeCreateProjectModal() {
+    const m = document.getElementById('createProjectModal');
+    if (m) m.style.display = 'none';
+}
+function closeModalOnBackdrop(e) {
+    if (e.target.classList.contains('modal-backdrop')) {
+        e.target.style.display = 'none';
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,681 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ project.name }} — Специфікація BOM — MCU Inventory System{% endblock %}
+
+{% block content %}
+<div class="catalog-page">
+    <!-- Breadcrumbs -->
+    <div class="detail-breadcrumbs">
+        <a href="{% url 'home' %}" class="breadcrumb-link">Головна</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="{% url 'projects:list' %}" class="breadcrumb-link">Проєкти та BOM</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">{{ project.name }}</span>
+    </div>
+
+    <!-- Project Hero Banner -->
+    <div class="project-hero-card">
+        <div class="project-hero-content">
+            <div class="project-hero-top">
+                <div class="project-hero-badges">
+                    <span class="project-status-badge status-{{ project.status }}">
+                        {{ project.get_status_display }}
+                    </span>
+                    {% if project.is_private %}
+                    <span class="project-vis-badge badge-private">🔒 Приватний</span>
+                    {% else %}
+                    <span class="project-vis-badge badge-public">🌐 Публічний</span>
+                    {% endif %}
+                    <span class="project-author-tag" title="Автор проєкту">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span>Автор: {{ project.created_by.username|default:"Лабораторія" }}</span>
+                    </span>
+                    <span class="project-meta-date">Створено: {{ project.created_at|date:"d.m.Y H:i" }}</span>
+                </div>
+
+                <!-- Status switcher & Actions -->
+                <div class="project-hero-actions">
+                    {% if user_can_edit %}
+                    <form method="post" action="{% url 'projects:status_update' project.pk %}" class="status-quick-form" style="display: inline-flex; align-items: center; gap: 6px;">
+                        {% csrf_token %}
+                        <label for="statusSelect" class="status-form-lbl">Статус:</label>
+                        <select name="status" id="statusSelect" class="status-select-sm" onchange="this.form.submit()">
+                            <option value="planning" {% if project.status == 'planning' %}selected{% endif %}>Планування</option>
+                            <option value="in_progress" {% if project.status == 'in_progress' %}selected{% endif %}>В розробці</option>
+                            <option value="completed" {% if project.status == 'completed' %}selected{% endif %}>Завершено</option>
+                            <option value="cancelled" {% if project.status == 'cancelled' %}selected{% endif %}>Скасовано</option>
+                        </select>
+                    </form>
+
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="openEditProjectModal()" title="Редагувати параметри проєкту">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;">
+                            <path d="M12 20h9"></path>
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                        </svg>
+                        <span>Редагувати</span>
+                    </button>
+
+                    <form method="post" action="{% url 'projects:delete' project.pk %}" style="display: inline;" onsubmit="return confirm('Ви дійсно бажаєте видалити проєкт «{{ project.name|escapejs }}»? Всі зарезервовані деталі буде повернено на склад.');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm" title="Видалити проєкт">
+                            Видалити
+                        </button>
+                    </form>
+                    {% else %}
+                    <span class="badge-dim" style="padding: 4px 10px; font-size: 12px;">🔒 Режим лише для читання</span>
+                    {% endif %}
+
+                    <a href="{% url 'projects:export_csv' project.pk %}?batch={{ batch_size }}" class="btn btn-secondary btn-sm" title="Експортувати BOM у CSV (Excel)">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        <span>Експорт CSV</span>
+                    </a>
+                </div>
+            </div>
+
+            <h1 class="project-hero-title">{{ project.name }}</h1>
+            {% if project.description %}
+            <p class="project-hero-desc">{{ project.description }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if not user_can_edit %}
+    <div class="readonly-notice">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0;">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        <span>Ви переглядаєте публічний проєкт у режимі читання. Модифікувати BOM та резервувати компоненти на складі може тільки автор проєкту або адміністратор.</span>
+    </div>
+    {% endif %}
+
+    <!-- Interactive Build Readiness & Batch Calculator Banner -->
+    <div class="readiness-calculator-card">
+        <div class="calc-top-row">
+            <div class="calc-title-group">
+                <div class="calc-icon-wrap">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                        <polyline points="2 17 12 22 22 17"></polyline>
+                        <polyline points="2 12 12 17 22 12"></polyline>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="calc-title">Калькулятор готовності до збірки (Build Readiness)</h2>
+                    <p class="calc-desc">Розрахунок забезпеченості компонентами зі складу та резервування партії</p>
+                </div>
+            </div>
+
+            <!-- Batch Size Stepper Control -->
+            <div class="batch-stepper-control">
+                <span class="batch-lbl">Партія збірки:</span>
+                <div class="batch-input-wrap">
+                    <button type="button" class="btn-batch-step" onclick="changeBatchDelta(-1)">&minus;</button>
+                    <input type="number" id="batchSizeInput" value="{{ batch_size }}" min="1" max="1000" class="batch-number-input" onchange="submitBatchSize(this.value)">
+                    <button type="button" class="btn-batch-step" onclick="changeBatchDelta(1)">&plus;</button>
+                </div>
+                <div class="batch-presets">
+                    <button type="button" class="batch-chip {% if batch_size == 1 %}active{% endif %}" onclick="setBatch(1)">1 шт</button>
+                    <button type="button" class="batch-chip {% if batch_size == 5 %}active{% endif %}" onclick="setBatch(5)">5 шт</button>
+                    <button type="button" class="batch-chip {% if batch_size == 10 %}active{% endif %}" onclick="setBatch(10)">10 шт</button>
+                    <button type="button" class="batch-chip {% if batch_size == 25 %}active{% endif %}" onclick="setBatch(25)">25 шт</button>
+                    <button type="button" class="batch-chip {% if batch_size == 50 %}active{% endif %}" onclick="setBatch(50)">50 шт</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metrics & Progress Bar Row -->
+        <div class="calc-metrics-row">
+            <div class="metric-box metric-max-buildable">
+                <span class="metric-label">Макс. можна зібрати зараз:</span>
+                <div class="metric-value-wrap">
+                    <strong class="metric-val {% if readiness.max_buildable > 0 %}val-green{% else %}val-danger{% endif %}">
+                        {{ readiness.max_buildable }}
+                    </strong>
+                    <span class="metric-unit">шт виробів</span>
+                </div>
+                <span class="metric-hint">Обмежено залишком «вузького місця»</span>
+            </div>
+
+            <div class="metric-box metric-progress-box">
+                <div class="progress-info-row">
+                    <span class="metric-label">Забезпеченість партії з <strong>{{ batch_size }} шт</strong>:</span>
+                    <strong class="progress-pct-val {% if readiness.readiness_percent == 100 and readiness.total_items > 0 %}pct-full{% elif readiness.readiness_percent > 0 %}pct-partial{% else %}pct-zero{% endif %}">
+                        {% if readiness.total_items > 0 %}{{ readiness.readiness_percent }}%{% else %}0%{% endif %}
+                    </strong>
+                </div>
+                <div class="readiness-large-bar-track">
+                    <div class="readiness-large-bar-fill {% if readiness.readiness_percent == 100 and readiness.total_items > 0 %}bar-full{% elif readiness.readiness_percent > 0 %}bar-partial{% else %}bar-zero{% endif %}"
+                         style="width: {{ readiness.readiness_percent }}%;"></div>
+                </div>
+                <div class="progress-sub-info">
+                    <span>Покрито: <strong>{{ readiness.covered_count }}</strong> з <strong>{{ readiness.total_items }}</strong> позицій BOM</span>
+                    {% if readiness.has_shortage %}
+                    <span class="text-danger-custom">⚠️ Є дефіцитні позиції</span>
+                    {% else %}
+                    <span class="text-success-custom">✓ Всі компоненти в наявності</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Global Mass Action Buttons -->
+            <div class="calc-actions-box">
+                {% if user_can_edit and readiness.total_items > 0 %}
+                <form method="post" action="{% url 'projects:reserve_all' project.pk %}?batch={{ batch_size }}" style="margin-bottom: 8px;">
+                    {% csrf_token %}
+                    <input type="hidden" name="batch" value="{{ batch_size }}">
+                    <button type="submit" class="btn btn-primary btn-sm btn-block-custom" title="Зарезервувати всі доступні деталі зі складу для поточної партії">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 5px;">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                        <span>Зарезервувати доступне</span>
+                    </button>
+                </form>
+
+                <form method="post" action="{% url 'projects:consume_all' project.pk %}?batch={{ batch_size }}" onsubmit="return confirm('Списати всі зарезервовані деталі зі складу у фізичну збірку проєкту «{{ project.name|escapejs }}»?');">
+                    {% csrf_token %}
+                    <input type="hidden" name="batch" value="{{ batch_size }}">
+                    <button type="submit" class="btn btn-secondary btn-sm btn-block-custom" title="Списати зарезервовані деталі у виробництво">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 5px;">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Списати у збірку</span>
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- TWO-PANEL BOM DESIGNER -->
+    <div class="bom-split-layout">
+        <!-- LEFT PANEL: BOM SPECIFICATION TABLE (approx 70%) -->
+        <div class="bom-main-panel">
+            <div class="panel-header-card">
+                <div class="panel-title-wrap">
+                    <h3 class="panel-heading">Специфікація виробу (BOM)</h3>
+                    <span class="panel-count-pill">{{ readiness.total_items }} позицій</span>
+                </div>
+                {% if user_can_edit %}
+                <button type="button" class="btn btn-secondary btn-sm" onclick="openAddBomModal()">
+                    + Додати через форму
+                </button>
+                {% endif %}
+            </div>
+
+            {% if readiness.boms_data %}
+            <div class="table-responsive-wrap">
+                <table class="inventory-table bom-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 110px;">Поз. (Desig.)</th>
+                            <th>Деталь / Парт-номер</th>
+                            <th style="text-align: right; width: 85px;">На 1 шт</th>
+                            <th style="text-align: right; width: 100px;">На партію</th>
+                            <th style="text-align: right; width: 115px;">Вільно на складі</th>
+                            <th style="text-align: right; width: 105px;">В резерві</th>
+                            <th style="text-align: center; width: 125px;">Статус</th>
+                            <th style="text-align: right; min-width: 270px;">Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in readiness.boms_data %}
+                        {% with bom=row.bom comp=row.component %}
+                        <tr class="{% if not row.is_covered %}bom-row-shortage{% endif %}">
+                            <!-- Designator -->
+                            <td>
+                                {% if bom.designator %}
+                                <span class="bom-designator-badge">{{ bom.designator }}</span>
+                                {% else %}
+                                <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Component Part Number & Info -->
+                            <td>
+                                <div class="bom-comp-info">
+                                    <a href="{% url 'catalog:detail' comp.component_id %}" class="table-part-link">
+                                        {{ comp.part_number }}
+                                    </a>
+                                    <div class="bom-comp-sub">
+                                        <span class="category-badge">{{ comp.category.name }}</span>
+                                        {% if comp.package_type %}
+                                        <span class="package-badge-sm">{{ comp.package_type }}</span>
+                                        {% endif %}
+                                        {% if comp.value_nominal %}
+                                        <span class="text-muted" style="font-size: 11px;">{{ comp.value_nominal }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- Qty per 1 unit -->
+                            <td style="text-align: right; font-weight: 600;">
+                                {{ row.qty_required }} шт
+                            </td>
+
+                            <!-- Total needed for batch -->
+                            <td style="text-align: right; font-weight: 700; color: var(--accent-bone);">
+                                {{ row.batch_needed }} шт
+                            </td>
+
+                            <!-- Free stock in warehouse cells -->
+                            <td style="text-align: right;">
+                                <div class="cell-stock-popup-wrap" title="Всього вільно: {{ row.total_free }} шт">
+                                    <span class="{% if row.total_free > 0 %}stock-avail-text{% else %}text-muted{% endif %}">
+                                        {{ row.total_free }} шт
+                                    </span>
+                                    {% if row.stocks %}
+                                    <span class="loc-count-hint" style="font-size: 10.5px; color: var(--text-muted); display: block;">
+                                        у {{ row.stocks|length }} комірці(-ках)
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </td>
+
+                            <!-- Reserved for this project BOM -->
+                            <td style="text-align: right; font-weight: 600; color: #9ec991;">
+                                {% if row.reserved_qty > 0 %}
+                                <span class="reserved-pill">{{ row.reserved_qty }} шт</span>
+                                {% else %}
+                                <span class="text-muted">0</span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Status Pill -->
+                            <td style="text-align: center;">
+                                {% if row.is_covered %}
+                                <span class="stock-pill stock-ok" title="Компонентів достатньо для цієї партії">
+                                    В наявності
+                                </span>
+                                {% else %}
+                                <span class="stock-pill stock-zero" title="Бракує {{ row.shortage }} шт для повної партії">
+                                    Дефіцит: -{{ row.shortage }} шт
+                                </span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Action Buttons -->
+                            <td style="text-align: right;">
+                                <div class="table-row-actions">
+                                    {% if user_can_edit %}
+                                        <!-- Reserve / Release Button -->
+                                        {% if row.total_free > 0 and row.reserved_qty < row.batch_needed %}
+                                        <form method="post" action="{% url 'projects:bom_reserve' project.pk bom.bom_id %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="batch" value="{{ batch_size }}">
+                                            <button type="submit" class="btn-table-action btn-put" title="Зарезервувати доступні {{ row.total_free }} шт для цього проєкту">
+                                                + Резерв
+                                            </button>
+                                        </form>
+                                        {% endif %}
+
+                                        {% if row.reserved_qty > 0 %}
+                                        <form method="post" action="{% url 'projects:bom_release' project.pk bom.bom_id %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="batch" value="{{ batch_size }}">
+                                            <button type="submit" class="btn-table-action btn-take" title="Зняти всі активні резерви для цієї позиції">
+                                                &times; Зняти
+                                            </button>
+                                        </form>
+                                        {% endif %}
+
+                                        <!-- Edit button -->
+                                        <button type="button" class="btn-table-action btn-edit" onclick="openEditBomModal('{{ bom.bom_id }}', '{{ row.qty_required }}', '{{ bom.designator|default:''|escapejs }}', '{{ comp.part_number|escapejs }}')" title="Редагувати кількість або десигнатор">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-action-svg">
+                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                            </svg>
+                                            <span>Редагувати</span>
+                                        </button>
+
+                                        <!-- Delete button -->
+                                        <form method="post" action="{% url 'projects:bom_delete' project.pk bom.bom_id %}" style="display:inline;" onsubmit="return confirm('Видалити {{ comp.part_number|escapejs }} зі специфікації проєкту?');">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="batch" value="{{ batch_size }}">
+                                            <button type="submit" class="btn-table-action btn-del" title="Видалити деталь зі специфікації проєкту">
+                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-action-svg">
+                                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                </svg>
+                                                <span>Видалити</span>
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <span class="text-muted" style="font-size: 11px;">Лише перегляд</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endwith %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state-box" style="padding: 3rem 1.5rem; text-align: center;">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--text-muted); margin-bottom: 0.75rem;">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                </svg>
+                <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 6px;">Специфікація BOM порожня</h3>
+                <p class="empty-desc" style="max-width: 440px; margin: 0 auto 1.25rem;">
+                    Скористайтеся правою панеллю швидкого вибору, щоб додати мікроконтролери, мікросхеми та радіодеталі до проєкту.
+                </p>
+                {% if user_can_edit %}
+                <button type="button" class="btn btn-primary btn-sm" onclick="openAddBomModal()">
+                    + Додати першу деталь
+                </button>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- RIGHT PANEL: QUICK COMPONENT PICKER FROM CATALOG (approx 30%) -->
+        <div class="bom-sidebar-panel">
+            <div class="picker-card">
+                <div class="picker-header">
+                    <div class="picker-title-wrap">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="picker-svg">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <h4 class="picker-title">Швидкий вибір з каталогу</h4>
+                    </div>
+                </div>
+
+                <!-- Picker Search Filter -->
+                <form method="get" class="picker-filter-wrap">
+                    <input type="hidden" name="batch" value="{{ batch_size }}">
+                    <div class="picker-search-field">
+                        <input type="text" name="pq" value="{{ picker_query }}" placeholder="Пошук деталі чи корпусу..." class="picker-input">
+                        {% if picker_query %}
+                        <a href="{% url 'projects:detail' project.pk %}?batch={{ batch_size }}" class="clear-picker-btn">&times;</a>
+                        {% endif %}
+                    </div>
+                    <select name="pcat" class="picker-select" onchange="this.form.submit()">
+                        <option value="">Усі категорії</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat.category_id }}" {% if picker_cat == cat.category_id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+
+                <!-- Components Scrollable List -->
+                <div class="picker-items-list">
+                    {% for item in picker_components %}
+                    {% with c=item.component %}
+                    <div class="picker-item-row {% if item.is_in_bom %}item-already-in-bom{% endif %}">
+                        <div class="picker-item-info">
+                            <span class="picker-part-name" title="{{ c.part_number }}">
+                                {{ c.part_number }}
+                            </span>
+                            <div class="picker-item-meta">
+                                <span class="picker-cat-badge">{{ c.category.name|truncatechars:18 }}</span>
+                                {% if c.package_type %}
+                                <span class="picker-pkg-badge">{{ c.package_type }}</span>
+                                {% endif %}
+                                <span class="picker-stock-badge {% if item.free_stock > 0 %}stock-has{% else %}stock-none{% endif %}">
+                                    {{ item.free_stock }} шт
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="picker-item-action">
+                            {% if user_can_edit %}
+                            <button type="button" class="btn-picker-add" onclick="quickAddComp('{{ c.component_id }}', '{{ c.part_number|escapejs }}')" title="Додати {{ c.part_number }} в BOM">
+                                + Додати
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endwith %}
+                    {% empty %}
+                    <div class="picker-empty-hint">
+                        <span>Деталей за вказаним пошуком не знайдено</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if user_can_edit %}
+<!-- Modal: Quick Add Component from Picker -->
+<div id="quickAddModal" class="modal-backdrop" style="display: none;" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-dialog" style="max-width: 440px;">
+        <div class="modal-header">
+            <h3 class="modal-title">Додати деталь до BOM</h3>
+            <button type="button" class="modal-close-btn" onclick="closeQuickAddModal()">&times;</button>
+        </div>
+        <form method="post" action="{% url 'projects:bom_add' project.pk %}?batch={{ batch_size }}">
+            {% csrf_token %}
+            <input type="hidden" name="component" id="quickAddCompId">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Компонент</label>
+                    <div id="quickAddCompName" style="font-weight: 700; font-size: 15px; color: var(--accent-bone); padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--border-color);"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="quickAddQty">Кількість на 1 виріб (шт) *</label>
+                    <div class="qty-stepper-wrap">
+                        <button type="button" class="btn-qty-step" onclick="stepQuickAddQty(-1)">&minus;</button>
+                        <input type="number" name="quantity_required" id="quickAddQty" class="form-input qty-number-input" value="1" min="1" max="10000" required>
+                        <button type="button" class="btn-qty-step" onclick="stepQuickAddQty(1)">&plus;</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="quickAddDesig">Позиційне позначення (Designator)</label>
+                    <input type="text" name="designator" id="quickAddDesig" class="form-input" placeholder="Наприклад: U1, R1, C1-C3">
+                    <span class="field-hint">Опціонально. Маркування на друкованій платі (PCB).</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeQuickAddModal()">Скасувати</button>
+                <button type="submit" class="btn btn-primary">Додати до специфікації</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Edit BOM Line -->
+<div id="editBomModal" class="modal-backdrop" style="display: none;" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-dialog" style="max-width: 440px;">
+        <div class="modal-header">
+            <h3 class="modal-title">Редагувати позицію BOM</h3>
+            <button type="button" class="modal-close-btn" onclick="closeEditBomModal()">&times;</button>
+        </div>
+        <form method="post" id="editBomForm" action="">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Деталь</label>
+                    <div id="editBomPartName" style="font-weight: 700; font-size: 15px; color: var(--accent-bone); padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--border-color);"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="editBomQty">Кількість на 1 виріб (шт) *</label>
+                    <input type="number" name="quantity_required" id="editBomQty" class="form-input" min="1" max="10000" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="editBomDesig">Позиційне позначення (Designator)</label>
+                    <input type="text" name="designator" id="editBomDesig" class="form-input" placeholder="Наприклад: U1, R1, C1-C3">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeEditBomModal()">Скасувати</button>
+                <button type="submit" class="btn btn-primary">Зберегти зміни</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Add BOM via standard select -->
+<div id="addBomModal" class="modal-backdrop" style="display: none;" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">Додати деталь до BOM</h3>
+            <button type="button" class="modal-close-btn" onclick="closeAddBomModal()">&times;</button>
+        </div>
+        <form method="post" action="{% url 'projects:bom_add' project.pk %}?batch={{ batch_size }}">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="{{ bom_form.component.id_for_label }}">Оберіть деталь з каталогу *</label>
+                    {{ bom_form.component }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="{{ bom_form.quantity_required.id_for_label }}">Кількість на 1 виріб *</label>
+                    {{ bom_form.quantity_required }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="{{ bom_form.designator.id_for_label }}">Позиційне позначення</label>
+                    {{ bom_form.designator }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeAddBomModal()">Скасувати</button>
+                <button type="submit" class="btn btn-primary">Додати в BOM</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Edit Project Metadata -->
+<div id="editProjectModal" class="modal-backdrop" style="display: none;" onclick="closeModalOnBackdrop(event)">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">Редагування проєкту</h3>
+            <button type="button" class="modal-close-btn" onclick="closeEditProjectModal()">&times;</button>
+        </div>
+        <form method="post" action="{% url 'projects:edit' project.pk %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="{{ project_form.name.id_for_label }}">Назва проєкту *</label>
+                    {{ project_form.name }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="{{ project_form.description.id_for_label }}">Опис</label>
+                    {{ project_form.description }}
+                </div>
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label" for="{{ project_form.status.id_for_label }}">Статус</label>
+                        {{ project_form.status }}
+                    </div>
+                    <div class="form-group" style="display: flex; flex-direction: column; justify-content: center; padding-top: 1.5rem;">
+                        <label class="checkbox-label" style="cursor: pointer;">
+                            {{ project_form.is_private }}
+                            <span style="font-weight: 500; font-size: 13.5px;">Приватний проєкт</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="{{ project_form.image_file.id_for_label }}">Зображення проєкту</label>
+                    {{ project_form.image_file }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeEditProjectModal()">Скасувати</button>
+                <button type="submit" class="btn btn-primary">Зберегти</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<script>
+// Batch Size Controls
+function setBatch(val) {
+    const input = document.getElementById('batchSizeInput');
+    if (input) {
+        input.value = val;
+        submitBatchSize(val);
+    }
+}
+
+function changeBatchDelta(delta) {
+    const input = document.getElementById('batchSizeInput');
+    if (input) {
+        let current = parseInt(input.value) || 1;
+        let next = Math.max(1, Math.min(1000, current + delta));
+        input.value = next;
+        submitBatchSize(next);
+    }
+}
+
+function submitBatchSize(val) {
+    val = parseInt(val) || 1;
+    val = Math.max(1, Math.min(1000, val));
+    const url = new URL(window.location.href);
+    url.searchParams.set('batch', val);
+    window.location.href = url.toString();
+}
+
+// Quick Add from Picker
+function quickAddComp(compId, partNumber) {
+    document.getElementById('quickAddCompId').value = compId;
+    document.getElementById('quickAddCompName').textContent = partNumber;
+    document.getElementById('quickAddQty').value = 1;
+    document.getElementById('quickAddDesig').value = '';
+    document.getElementById('quickAddModal').style.display = 'flex';
+}
+function closeQuickAddModal() {
+    document.getElementById('quickAddModal').style.display = 'none';
+}
+function stepQuickAddQty(delta) {
+    const input = document.getElementById('quickAddQty');
+    let current = parseInt(input.value) || 1;
+    input.value = Math.max(1, current + delta);
+}
+
+// Edit BOM modal
+function openEditBomModal(bomId, qty, desig, partNumber) {
+    const form = document.getElementById('editBomForm');
+    form.action = "{% url 'projects:bom_edit' project.pk 0 %}".replace('/0/', '/' + bomId + '/');
+    document.getElementById('editBomPartName').textContent = partNumber;
+    document.getElementById('editBomQty').value = qty;
+    document.getElementById('editBomDesig').value = desig;
+    document.getElementById('editBomModal').style.display = 'flex';
+}
+function closeEditBomModal() {
+    document.getElementById('editBomModal').style.display = 'none';
+}
+
+// Add BOM modal
+function openAddBomModal() {
+    document.getElementById('addBomModal').style.display = 'flex';
+}
+function closeAddBomModal() {
+    document.getElementById('addBomModal').style.display = 'none';
+}
+
+// Edit project modal
+function openEditProjectModal() {
+    document.getElementById('editProjectModal').style.display = 'flex';
+}
+function closeEditProjectModal() {
+    document.getElementById('editProjectModal').style.display = 'none';
+}
+
+function closeModalOnBackdrop(e) {
+    if (e.target.classList.contains('modal-backdrop')) {
+        e.target.style.display = 'none';
+    }
+}
+</script>
+{% endblock %}
