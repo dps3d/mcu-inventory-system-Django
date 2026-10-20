@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
-{% block title %}Панель керування &bull; MCU Inventory System{% endblock %}
+{% block title %}
+{% if user.is_authenticated %}Панель керування{% else %}MCU Inventory &bull; Лабораторний облік компонентів{% endif %} &bull; MCU Inventory System
+{% endblock %}
 
 {% block content %}
 <div class="dashboard-container">
@@ -18,7 +20,10 @@
     </div>
     {% endif %}
 
-    <!-- Header Hero Banner with Actions -->
+    {% if user.is_authenticated %}
+    <!-- ====================================================================
+         1. ПАНЕЛЬ ДЛЯ АВТОРИЗОВАНИХ КОРИСТУВАЧІВ (ЛАБОРАНТИ ТА ВИКЛАДАЧІ)
+         ==================================================================== -->
     <div class="workspace-hero">
         <div class="hero-left">
             <h1 class="hero-title">Лабораторний облік компонентів</h1>
@@ -227,5 +232,262 @@
             <span class="status-tag">Вільні / Зарезервовані</span>
         </div>
     </div>
+
+    {% else %}
+    <!-- ====================================================================
+         2. ГОСТЬОВА СТОРІНКА-ПРЕЗЕНТАЦІЯ ДЛЯ НЕЗАЛОГІНЕНИХ ВІДВІДУВАЧІВ
+         ==================================================================== -->
+    <div class="landing-container">
+        <!-- Hero Presentation Banner -->
+        <section class="landing-hero-card">
+            <div class="landing-hero-content">
+                <div class="landing-badge">
+                    <span class="badge-dot"></span>
+                    <span>Академічна лабораторія &bull; MCU Inventory System</span>
+                </div>
+                <h1 class="landing-title">
+                    Лабораторна система обліку мікроконтролерів, складських комірок та інженерних проєктів
+                </h1>
+                <p class="landing-lead">
+                    Єдина веб-платформа для контролю лабораторного фонду радіодеталей, інтерактивного проєктування розпіновок мікросхем (Pinout Builder), просторового розміщення в органайзерах та автоматичного розрахунку специфікацій збірки (BOM).
+                </p>
+
+                <!-- Primary Call to Action Buttons -->
+                <div class="landing-actions-group">
+                    <a href="{% url 'accounts:login' %}" class="btn-landing-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                            <polyline points="10 17 15 12 10 7"></polyline>
+                            <line x1="15" y1="12" x2="3" y2="12"></line>
+                        </svg>
+                        <span>Увійти до системи</span>
+                    </a>
+                    <a href="{% url 'accounts:register' %}" class="btn-landing-secondary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="8.5" cy="7" r="4"></circle>
+                            <line x1="20" y1="8" x2="20" y2="14"></line>
+                            <line x1="23" y1="11" x2="17" y2="11"></line>
+                        </svg>
+                        <span>Створити акаунт (Реєстрація)</span>
+                    </a>
+                    <a href="{% url 'catalog:list' %}" class="btn-landing-ghost">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <span>Відкритий каталог компонентів &rarr;</span>
+                    </a>
+                </div>
+
+                <!-- Platform Live Metrics -->
+                <div class="landing-metrics-bar">
+                    <div class="landing-metric">
+                        <span class="metric-num">{{ components_count }}</span>
+                        <span class="metric-lbl">Компонентів у фонді</span>
+                    </div>
+                    <div class="metric-divider"></div>
+                    <div class="landing-metric">
+                        <span class="metric-num">{{ locations_count }}</span>
+                        <span class="metric-lbl">Адресних комірок</span>
+                    </div>
+                    <div class="metric-divider"></div>
+                    <div class="landing-metric">
+                        <span class="metric-num">{{ projects_count }}</span>
+                        <span class="metric-lbl">Відкритих розробок</span>
+                    </div>
+                    <div class="metric-divider"></div>
+                    <div class="landing-metric">
+                        <span class="metric-num">MariaDB 13.0</span>
+                        <span class="metric-lbl">InnoDB / ACID транзакції</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Capabilities Grid -->
+        <section class="landing-section">
+            <div class="landing-section-header">
+                <span class="landing-section-tag">Можливості платформи</span>
+                <h2 class="landing-section-title">Функціональні модулі системи</h2>
+                <p class="landing-section-subtitle">Платформа автоматизує повний цикл роботи навчальної та наукової лабораторії електроніки</p>
+            </div>
+
+            <div class="landing-features-grid">
+                <!-- Module 1: Catalog & Pinout -->
+                <div class="landing-feature-card">
+                    <div class="feature-icon icon-emerald">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Каталог та Pinout Builder</h3>
+                    <p class="feature-desc">
+                        Централізована номенклатура мікроконтролерів (STM32, ESP32, AVR, RP2040) та модулів. Інтерактивна візуалізація розпіновки чіпів з підсвічуванням шин (GPIO, I2C, SPI, UART, ADC, Power).
+                    </p>
+                    <ul class="feature-list">
+                        <li>Миттєвий пошук за маркуванням і номіналом</li>
+                        <li>Фільтрація за корпусами (DIP, LQFP, QFN, SOIC)</li>
+                        <li>Вбудовані прямі посилання на PDF Datasheets</li>
+                    </ul>
+                    <a href="{% url 'catalog:list' %}" class="feature-link">Переглянути каталог деталей &rarr;</a>
+                </div>
+
+                <!-- Module 2: Spatial Warehouse -->
+                <div class="landing-feature-card">
+                    <div class="feature-icon icon-amber">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                            <line x1="12" y1="11" x2="12" y2="17"></line>
+                            <line x1="9" y1="14" x2="15" y2="14"></line>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Адресний складський облік</h3>
+                    <p class="feature-desc">
+                        Точна топологія розміщення деталей у касетних органайзерах, рядах та окремих комірках. Роздільний контроль загального наявного залишку та резервів під інженерні збірки.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Колірна індикація наявності та стану запасів</li>
+                        <li>Швидкі операції поповнення та списання в 1 клік</li>
+                        <li>Журналювання переміщень із фіксацією автора</li>
+                    </ul>
+                    <a href="{% url 'inventory:dashboard' %}" class="feature-link">Ознайомитися зі складом &rarr;</a>
+                </div>
+
+                <!-- Module 3: Projects & BOM -->
+                <div class="landing-feature-card">
+                    <div class="feature-icon icon-blue">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Специфікації проєктів (BOM)</h3>
+                    <p class="feature-desc">
+                        Двопанельний конструктор переліку компонентів для інженерних пристроїв. Автоматичний калькулятор готовності до збірки (Build Readiness) із розрахунком дефіцитних позицій.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Бронювання деталей зі складу під конкретний проєкт</li>
+                        <li>Підтримка публічних та приватних проєктів</li>
+                        <li>Експорт та калькуляція собівартості виробів</li>
+                    </ul>
+                    <a href="{% url 'projects:list' %}" class="feature-link">Галерея відкритих проєктів &rarr;</a>
+                </div>
+
+                <!-- Module 4: Access Control & Security -->
+                <div class="landing-feature-card">
+                    <div class="feature-icon icon-purple">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Безпека та модерація</h3>
+                    <p class="feature-desc">
+                        Багаторівнева рольова модель: Гість (тільки перегляд), Лаборант (керування власними проєктами) та Викладач-Адміністратор (повний контроль складу та поповнення).
+                    </p>
+                    <ul class="feature-list">
+                        <li>Пре-модерація нових заявок (активація викладачем)</li>
+                        <li>Захист від SQL Injection через параметризований ORM</li>
+                        <li>Суворий захист форм токенами CSRF та PRG патерн</li>
+                    </ul>
+                    <a href="{% url 'accounts:register' %}" class="feature-link">Подати заявку на доступ &rarr;</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Onboarding Steps -->
+        <section class="landing-onboarding-section">
+            <div class="landing-section-header">
+                <span class="landing-section-tag">Швидкий старт</span>
+                <h2 class="landing-section-title">Як отримати доступ до роботи в системі</h2>
+                <p class="landing-section-subtitle">Простий та безпечний алгоритм підключення нових співробітників та студентів</p>
+            </div>
+
+            <div class="onboarding-steps-grid">
+                <div class="onboarding-step-card">
+                    <div class="step-badge">Крок 1</div>
+                    <h4 class="step-title">Створення заявки</h4>
+                    <p class="step-desc">
+                        Перейдіть на форму реєстрації та заповніть базові дані: ваше ім'я, прізвище, бажаний логін та контактний email.
+                    </p>
+                    <a href="{% url 'accounts:register' %}" class="step-link">Заповнити форму реєстрації &rarr;</a>
+                </div>
+
+                <div class="onboarding-step-card">
+                    <div class="step-badge">Крок 2</div>
+                    <h4 class="step-title">Активація викладачем</h4>
+                    <p class="step-desc">
+                        З міркувань збереження матеріальних цінностей новий акаунт проходить обов'язкову модерацію відповідальною особою.
+                    </p>
+                    <span class="step-hint">Статус: очікування схвалення в системі</span>
+                </div>
+
+                <div class="onboarding-step-card">
+                    <div class="step-badge">Крок 3</div>
+                    <h4 class="step-title">Повноцінна робота</h4>
+                    <p class="step-desc">
+                        Після схвалення заявки увійдіть за своїм паролем, створюйте власні проєкти та бронюйте мікроконтролери під пайку.
+                    </p>
+                    <a href="{% url 'accounts:login' %}" class="step-link">Сторінка входу &rarr;</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Catalog Teaser Section (Available for Guests) -->
+        {% if recent_components %}
+        <section class="home-section-card">
+            <div class="section-card-header">
+                <div class="section-card-title-group">
+                    <h3 class="section-card-title">Відкриті позиції номенклатури</h3>
+                    <span class="section-card-hint">Останні компоненти, доступні для публічного перегляду</span>
+                </div>
+                <a href="{% url 'catalog:list' %}" class="link-olive text-sm">Увесь каталог &rarr;</a>
+            </div>
+            <div class="recent-components-grid">
+                {% for comp in recent_components %}
+                <a href="{% url 'catalog:detail' comp.component_id %}" class="recent-comp-card">
+                    <div class="recent-comp-main">
+                        <span class="recent-comp-part">{{ comp.part_number }}</span>
+                        <span class="recent-comp-cat">{{ comp.category.name }}</span>
+                    </div>
+                    <div class="recent-comp-meta">
+                        {% if comp.package_type %}
+                        <span class="recent-comp-badge">{{ comp.package_type }}</span>
+                        {% endif %}
+                        <span class="recent-comp-arrow">&rarr;</span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Final Call to Action Box -->
+        <section class="landing-cta-box">
+            <div class="cta-box-content">
+                <h2 class="cta-box-title">Бажаєте долучитися до роботи в лабораторії?</h2>
+                <p class="cta-box-subtitle">
+                    Авторизуйтесь під своїм чинним обліковим записом або подайте заявку на реєстрацію для отримання доступу до резервування деталей.
+                </p>
+                <div class="cta-box-actions">
+                    <a href="{% url 'accounts:login' %}" class="btn-landing-primary large">
+                        <span>Увійти до системи</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </a>
+                    <a href="{% url 'accounts:register' %}" class="btn-landing-secondary large">
+                        <span>Створити акаунт лаборанта</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
