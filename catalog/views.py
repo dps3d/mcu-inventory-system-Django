@@ -57,14 +57,14 @@ class ComponentListView(ListView):
             qs = qs.filter(package_type=package_type)
 
         if stock_status == 'in_stock':
-            qs = qs.filter(total_on_hand__gt=0)
+            qs = qs.filter(total_free__gt=0)
         elif stock_status == 'low_stock':
             qs = qs.filter(
-                total_on_hand__gt=0,
-                total_on_hand__lte=F('min_threshold')
+                total_free__gt=0,
+                total_free__lte=F('min_threshold')
             )
         elif stock_status == 'out_of_stock':
-            qs = qs.filter(total_on_hand__lte=0)
+            qs = qs.filter(total_free__lte=0)
 
         if sort_by == 'name_desc':
             qs = qs.order_by('-part_number')
@@ -121,9 +121,9 @@ class ComponentDetailView(DetailView):
         total_reserved = sum(s.quantity_reserved for s in stocks)
         total_free = max(0, total_on_hand - total_reserved)
 
-        if total_on_hand <= 0:
+        if total_free <= 0:
             stock_badge = {'type': 'danger', 'label': 'Немає на складі'}
-        elif component.min_threshold and total_on_hand <= component.min_threshold:
+        elif component.min_threshold and total_free <= component.min_threshold:
             stock_badge = {'type': 'warning', 'label': 'Закінчується'}
         else:
             stock_badge = {'type': 'success', 'label': 'В наявності'}
@@ -146,7 +146,21 @@ class ComponentDetailView(DetailView):
         return context
 
 
-class ComponentCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    """Міксин перевірки прав персоналу (is_staff) для CBV з редиректом на логін."""
+    def test_func(self):
+        return is_staff_check(self.request.user)
+
+    def handle_no_permission(self):
+        from django.contrib.auth.views import redirect_to_login
+        return redirect_to_login(
+            self.request.get_full_path(),
+            self.get_login_url(),
+            self.get_redirect_field_name(),
+        )
+
+
+class ComponentCreateView(StaffRequiredMixin, CreateView):
     """
     Generic CreateView для реєстрації нового компонента в каталозі (персонал).
     Перевизначено form_valid() (flash-повідомлення) та get_context_data().
@@ -154,9 +168,6 @@ class ComponentCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Components
     form_class = ComponentForm
     template_name = 'catalog/component_form.html'
-
-    def test_func(self):
-        return is_staff_check(self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -176,7 +187,7 @@ class ComponentCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return self.object.get_absolute_url()
 
 
-class ComponentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class ComponentUpdateView(StaffRequiredMixin, UpdateView):
     """
     Generic UpdateView для редагування параметрів деталі.
     Перевизначено form_valid() (flash-повідомлення) та get_context_data().
@@ -184,9 +195,6 @@ class ComponentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Components
     form_class = ComponentForm
     template_name = 'catalog/component_form.html'
-
-    def test_func(self):
-        return is_staff_check(self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -207,7 +215,7 @@ class ComponentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.object.get_absolute_url()
 
 
-class ComponentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class ComponentDeleteView(StaffRequiredMixin, DeleteView):
     """
     Generic DeleteView для видалення компонента з контролем зовнішніх ключів.
     """
@@ -215,9 +223,6 @@ class ComponentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     template_name = 'catalog/component_confirm_delete.html'
     context_object_name = 'component'
     success_url = reverse_lazy('catalog:list')
-
-    def test_func(self):
-        return is_staff_check(self.request.user)
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -291,6 +296,7 @@ def pinout_builder(request, pk):
                 # Видаляємо старі піни та створюємо нові
                 ComponentPinouts.objects.filter(component=component).delete()
                 new_pins = []
+                seen_keys = set()
                 for p in pins_data:
                     side = p.get('side', 'left')
                     if side not in ['left', 'right']:
@@ -301,6 +307,11 @@ def pinout_builder(request, pk):
                     description = str(p.get('description', '')).strip()
 
                     if pin_label:
+                        key = (side, pin_number)
+                        if key in seen_keys:
+                            side_label = "лівій" if side == "left" else "правій"
+                            raise ValueError(f"Дублювання номера виводу №{pin_number} на {side_label} стороні.")
+                        seen_keys.add(key)
                         new_pins.append(ComponentPinouts(
                             component=component,
                             side=side,
@@ -369,6 +380,7 @@ def pinout_save_api(request, pk):
         with transaction.atomic():
             ComponentPinouts.objects.filter(component=component).delete()
             new_pins = []
+            seen_keys = set()
             for p in pins:
                 side = p.get('side', 'left')
                 if side not in ['left', 'right']:
@@ -379,6 +391,11 @@ def pinout_save_api(request, pk):
                 description = str(p.get('description', '')).strip()
 
                 if pin_label:
+                    key = (side, pin_number)
+                    if key in seen_keys:
+                        side_label = "лівій" if side == "left" else "правій"
+                        raise ValueError(f"Дублювання номера виводу №{pin_number} на {side_label} стороні.")
+                    seen_keys.add(key)
                     new_pins.append(ComponentPinouts(
                         component=component,
                         side=side,

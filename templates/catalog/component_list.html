@@ -149,9 +149,9 @@
                             <td><span class="package-badge">{{ comp.package_type|default:"—" }}</span></td>
                             <td>{{ comp.value_nominal|default:"—" }}</td>
                             <td>
-                                {% if comp.total_on_hand <= 0 %}
+                                {% if comp.total_free <= 0 %}
                                     <span class="stock-pill stock-none">Немає (0 шт)</span>
-                                {% elif comp.min_threshold and comp.total_on_hand <= comp.min_threshold %}
+                                {% elif comp.min_threshold and comp.total_free <= comp.min_threshold %}
                                     <span class="stock-pill stock-low">Закінчується: {{ comp.total_free }} шт</span>
                                 {% else %}
                                     <span class="stock-pill stock-ok">{{ comp.total_free }} шт</span>
@@ -229,9 +229,9 @@
 
                     <div class="card-footer">
                         <div class="card-stock-info">
-                            {% if comp.total_on_hand <= 0 %}
+                            {% if comp.total_free <= 0 %}
                                 <span class="stock-pill stock-none">Немає</span>
-                            {% elif comp.min_threshold and comp.total_on_hand <= comp.min_threshold %}
+                            {% elif comp.min_threshold and comp.total_free <= comp.min_threshold %}
                                 <span class="stock-pill stock-low" title="Фактичний: {{ comp.total_on_hand }} шт, вільний: {{ comp.total_free }} шт">
                                     {{ comp.total_free }} шт
                                 </span>

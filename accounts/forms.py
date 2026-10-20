@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
 
@@ -54,6 +55,11 @@ class UserRegistrationForm(forms.ModelForm):
 
         if password and password_confirm and password != password_confirm:
             self.add_error('password_confirm', "Введені паролі не збігаються.")
+        elif password:
+            try:
+                validate_password(password, self.instance)
+            except ValidationError as exc:
+                self.add_error('password', exc)
         return cleaned_data
 
     def save(self, commit=True):

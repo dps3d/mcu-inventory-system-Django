@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 from .forms import UserRegistrationForm, UserLoginForm
 
@@ -40,7 +41,14 @@ def login_view(request):
                 if user.is_active:
                     login(request, user)
                     messages.success(request, f"Вітаємо, {user.first_name or user.username}! Ви успішно увійшли як авторизований лаборант.")
-                    return redirect(request.POST.get('next') or 'home')
+                    raw_next = request.POST.get('next', '')
+                    if raw_next and url_has_allowed_host_and_scheme(
+                        url=raw_next,
+                        allowed_hosts={request.get_host()},
+                        require_https=request.is_secure(),
+                    ):
+                        return redirect(raw_next)
+                    return redirect('home')
                 else:
                     messages.warning(
                         request,

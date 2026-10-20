@@ -405,11 +405,19 @@ function escapeHtml(str) {
 // Save Pinout
 document.getElementById('savePinoutBtn').addEventListener('click', async () => {
     // Validate
+    const seenKeys = new Set();
     for (const p of pins) {
         if (!p.pin_label || !p.pin_label.trim()) {
             alert(`Помилка: вкажіть назву для піна #${p.pin_number}`);
             return;
         }
+        const key = `${p.side || 'left'}:${p.pin_number}`;
+        if (seenKeys.has(key)) {
+            const sideName = p.side === 'right' ? 'правій' : 'лівій';
+            alert(`Помилка: дублювання номера виводу №${p.pin_number} на ${sideName} стороні!`);
+            return;
+        }
+        seenKeys.add(key);
     }
 
     const saveBtn = document.getElementById('savePinoutBtn');

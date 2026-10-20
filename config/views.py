@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Q
 from django.db.utils import OperationalError, DatabaseError
 from django.contrib.auth.models import AnonymousUser
 from catalog.models import Components, Categories
@@ -27,7 +28,14 @@ def home(request):
         categories_count = Categories.objects.count()
         locations_count = StorageLocations.objects.count()
         suppliers_count = Suppliers.objects.count()
-        projects_count = Projects.objects.count()
+        if not request.user.is_authenticated:
+            projects_count = Projects.objects.filter(is_private=False).count()
+        elif request.user.is_staff or request.user.is_superuser:
+            projects_count = Projects.objects.count()
+        else:
+            projects_count = Projects.objects.filter(
+                Q(is_private=False) | Q(created_by=request.user)
+            ).count()
 
         popular_categories = list(Categories.objects.filter(parent__isnull=True).order_by('name')[:8])
         recent_components = list(

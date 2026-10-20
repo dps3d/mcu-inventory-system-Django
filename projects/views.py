@@ -15,21 +15,26 @@ from catalog.models import Components, Categories
 from inventory.models import InventoryStocks, StockTransactions, StorageLocations
 
 
-def _calculate_project_readiness(project, batch_size=1):
+def _calculate_project_readiness(project, batch_size=1, preloaded_stocks_by_comp=None):
     """
     Допоміжний розрахунок готовності до збірки (Build Readiness):
     - Скільки одиниць виробу можна зібрати прямо зараз (max_buildable).
     - Рівень укомплектованості для вказаної партії batch_size (readiness_percent).
     - Деталізований статус кожного компонента в BOM.
     """
-    boms = project.boms.select_related('component__category').prefetch_related(
-        Prefetch(
-            'allocations',
-            queryset=ProjectAllocations.objects.filter(status='reserved').select_related('stock__location')
+    if hasattr(project, '_prefetched_objects_cache') and 'boms' in project._prefetched_objects_cache:
+        boms = list(project.boms.all())
+    else:
+        boms = list(
+            project.boms.select_related('component__category').prefetch_related(
+                Prefetch(
+                    'allocations',
+                    queryset=ProjectAllocations.objects.filter(status='reserved').select_related('stock__location')
+                )
+            ).all()
         )
-    ).all()
 
-    if not boms.exists():
+    if not boms:
         return {
             'boms_data': [],
             'max_buildable': 0,
@@ -41,15 +46,18 @@ def _calculate_project_readiness(project, batch_size=1):
         }
 
     # Отримуємо всі активні складські залишки для компонентів цього BOM
-    comp_ids = [b.component_id for b in boms]
-    stocks_qs = InventoryStocks.objects.filter(
-        component_id__in=comp_ids,
-        location__isnull=False
-    ).select_related('location')
+    if preloaded_stocks_by_comp is not None:
+        stocks_by_comp = preloaded_stocks_by_comp
+    else:
+        comp_ids = [b.component_id for b in boms]
+        stocks_qs = InventoryStocks.objects.filter(
+            component_id__in=comp_ids,
+            location__isnull=False
+        ).select_related('location')
 
-    stocks_by_comp = {}
-    for st in stocks_qs:
-        stocks_by_comp.setdefault(st.component_id, []).append(st)
+        stocks_by_comp = {}
+        for st in stocks_qs:
+            stocks_by_comp.setdefault(st.component_id, []).append(st)
 
     boms_data = []
     buildable_per_item = []
@@ -166,7 +174,17 @@ def project_list(request):
             Q(is_private=False) | Q(created_by=request.user)
         )
 
-    projects_qs = base_visible.select_related('created_by')
+    projects_qs = base_visible.select_related('created_by').prefetch_related(
+        Prefetch(
+            'boms',
+            queryset=ProjectBoms.objects.select_related('component__category').prefetch_related(
+                Prefetch(
+                    'allocations',
+                    queryset=ProjectAllocations.objects.filter(status='reserved').select_related('stock__location')
+                )
+            )
+        )
+    )
 
     # Фільтрація за видимістю (публічний / приватний)
     if visibility_filter == 'public':
@@ -197,12 +215,23 @@ def project_list(request):
     active_projects = base_visible.filter(status='in_progress').count()
     completed_projects = base_visible.filter(status='completed').count()
 
-    # Підрахунок readiness для списку
+    # Підрахунок readiness для списку (з попереднім пакетним завантаженням залишків без N+1)
+    projects_list = list(projects_qs)
+    all_comp_ids = {
+        b.component_id
+        for proj in projects_list
+        for b in proj.boms.all()
+    }
+    preloaded_stocks = {}
+    if all_comp_ids:
+        for st in InventoryStocks.objects.filter(component_id__in=all_comp_ids, location__isnull=False).select_related('location'):
+            preloaded_stocks.setdefault(st.component_id, []).append(st)
+
     projects_with_stats = []
     fully_buildable_count = 0
 
-    for proj in projects_qs:
-        stats = _calculate_project_readiness(proj, batch_size=1)
+    for proj in projects_list:
+        stats = _calculate_project_readiness(proj, batch_size=1, preloaded_stocks_by_comp=preloaded_stocks)
         if stats['total_items'] > 0 and stats['readiness_percent'] == 100:
             fully_buildable_count += 1
         projects_with_stats.append({

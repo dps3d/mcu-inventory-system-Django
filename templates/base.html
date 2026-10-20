@@ -26,7 +26,7 @@
                     </button>
                 </div>
                 {% if user.is_staff %}
-                <a href="/admin/" target="_blank" class="admin-top-btn" title="Перейти в панель адміністрування Django">
+                <a href="{% url 'admin:index' %}" target="_blank" class="admin-top-btn" title="Перейти в панель адміністрування Django">
                     <div class="admin-btn-content">
                         <svg width="15" height="15" class="admin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
@@ -76,7 +76,7 @@
                     <span>Проєкти та BOM</span>
                 </a>
                 {% if user.is_staff %}
-                <a href="/admin/auth/user/?is_active__exact=0" target="_blank" class="nav-item">
+                <a href="{% url 'admin:auth_user_changelist' %}?is_active__exact=0" target="_blank" class="nav-item">
                     <svg width="17" height="17" class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                     </svg>

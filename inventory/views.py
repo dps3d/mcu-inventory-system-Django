@@ -7,10 +7,22 @@ from django.db.models import F, Sum, Q, Count, Prefetch
 from django.core.paginator import Paginator
 from django.urls import reverse
 from django.http import JsonResponse
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from .models import StorageLocations, InventoryStocks, StockTransactions, Suppliers
 from .forms import StorageLocationForm, QuickStockOperationForm, SupplierForm
 from catalog.models import Components
+
+
+def _safe_referer_redirect(request, fallback_url=None):
+    referer = request.META.get('HTTP_REFERER')
+    if referer and url_has_allowed_host_and_scheme(
+        url=referer,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        return redirect(referer)
+    return redirect(fallback_url or reverse('inventory:dashboard'))
 
 
 def dashboard(request):
@@ -20,13 +32,6 @@ def dashboard(request):
     - Зведена таблиця залишків компонентів з контролем дефіциту.
     - Журнал складських рухів (StockTransactions).
     """
-    # Clean up any orphaned stocks that have no location and 0 quantities
-    InventoryStocks.objects.filter(
-        location__isnull=True,
-        quantity_on_hand=0,
-        quantity_reserved=0
-    ).delete()
-
     active_tab = request.GET.get('tab', 'locations')
     if active_tab not in ['locations', 'stocks', 'history']:
         active_tab = 'locations'
@@ -163,7 +168,8 @@ def dashboard(request):
         if query:
             stocks_list_qs = stocks_list_qs.filter(
                 Q(component__part_number__icontains=query) |
-                Q(component__description__icontains=query) |
+                Q(component__specifications__icontains=query) |
+                Q(component__value_nominal__icontains=query) |
                 Q(location__box_number__icontains=query) |
                 Q(location__cell_code__icontains=query)
             )
@@ -250,7 +256,7 @@ def quick_operation(request):
                                 request,
                                 f"Помилка списання: у комірці {location} немає деталі {component.part_number} (наявний залишок: 0 шт)."
                             )
-                            return redirect(request.META.get('HTTP_REFERER') or reverse('inventory:dashboard'))
+                            return _safe_referer_redirect(request)
 
                         # Перевіряємо чи достатньо саме вільного (незарезервованого) залишку
                         free_available = stock.free_stock
@@ -269,7 +275,7 @@ def quick_operation(request):
                                     f"Помилка списання: недостатньо залишку {component.part_number} "
                                     f"у комірці {location}. Наявний залишок: {stock.quantity_on_hand} шт (запитано: {qty} шт)."
                                 )
-                            return redirect(request.META.get('HTTP_REFERER') or reverse('inventory:dashboard'))
+                            return _safe_referer_redirect(request)
 
                         stock.quantity_on_hand -= qty
                         delta = -qty
@@ -282,7 +288,7 @@ def quick_operation(request):
                                 f"Помилка: перевищено максимальну місткість комірки (50 000 шт). "
                                 f"Поточний залишок: {stock.quantity_on_hand} шт, спроба додати: {qty} шт."
                             )
-                            return redirect(request.META.get('HTTP_REFERER') or reverse('inventory:dashboard'))
+                            return _safe_referer_redirect(request)
 
                         stock.quantity_on_hand += qty
                         delta = qty
@@ -293,7 +299,7 @@ def quick_operation(request):
                         # Коригування фактичного залишку
                         if qty < 0:
                             messages.error(request, "Фактичний залишок не може бути від'ємним.")
-                            return redirect(request.META.get('HTTP_REFERER') or reverse('inventory:dashboard'))
+                            return _safe_referer_redirect(request)
 
                         if qty < stock.quantity_reserved:
                             messages.error(
@@ -302,11 +308,11 @@ def quick_operation(request):
                                 f"оскільки {stock.quantity_reserved} шт уже зарезервовано під активні проєкти. "
                                 f"Спочатку звільніть резерв або вкажіть залишок не менше {stock.quantity_reserved} шт."
                             )
-                            return redirect(request.META.get('HTTP_REFERER') or reverse('inventory:dashboard'))
+                            return _safe_referer_redirect(request)
 
                         if qty > 50000:
                             messages.error(request, "Залишок однієї комірки не може перевищувати 50 000 шт.")
-                            return redirect(request.META.get('HTTP_REFERER') or reverse('inventory:dashboard'))
+                            return _safe_referer_redirect(request)
 
                         delta = qty - stock.quantity_on_hand
                         if delta == 0:
@@ -314,7 +320,7 @@ def quick_operation(request):
                                 request,
                                 f"Залишок {component.part_number} у комірці {location} вже становить {qty} шт. Змін не внесено."
                             )
-                            return redirect(request.META.get('HTTP_REFERER') or reverse('inventory:dashboard'))
+                            return _safe_referer_redirect(request)
 
                         stock.quantity_on_hand = qty
                         if unit_price is not None:
@@ -354,7 +360,7 @@ def quick_operation(request):
                         error_msgs.append(f"{label}: {err}")
             messages.error(request, " ".join(error_msgs))
 
-    return redirect(request.META.get('HTTP_REFERER') or reverse('inventory:dashboard'))
+    return _safe_referer_redirect(request)
 
 
 def location_detail(request, pk):
