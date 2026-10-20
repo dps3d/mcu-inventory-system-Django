@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}MCU Inventory System{% endblock %}</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=20261016.6">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}?v=20261016.7">
     {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -154,15 +154,7 @@
             {% endblock topbar %}
 
 
-            {% if messages %}
-            <div class="messages-wrap">
-                {% for message in messages %}
-                <div class="toast-message toast-{{ message.tags }}">
-                    {{ message }}
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
+            {% include 'includes/messages.html' %}
 
             <main class="content-scroll">
                 {% block content %}{% endblock %}
@@ -224,7 +216,7 @@
             closeMobileSidebar();
         });
     </script>
-    <script src="{% static 'js/main.js' %}?v=20261016.6"></script>
+    <script src="{% static 'js/main.js' %}?v=20261016.7"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -1,0 +1,32 @@
+{% load catalog_tags %}
+{% if page_obj and page_obj.has_other_pages %}
+<div class="pagination-bar">
+    {% if page_obj.has_previous %}
+    <a href="{% url_replace page=page_obj.previous_page_number %}" class="pagination-btn">
+        &larr; Попередня
+    </a>
+    {% else %}
+    <span class="pagination-btn disabled">&larr; Попередня</span>
+    {% endif %}
+
+    <div class="pagination-pages">
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <span class="page-number active">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="{% url_replace page=num %}" class="page-number">
+                    {{ num }}
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    {% if page_obj.has_next %}
+    <a href="{% url_replace page=page_obj.next_page_number %}" class="pagination-btn">
+        Наступна &rarr;
+    </a>
+    {% else %}
+    <span class="pagination-btn disabled">Наступна &rarr;</span>
+    {% endif %}
+</div>
+{% endif %}

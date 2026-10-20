@@ -4,9 +4,9 @@
 {% block title %}{{ title }} — MCU Inventory System{% endblock %}
 
 {% block content %}
-<div class="catalog-page-container" style="max-width: 720px; margin: 0 auto;">
+<div class="form-page-container" style="max-width: 720px; width: 100%; min-width: 0;">
     <!-- Breadcrumbs -->
-    <div class="detail-breadcrumbs">
+    <div class="detail-breadcrumbs" style="flex-wrap: wrap;">
         <a href="{% url 'home' %}" class="breadcrumb-link">Головна</a>
         <span class="breadcrumb-separator">/</span>
         <a href="{% url 'projects:list' %}" class="breadcrumb-link">Проєкти та BOM</a>
@@ -14,7 +14,7 @@
         <span class="breadcrumb-current">{{ title }}</span>
     </div>
 
-    <div class="detail-card" style="margin-top: 1rem;">
+    <div class="detail-card" style="margin-top: 1rem; width: 100%; min-width: 0; box-sizing: border-box; overflow: hidden;">
         <h2 class="card-section-title" style="margin-bottom: 1.5rem;">{{ title }}</h2>
 
         <form method="post" enctype="multipart/form-data">
@@ -55,7 +55,7 @@
                 {% if project and project.image_file %}
                 <div style="margin-top: 8px;">
                     <span style="font-size: 12px; color: var(--text-muted);">Поточне фото: </span>
-                    <a href="{{ project.image_file.url }}" target="_blank" style="color: var(--accent-bone); font-size: 12px;">{{ project.image_file.name }}</a>
+                    <a href="{{ project.image_file.url }}" target="_blank" style="color: var(--accent-bone); font-size: 12px; overflow-wrap: anywhere; word-break: break-all;">{{ project.image_file.name }}</a>
                 </div>
                 {% endif %}
             </div>
@@ -65,7 +65,7 @@
                 {{ form.image_path }}
             </div>
 
-            <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 2rem;">
+            <div class="form-footer-actions">
                 <a href="{% if project %}{% url 'projects:detail' project.pk %}{% else %}{% url 'projects:list' %}{% endif %}" class="btn btn-secondary">
                     Скасувати
                 </a>

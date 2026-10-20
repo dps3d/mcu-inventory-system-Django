@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.views.decorators.http import require_POST
 from .forms import UserRegistrationForm, UserLoginForm
 
 
@@ -62,6 +63,7 @@ def login_view(request):
     return render(request, 'accounts/login.html', {'form': form, 'next': next_url})
 
 
+@require_POST
 def logout_view(request):
     if request.user.is_authenticated:
         logout(request)

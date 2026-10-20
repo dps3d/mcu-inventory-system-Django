@@ -1,4 +1,5 @@
 from django.db import models
+from .validators import validate_part_number
 
 
 class Categories(models.Model):
@@ -36,7 +37,11 @@ class Components(models.Model):
         db_column='category_id',
         verbose_name="Категорія"
     )
-    part_number = models.CharField(max_length=100, verbose_name="Парт-номер / Маркування")
+    part_number = models.CharField(
+        max_length=100,
+        verbose_name="Парт-номер / Маркування",
+        validators=[validate_part_number]
+    )
     package_type = models.CharField(max_length=50, null=True, blank=True, verbose_name="Тип корпусу")
     value_nominal = models.CharField(max_length=50, null=True, blank=True, verbose_name="Номінал")
     specifications = models.TextField(null=True, blank=True, verbose_name="Технічні характеристики")
@@ -55,6 +60,10 @@ class Components(models.Model):
     def __str__(self):
         val = f" ({self.value_nominal})" if self.value_nominal else ""
         return f"{self.part_number}{val}"
+
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('catalog:detail', kwargs={'pk': self.pk})
 
     @property
     def image_url(self):

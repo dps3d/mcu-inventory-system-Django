@@ -38,6 +38,10 @@ class Projects(models.Model):
         priv = " [Приватний]" if self.is_private else " [Публічний]"
         return f"{self.name}{priv}"
 
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('projects:detail', kwargs={'pk': self.pk})
+
     @property
     def image_url(self):
         if self.image_file:

@@ -43,6 +43,11 @@
     padding: 0;
 }
 
+html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
 body {
     font-family: var(--font-sans);
     background-color: var(--bg-canvas);
@@ -73,6 +78,8 @@ svg.organizer-chip-svg {
 .app-shell {
     display: flex;
     min-height: 100vh;
+    max-width: 100vw;
+    overflow-x: hidden;
 }
 
 /* Sidebar */
@@ -356,6 +363,8 @@ svg.organizer-chip-svg {
     display: flex;
     flex-direction: column;
     min-width: 0;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 /* Command Topbar */
@@ -1745,6 +1754,7 @@ svg.organizer-chip-svg {
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
+    margin-bottom: 1.75rem;
 }
 
 .detail-breadcrumbs {
@@ -2086,23 +2096,31 @@ svg.organizer-chip-svg {
    Form Editor Page
    ========================================================================== */
 .form-page-container {
+    width: 100%;
     max-width: 960px;
+    min-width: 0;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    box-sizing: border-box;
 }
 
 .form-header-bar {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    width: 100%;
+    min-width: 0;
 }
 
 .form-title {
-    font-size: 22px;
+    font-size: clamp(18px, 4vw, 22px);
     font-weight: 600;
     color: var(--text-primary);
+    word-break: break-word;
+    min-width: 0;
 }
 
 .editor-card {
@@ -2112,24 +2130,26 @@ svg.organizer-chip-svg {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .form-grid-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
-}
-
-@media (max-width: 768px) {
-    .form-grid-layout {
-        grid-template-columns: 1fr;
-    }
+    min-width: 0;
+    width: 100%;
 }
 
 .form-section {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
+    min-width: 0;
+    width: 100%;
 }
 
 .section-title {
@@ -2144,12 +2164,16 @@ svg.organizer-chip-svg {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
+    min-width: 0;
+    width: 100%;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
     gap: 6px;
+    min-width: 0;
+    width: 100%;
 }
 
 .form-label {
@@ -2166,6 +2190,8 @@ svg.organizer-chip-svg {
 .form-select,
 .form-textarea {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     padding: 9px 12px;
     background: var(--bg-input);
     border: 1px solid var(--border-subtle);
@@ -2173,6 +2199,7 @@ svg.organizer-chip-svg {
     color: var(--text-primary);
     font-size: 13px;
     outline: none;
+    box-sizing: border-box;
     transition: border-color 0.15s ease;
 }
 
@@ -2189,6 +2216,9 @@ svg.organizer-chip-svg {
 .form-file-input {
     font-size: 12px;
     color: var(--text-secondary);
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-all;
 }
 
 .field-help {
@@ -2199,18 +2229,57 @@ svg.organizer-chip-svg {
 .current-file-hint {
     font-size: 11.5px;
     color: var(--text-muted);
+    overflow-wrap: anywhere;
+    word-break: break-all;
+    max-width: 100%;
 }
 
-.current-file-hint a {
+.current-file-hint a,
+.form-file-input a,
+.editor-card a,
+.modal-body a {
     color: var(--accent-bone);
+    overflow-wrap: anywhere !important;
+    word-break: break-all !important;
+    max-width: 100% !important;
 }
 
 .form-footer-actions {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 10px;
     padding-top: 1.5rem;
     border-top: 1px solid var(--border-subtle);
+    width: 100%;
+}
+
+@media (max-width: 860px) {
+    .form-grid-layout {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .form-row-2 {
+        grid-template-columns: 1fr;
+        gap: 0.85rem;
+    }
+
+    .editor-card {
+        padding: 1.25rem 1rem;
+    }
+
+    .form-footer-actions {
+        flex-direction: column-reverse;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .form-footer-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 /* ==========================================================================
@@ -4374,6 +4443,14 @@ svg.tab-icon-svg {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    max-height: calc(100vh - 2rem);
+    box-sizing: border-box;
+}
+
+.modal-dialog .form-row-2 {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
 }
 
 .modal-header {
@@ -4410,6 +4487,8 @@ svg.tab-icon-svg {
     display: flex;
     flex-direction: column;
     gap: 1.1rem;
+    overflow-y: auto;
+    min-width: 0;
 }
 
 .modal-footer {
@@ -5174,12 +5253,27 @@ svg.tab-icon-svg {
     grid-template-columns: 1fr 340px;
     gap: 1.5rem;
     align-items: start;
+    width: 100%;
+    min-width: 0;
 }
 
 @media (max-width: 1100px) {
     .bom-split-layout {
         grid-template-columns: 1fr;
     }
+}
+
+.bom-main-panel {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.bom-sidebar-panel {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
 }
 
 .panel-header-card {
@@ -5896,6 +5990,8 @@ body.sidebar-locked {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.75rem;
+        margin-bottom: 1.75rem !important;
+        width: 100%;
     }
 
     .detail-header-actions {
@@ -5906,9 +6002,25 @@ body.sidebar-locked {
     }
 
     .detail-header-actions .btn {
-        flex: 1;
-        min-width: 130px;
+        flex: 1 1 auto;
+        min-height: 40px;
         justify-content: center;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.25;
+        padding: 8px 14px;
+    }
+
+    .detail-header-actions .btn.btn-primary,
+    .detail-header-actions .btn-quick-op {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+    }
+
+    .detail-header-actions .btn.btn-secondary {
+        flex: 1 1 calc(50% - 4px);
+        min-width: 120px;
+        white-space: nowrap;
     }
 
     .detail-banner {
@@ -5987,6 +6099,11 @@ body.sidebar-locked {
         gap: 1.25rem;
     }
 
+    .form-row-2 {
+        grid-template-columns: 1fr;
+        gap: 0.85rem;
+    }
+
     .form-header-bar {
         flex-direction: column;
         align-items: flex-start;
@@ -5997,12 +6114,15 @@ body.sidebar-locked {
         padding: 1.25rem 1.1rem;
     }
 
-    .editor-footer {
+    .editor-footer,
+    .form-footer-actions {
         flex-direction: column-reverse;
         gap: 8px;
+        width: 100%;
     }
 
-    .editor-footer .btn {
+    .editor-footer .btn,
+    .form-footer-actions .btn {
         width: 100%;
         justify-content: center;
     }

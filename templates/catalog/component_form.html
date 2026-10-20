@@ -106,7 +106,7 @@
                     </label>
                     {{ form.image_file }}
                     {% if component and component.image_file %}
-                    <span class="current-file-hint">Поточний файл: <a href="{{ component.image_file.url }}" target="_blank">{{ component.image_file.name }}</a></span>
+                    <span class="current-file-hint">Поточний файл: <a href="{{ component.image_file.url }}" target="_blank" style="overflow-wrap: anywhere; word-break: break-all;">{{ component.image_file.name }}</a></span>
                     {% endif %}
                     {% if form.image_file.errors %}
                     <span class="field-error">{{ form.image_file.errors.0 }}</span>

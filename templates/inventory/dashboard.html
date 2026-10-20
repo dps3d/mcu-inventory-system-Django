@@ -11,12 +11,12 @@
             <p class="catalog-subtitle">Органайзери з колірними пігулками категорій, швидкі операції «Взяти / Покласти» та контроль дефіциту</p>
         </div>
         <div class="detail-header-actions">
-            <button type="button" class="btn btn-primary" onclick="openQuickOpModal()">
+            <button type="button" class="btn btn-primary btn-quick-op" onclick="openQuickOpModal()">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
                     <line x1="12" y1="5" x2="12" y2="19"></line>
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
-                <span>Швидка операція (Взяти / Покласти)</span>
+                <span>Швидка дія (Взяти / Покласти)</span>
             </button>
             {% if user.is_staff %}
             <button type="button" class="btn btn-secondary" onclick="openAddRowModal('{{ selected_box|default:''|escapejs }}')">

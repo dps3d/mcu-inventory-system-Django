@@ -1,6 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 from django.core.paginator import Paginator
 from django.db.models import Sum, Q, F
 from django.db.models.functions import Coalesce
@@ -13,222 +16,230 @@ def is_staff_check(user):
     return user.is_authenticated and user.is_staff
 
 
-def component_list(request):
+class ComponentListView(ListView):
     """
-    Публічний каталог компонентів з пошуком, фільтрацією та перемикачем Сітка/Таблиця.
+    Generic ListView для виводу списку компонентів каталогу.
+    Перевизначено get_queryset() (фільтрація, пошук, залишки, сортування)
+    та get_context_data() (довідники, параметри запиту, лічильники).
     """
-    query = request.GET.get('q', '').strip()
-    category_id = request.GET.get('category', '').strip()
-    package_type = request.GET.get('package', '').strip()
-    stock_status = request.GET.get('status', '').strip()
-    sort_by = request.GET.get('sort', 'name_asc').strip()
-    view_mode = request.GET.get('view', 'grid').strip()
+    model = Components
+    template_name = 'catalog/component_list.html'
+    context_object_name = 'components'
+    paginate_by = 12
 
-    # Базовий запит з анотаціями залишків
-    queryset = Components.objects.select_related('category').annotate(
-        total_on_hand=Coalesce(Sum('stocks__quantity_on_hand'), 0),
-        total_reserved=Coalesce(Sum('stocks__quantity_reserved'), 0),
-    ).annotate(
-        total_free=F('total_on_hand') - F('total_reserved')
-    )
+    def get_queryset(self):
+        query = self.request.GET.get('q', '').strip()
+        category_id = self.request.GET.get('category', '').strip()
+        package_type = self.request.GET.get('package', '').strip()
+        stock_status = self.request.GET.get('status', '').strip()
+        sort_by = self.request.GET.get('sort', 'name_asc').strip()
 
-    # 1. Пошук (по маркуванню, опису, номіналу, корпусу, категорії)
-    if query:
-        queryset = queryset.filter(
-            Q(part_number__icontains=query) |
-            Q(specifications__icontains=query) |
-            Q(value_nominal__icontains=query) |
-            Q(package_type__icontains=query) |
-            Q(category__name__icontains=query)
+        qs = Components.objects.select_related('category').annotate(
+            total_on_hand=Coalesce(Sum('stocks__quantity_on_hand'), 0),
+            total_reserved=Coalesce(Sum('stocks__quantity_reserved'), 0),
+        ).annotate(
+            total_free=F('total_on_hand') - F('total_reserved')
         )
 
-    # 2. Фільтр за категорією
-    if category_id:
-        queryset = queryset.filter(category_id=category_id)
+        if query:
+            qs = qs.filter(
+                Q(part_number__icontains=query) |
+                Q(specifications__icontains=query) |
+                Q(value_nominal__icontains=query) |
+                Q(package_type__icontains=query) |
+                Q(category__name__icontains=query)
+            )
 
-    # 3. Фільтр за корпусом
-    if package_type:
-        queryset = queryset.filter(package_type=package_type)
+        if category_id:
+            qs = qs.filter(category_id=category_id)
 
-    # 4. Фільтр за наявністю на складі
-    if stock_status == 'in_stock':
-        queryset = queryset.filter(total_on_hand__gt=0)
-    elif stock_status == 'low_stock':
-        queryset = queryset.filter(
-            total_on_hand__gt=0,
-            total_on_hand__lte=F('min_threshold')
+        if package_type:
+            qs = qs.filter(package_type=package_type)
+
+        if stock_status == 'in_stock':
+            qs = qs.filter(total_on_hand__gt=0)
+        elif stock_status == 'low_stock':
+            qs = qs.filter(
+                total_on_hand__gt=0,
+                total_on_hand__lte=F('min_threshold')
+            )
+        elif stock_status == 'out_of_stock':
+            qs = qs.filter(total_on_hand__lte=0)
+
+        if sort_by == 'name_desc':
+            qs = qs.order_by('-part_number')
+        elif sort_by == 'stock_desc':
+            qs = qs.order_by('-total_free', 'part_number')
+        elif sort_by == 'stock_asc':
+            qs = qs.order_by('total_free', 'part_number')
+        elif sort_by == 'newest':
+            qs = qs.order_by('-created_at', '-component_id')
+        else:
+            qs = qs.order_by('part_number')
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        categories = Categories.objects.select_related('parent').all()
+        db_packages = list(
+            Components.objects.exclude(package_type__isnull=True)
+            .exclude(package_type__exact='')
+            .values_list('package_type', flat=True)
+            .distinct()
         )
-    elif stock_status == 'out_of_stock':
-        queryset = queryset.filter(total_on_hand__lte=0)
+        packages = sorted(set(db_packages + STANDARD_PACKAGES[:16]))
 
-    # 5. Сортування
-    if sort_by == 'name_desc':
-        queryset = queryset.order_by('-part_number')
-    elif sort_by == 'stock_desc':
-        queryset = queryset.order_by('-total_free', 'part_number')
-    elif sort_by == 'stock_asc':
-        queryset = queryset.order_by('total_free', 'part_number')
-    elif sort_by == 'newest':
-        queryset = queryset.order_by('-created_at', '-component_id')
-    else:  # name_asc
-        queryset = queryset.order_by('part_number')
-
-    # Пагінація: 12 елементів на сторінку
-    paginator = Paginator(queryset, 12)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    # Довідники для фільтрів (з оптимізацією select_related для запобігання N+1)
-    categories = Categories.objects.select_related('parent').all()
-    db_packages = list(
-        Components.objects.exclude(package_type__isnull=True)
-        .exclude(package_type__exact='')
-        .values_list('package_type', flat=True)
-        .distinct()
-    )
-    # Об'єднуємо наявні в базі корпуси та популярні стандартні для швидкої фільтрації
-    packages = sorted(set(db_packages + STANDARD_PACKAGES[:16]))
-
-    context = {
-        'page_obj': page_obj,
-        'components': page_obj.object_list,
-        'categories': categories,
-        'packages': packages,
-        'search_query': query,
-        'selected_category': category_id,
-        'selected_package': package_type,
-        'selected_status': stock_status,
-        'selected_sort': sort_by,
-        'view_mode': view_mode,
-        'total_count': paginator.count,
-    }
-    return render(request, 'catalog/component_list.html', context)
+        context.update({
+            'categories': categories,
+            'packages': packages,
+            'search_query': self.request.GET.get('q', '').strip(),
+            'selected_category': self.request.GET.get('category', '').strip(),
+            'selected_package': self.request.GET.get('package', '').strip(),
+            'selected_status': self.request.GET.get('status', '').strip(),
+            'selected_sort': self.request.GET.get('sort', 'name_asc').strip(),
+            'view_mode': self.request.GET.get('view', 'grid').strip(),
+            'total_count': context['paginator'].count if 'paginator' in context else self.get_queryset().count(),
+        })
+        return context
 
 
-def component_detail(request, pk):
+class ComponentDetailView(DetailView):
     """
-    Детальний перегляд компонента: характеристики, складські комірки та статус.
+    Generic DetailView для відображення детальної сторінки електронного компонента.
+    Перевизначено get_context_data() для розрахунку складських статусів та виводів розпіновки.
     """
-    try:
-        component = Components.objects.select_related('category').get(pk=pk)
-    except Components.DoesNotExist:
-        messages.warning(request, f"Компонент №{pk} не знайдено в каталозі (можливо, його було видалено).")
-        return redirect('catalog:list')
+    model = Components
+    template_name = 'catalog/component_detail.html'
+    context_object_name = 'component'
 
-    stocks = component.stocks.select_related('location').all()
-    total_on_hand = sum(s.quantity_on_hand for s in stocks)
-    total_reserved = sum(s.quantity_reserved for s in stocks)
-    total_free = max(0, total_on_hand - total_reserved)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        component = self.object
+        stocks = component.stocks.select_related('location').all()
+        total_on_hand = sum(s.quantity_on_hand for s in stocks)
+        total_reserved = sum(s.quantity_reserved for s in stocks)
+        total_free = max(0, total_on_hand - total_reserved)
 
-    # Визначення статусу запасу
-    if total_on_hand <= 0:
-        stock_badge = {'type': 'danger', 'label': 'Немає на складі'}
-    elif component.min_threshold and total_on_hand <= component.min_threshold:
-        stock_badge = {'type': 'warning', 'label': 'Закінчується'}
-    else:
-        stock_badge = {'type': 'success', 'label': 'В наявності'}
+        if total_on_hand <= 0:
+            stock_badge = {'type': 'danger', 'label': 'Немає на складі'}
+        elif component.min_threshold and total_on_hand <= component.min_threshold:
+            stock_badge = {'type': 'warning', 'label': 'Закінчується'}
+        else:
+            stock_badge = {'type': 'success', 'label': 'В наявності'}
 
-    # Розпіновки компонента (для прев'ю та зв'язку з наступним модулем)
-    pinouts = component.pinouts.all().order_by('side', 'pin_number')
-    left_pins = [p for p in pinouts if p.side == 'left']
-    right_pins = [p for p in pinouts if p.side == 'right']
+        pinouts = component.pinouts.all().order_by('side', 'pin_number')
+        left_pins = [p for p in pinouts if p.side == 'left']
+        right_pins = [p for p in pinouts if p.side == 'right']
 
-    context = {
-        'component': component,
-        'stocks': stocks,
-        'total_on_hand': total_on_hand,
-        'total_reserved': total_reserved,
-        'total_free': total_free,
-        'stock_badge': stock_badge,
-        'pinouts': pinouts,
-        'left_pins': left_pins,
-        'right_pins': right_pins,
-        'has_pinouts': pinouts.exists(),
-    }
-    return render(request, 'catalog/component_detail.html', context)
+        context.update({
+            'stocks': stocks,
+            'total_on_hand': total_on_hand,
+            'total_reserved': total_reserved,
+            'total_free': total_free,
+            'stock_badge': stock_badge,
+            'pinouts': pinouts,
+            'left_pins': left_pins,
+            'right_pins': right_pins,
+            'has_pinouts': pinouts.exists(),
+        })
+        return context
 
 
-@login_required
-@user_passes_test(is_staff_check)
-def component_create(request):
+class ComponentCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     """
-    Створення нового компонента в каталозі (тільки для персоналу).
+    Generic CreateView для реєстрації нового компонента в каталозі (персонал).
+    Перевизначено form_valid() (flash-повідомлення) та get_context_data().
     """
-    if request.method == 'POST':
-        form = ComponentForm(request.POST, request.FILES)
-        if form.is_valid():
-            component = form.save()
-            messages.success(request, f"Компонент «{component.part_number}» успішно додано до каталогу.")
-            return redirect('catalog:detail', pk=component.pk)
-    else:
-        form = ComponentForm()
+    model = Components
+    form_class = ComponentForm
+    template_name = 'catalog/component_form.html'
 
-    return render(request, 'catalog/component_form.html', {
-        'form': form,
-        'action_title': 'Додавання нового компонента',
-        'submit_label': 'Створити компонент',
-        'standard_packages': STANDARD_PACKAGES,
-    })
+    def test_func(self):
+        return is_staff_check(self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'action_title': 'Додавання нового компонента',
+            'submit_label': 'Створити компонент',
+            'standard_packages': STANDARD_PACKAGES,
+        })
+        return context
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, f"Компонент «{self.object.part_number}» успішно додано до каталогу.")
+        return response
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
 
 
-@login_required
-@user_passes_test(is_staff_check)
-def component_edit(request, pk):
+class ComponentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     """
-    Редагування існуючого компонента (тільки для персоналу).
+    Generic UpdateView для редагування параметрів деталі.
+    Перевизначено form_valid() (flash-повідомлення) та get_context_data().
     """
-    try:
-        component = Components.objects.get(pk=pk)
-    except Components.DoesNotExist:
-        messages.warning(request, f"Компонент №{pk} не знайдено.")
-        return redirect('catalog:list')
+    model = Components
+    form_class = ComponentForm
+    template_name = 'catalog/component_form.html'
 
-    if request.method == 'POST':
-        form = ComponentForm(request.POST, request.FILES, instance=component)
-        if form.is_valid():
-            form.save()
-            messages.success(request, f"Дані компонента «{component.part_number}» успішно оновлено.")
-            return redirect('catalog:detail', pk=component.pk)
-    else:
-        form = ComponentForm(instance=component)
+    def test_func(self):
+        return is_staff_check(self.request.user)
 
-    return render(request, 'catalog/component_form.html', {
-        'form': form,
-        'component': component,
-        'action_title': f"Редагування «{component.part_number}»",
-        'submit_label': 'Зберегти зміни',
-        'standard_packages': STANDARD_PACKAGES,
-    })
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'component': self.object,
+            'action_title': f"Редагування «{self.object.part_number}»",
+            'submit_label': 'Зберегти зміни',
+            'standard_packages': STANDARD_PACKAGES,
+        })
+        return context
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, f"Дані компонента «{self.object.part_number}» успішно оновлено.")
+        return response
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
 
 
-@login_required
-@user_passes_test(is_staff_check)
-def component_delete(request, pk):
+class ComponentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     """
-    Видалення компонента (тільки для персоналу).
+    Generic DeleteView для видалення компонента з контролем зовнішніх ключів.
     """
-    try:
-        component = Components.objects.get(pk=pk)
-    except Components.DoesNotExist:
-        messages.warning(request, f"Компонент №{pk} не знайдено.")
-        return redirect('catalog:list')
+    model = Components
+    template_name = 'catalog/component_confirm_delete.html'
+    context_object_name = 'component'
+    success_url = reverse_lazy('catalog:list')
 
-    if request.method == 'POST':
-        part_name = component.part_number
+    def test_func(self):
+        return is_staff_check(self.request.user)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        part_name = self.object.part_number
         try:
-            component.delete()
+            response = super().delete(request, *args, **kwargs)
             messages.success(request, f"Компонент «{part_name}» видалено з каталогу.")
-            return redirect('catalog:list')
-        except Exception as e:
+            return response
+        except Exception:
             messages.error(
                 request,
                 f"Неможливо видалити компонент «{part_name}», оскільки на нього посилаються складські залишки або замовлення."
             )
-            return redirect('catalog:detail', pk=component.pk)
+            return redirect('catalog:detail', pk=self.object.pk)
 
-    return render(request, 'catalog/component_confirm_delete.html', {
-        'component': component,
-    })
+
+# Зворотна сумісність для функціональних викликів та тестів
+component_list = ComponentListView.as_view()
+component_detail = ComponentDetailView.as_view()
+component_create = ComponentCreateView.as_view()
+component_edit = ComponentUpdateView.as_view()
+component_delete = ComponentDeleteView.as_view()
 
 
 def pinout_view(request, pk):

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load catalog_tags %}
 
 {% block title %}Каталог компонентів &bull; MCU Inventory{% endblock %}
 
@@ -263,38 +264,8 @@
             </div>
         {% endif %}
 
-        <!-- Pagination -->
-        {% if page_obj.has_other_pages %}
-        <div class="pagination-bar">
-            {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}&q={{ search_query }}&category={{ selected_category }}&package={{ selected_package }}&status={{ selected_status }}&sort={{ selected_sort }}&view={{ view_mode }}" class="pagination-btn">
-                &larr; Попередня
-            </a>
-            {% else %}
-            <span class="pagination-btn disabled">&larr; Попередня</span>
-            {% endif %}
-
-            <div class="pagination-pages">
-                {% for num in page_obj.paginator.page_range %}
-                    {% if page_obj.number == num %}
-                        <span class="page-number active">{{ num }}</span>
-                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                        <a href="?page={{ num }}&q={{ search_query }}&category={{ selected_category }}&package={{ selected_package }}&status={{ selected_status }}&sort={{ selected_sort }}&view={{ view_mode }}" class="page-number">
-                            {{ num }}
-                        </a>
-                    {% endif %}
-                {% endfor %}
-            </div>
-
-            {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}&q={{ search_query }}&category={{ selected_category }}&package={{ selected_package }}&status={{ selected_status }}&sort={{ selected_sort }}&view={{ view_mode }}" class="pagination-btn">
-                Наступна &rarr;
-            </a>
-            {% else %}
-            <span class="pagination-btn disabled">Наступна &rarr;</span>
-            {% endif %}
-        </div>
-        {% endif %}
+        <!-- Pagination via Custom DTL Inclusion Tag -->
+        {% render_pagination page_obj %}
 
     {% else %}
         <!-- Empty State -->
