@@ -27,7 +27,6 @@
     --accent-olive: #565449;     /* Olive Drab */
     --accent-olive-light: #737062;
     --accent-bone: #d8cfbc;      /* Bone */
-    --accent-ivory: #f3f0e7;     /* Pale Ivory */
 
     --radius-sm: 6px;
     --radius-md: 10px;
@@ -185,25 +184,6 @@ svg.organizer-chip-svg {
     flex-shrink: 0;
     color: var(--text-muted);
     opacity: 0.7;
-}
-
-.db-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 12px;
-    background: var(--bg-surface);
-    border-radius: var(--radius-sm);
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    color: var(--text-secondary);
-}
-
-.db-status-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background-color: #8bb381;
 }
 
 .sidebar-menu {
@@ -1037,6 +1017,8 @@ svg.organizer-chip-svg {
     flex-direction: column;
     gap: 6px;
     margin-bottom: 1.25rem;
+    min-width: 0;
+    width: 100%;
 }
 
 .form-group label {
@@ -1418,25 +1400,30 @@ svg.organizer-chip-svg {
 .stock-pill {
     display: inline-flex;
     align-items: center;
-    padding: 2px 8px;
+    padding: 3px 9px;
     border-radius: 9999px;
-    font-size: 11.5px;
+    font-size: 11px;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .stock-pill.stock-ok {
-    background: rgba(139, 179, 129, 0.16);
+    background: rgba(139, 179, 129, 0.15);
     color: #9ec991;
+    border: 1px solid rgba(139, 179, 129, 0.3);
 }
 
 .stock-pill.stock-low {
-    background: rgba(220, 180, 70, 0.16);
-    color: #dec262;
+    background: rgba(222, 194, 98, 0.15);
+    color: #fef08a;
+    border: 1px solid rgba(222, 194, 98, 0.35);
 }
 
-.stock-pill.stock-none {
-    background: rgba(214, 123, 116, 0.16);
-    color: #d67b74;
+.stock-pill.stock-none,
+.stock-pill.stock-zero {
+    background: rgba(220, 70, 70, 0.15);
+    color: #fca5a5;
+    border: 1px solid rgba(220, 70, 70, 0.35);
 }
 
 /* ==========================================================================
@@ -1636,8 +1623,11 @@ svg.organizer-chip-svg {
 }
 
 .table-part-link {
+    font-weight: 600;
     color: var(--text-primary);
     text-decoration: none;
+    font-size: 13.5px;
+    transition: color 0.15s ease;
 }
 
 .table-part-link:hover {
@@ -2193,14 +2183,6 @@ svg.organizer-chip-svg {
     width: 100%;
 }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    min-width: 0;
-    width: 100%;
-}
-
 .form-label {
     font-size: 12.5px;
     font-weight: 500;
@@ -2372,15 +2354,6 @@ svg.organizer-chip-svg {
     color: #9ec991;
 }
 
-.link-olive {
-    color: var(--accent-bone);
-    text-decoration: none;
-}
-
-.link-olive:hover {
-    text-decoration: underline;
-}
-
 /* ==========================================================================
    Pinout Viewer & Interactive Schematic
    ========================================================================== */
@@ -2461,12 +2434,6 @@ svg.organizer-chip-svg {
     grid-template-columns: 1fr 360px;
     gap: 1.5rem;
     align-items: start;
-}
-
-@media (max-width: 1024px) {
-    .pinout-workspace-layout {
-        grid-template-columns: 1fr;
-    }
 }
 
 /* Chip Viewer Card */
@@ -2904,7 +2871,7 @@ svg.organizer-chip-svg {
     border: 1px solid var(--border-subtle);
 }
 
-.presets-label {
+.builder-presets-bar .presets-label {
     font-size: 12.5px;
     font-weight: 500;
     color: var(--text-muted);
@@ -3725,17 +3692,6 @@ svg.tab-icon-svg {
     background: rgba(220, 70, 70, 0.2);
 }
 
-/* Visual Cells Matrix (Fallback Organizers Grid) */
-.cells-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(136px, 1fr));
-    gap: 10px;
-    margin-bottom: 2.5rem;
-    min-width: 0;
-    width: 100%;
-    box-sizing: border-box;
-}
-
 .cell-card {
     background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
@@ -4030,7 +3986,8 @@ svg.tab-icon-svg {
     padding-top: 4px;
 }
 
-.presets-label {
+.quick-qty-chips .presets-label,
+.quick-row-presets .presets-label {
     font-size: 11px;
     color: var(--text-muted);
     margin-right: 2px;
@@ -4075,15 +4032,6 @@ svg.tab-icon-svg {
     font-size: 13px;
     font-weight: 700;
     color: var(--text-primary);
-}
-
-.cell-shelf-tag {
-    font-size: 10px;
-    color: var(--text-muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 65px;
 }
 
 .cell-middle {
@@ -4173,19 +4121,6 @@ svg.tab-icon-svg {
     background: var(--bg-surface-hover);
 }
 
-.table-part-link {
-    font-weight: 600;
-    color: var(--text-primary);
-    text-decoration: none;
-    font-size: 13.5px;
-    transition: color 0.15s ease;
-}
-
-.table-part-link:hover {
-    color: var(--accent-bone);
-    text-decoration: underline;
-}
-
 .package-badge-sm {
     font-size: 10.5px;
     font-family: var(--font-mono);
@@ -4214,34 +4149,6 @@ svg.tab-icon-svg {
 .table-loc-pill:hover {
     background: var(--bg-surface-hover);
     color: var(--text-primary);
-}
-
-/* Stock Status Badges */
-.stock-pill {
-    display: inline-block;
-    padding: 3px 9px;
-    border-radius: 9999px;
-    font-size: 11px;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.stock-pill.stock-ok {
-    background: rgba(139, 179, 129, 0.15);
-    color: #9ec991;
-    border: 1px solid rgba(139, 179, 129, 0.3);
-}
-
-.stock-pill.stock-low {
-    background: rgba(222, 194, 98, 0.15);
-    color: #fef08a;
-    border: 1px solid rgba(222, 194, 98, 0.35);
-}
-
-.stock-pill.stock-zero {
-    background: rgba(220, 70, 70, 0.15);
-    color: #fca5a5;
-    border: 1px solid rgba(220, 70, 70, 0.35);
 }
 
 /* Table Quick Action Buttons */
@@ -5146,18 +5053,16 @@ svg.tab-icon-svg {
     padding-top: 1rem;
 }
 
-@media (max-width: 900px) {
-    .calc-metrics-row {
-        grid-template-columns: 1fr;
-    }
-}
-
 .metric-max-buildable {
     border-right: 1px solid rgba(255, 255, 255, 0.06);
     padding-right: 1.5rem;
 }
 
 @media (max-width: 900px) {
+    .calc-metrics-row {
+        grid-template-columns: 1fr;
+    }
+
     .metric-max-buildable {
         border-right: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -5382,24 +5287,6 @@ svg.tab-icon-svg {
     font-size: 11px;
     background: rgba(139, 179, 129, 0.12);
     border: 1px solid rgba(139, 179, 129, 0.25);
-}
-
-.btn-icon-subtle {
-    background: transparent;
-    border: none;
-    font-size: 13px;
-    cursor: pointer;
-    padding: 3px 6px;
-    border-radius: var(--radius-sm);
-    transition: background 0.12s ease;
-}
-
-.btn-icon-subtle:hover {
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.btn-del-subtle:hover {
-    background: rgba(214, 123, 116, 0.18);
 }
 
 /* ==========================================================================
@@ -5794,10 +5681,6 @@ body.sidebar-locked {
         grid-template-columns: 1fr;
     }
 
-    .bom-split-layout {
-        grid-template-columns: 1fr;
-    }
-
     .pinout-workspace-layout {
         grid-template-columns: 1fr;
     }
@@ -6140,14 +6023,12 @@ body.sidebar-locked {
         padding: 1.25rem 1.1rem;
     }
 
-    .editor-footer,
     .form-footer-actions {
         flex-direction: column-reverse;
         gap: 8px;
         width: 100%;
     }
 
-    .editor-footer .btn,
     .form-footer-actions .btn {
         width: 100%;
         justify-content: center;
@@ -6369,18 +6250,6 @@ body.sidebar-locked {
 
     .card-visual-area {
         height: 140px;
-    }
-
-    .card-meta-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-    }
-
-    .card-bottom-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
     }
 
     .card-links {

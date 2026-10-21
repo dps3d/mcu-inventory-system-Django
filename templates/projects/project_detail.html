@@ -601,7 +601,7 @@
 <script>
 // Batch Size Controls
 function setBatch(val) {
-    const input = document.getElementById('batchSizeInput');
+    const input = document.querySelector('#batchSizeInput');
     if (input) {
         input.value = val;
         submitBatchSize(val);
@@ -609,7 +609,7 @@ function setBatch(val) {
 }
 
 function changeBatchDelta(delta) {
-    const input = document.getElementById('batchSizeInput');
+    const input = document.querySelector('#batchSizeInput');
     if (input) {
         let current = parseInt(input.value) || 1;
         let next = Math.max(1, Math.min(1000, current + delta));
@@ -628,48 +628,48 @@ function submitBatchSize(val) {
 
 // Quick Add from Picker
 function quickAddComp(compId, partNumber) {
-    document.getElementById('quickAddCompId').value = compId;
-    document.getElementById('quickAddCompName').textContent = partNumber;
-    document.getElementById('quickAddQty').value = 1;
-    document.getElementById('quickAddDesig').value = '';
-    document.getElementById('quickAddModal').style.display = 'flex';
+    document.querySelector('#quickAddCompId').value = compId;
+    document.querySelector('#quickAddCompName').textContent = partNumber;
+    document.querySelector('#quickAddQty').value = 1;
+    document.querySelector('#quickAddDesig').value = '';
+    document.querySelector('#quickAddModal').style.display = 'flex';
 }
 function closeQuickAddModal() {
-    document.getElementById('quickAddModal').style.display = 'none';
+    document.querySelector('#quickAddModal').style.display = 'none';
 }
 function stepQuickAddQty(delta) {
-    const input = document.getElementById('quickAddQty');
+    const input = document.querySelector('#quickAddQty');
     let current = parseInt(input.value) || 1;
     input.value = Math.max(1, current + delta);
 }
 
 // Edit BOM modal
 function openEditBomModal(bomId, qty, desig, partNumber) {
-    const form = document.getElementById('editBomForm');
+    const form = document.querySelector('#editBomForm');
     form.action = "{% url 'projects:bom_edit' project.pk 0 %}".replace('/0/', '/' + bomId + '/');
-    document.getElementById('editBomPartName').textContent = partNumber;
-    document.getElementById('editBomQty').value = qty;
-    document.getElementById('editBomDesig').value = desig;
-    document.getElementById('editBomModal').style.display = 'flex';
+    document.querySelector('#editBomPartName').textContent = partNumber;
+    document.querySelector('#editBomQty').value = qty;
+    document.querySelector('#editBomDesig').value = desig;
+    document.querySelector('#editBomModal').style.display = 'flex';
 }
 function closeEditBomModal() {
-    document.getElementById('editBomModal').style.display = 'none';
+    document.querySelector('#editBomModal').style.display = 'none';
 }
 
 // Add BOM modal
 function openAddBomModal() {
-    document.getElementById('addBomModal').style.display = 'flex';
+    document.querySelector('#addBomModal').style.display = 'flex';
 }
 function closeAddBomModal() {
-    document.getElementById('addBomModal').style.display = 'none';
+    document.querySelector('#addBomModal').style.display = 'none';
 }
 
 // Edit project modal
 function openEditProjectModal() {
-    document.getElementById('editProjectModal').style.display = 'flex';
+    document.querySelector('#editProjectModal').style.display = 'flex';
 }
 function closeEditProjectModal() {
-    document.getElementById('editProjectModal').style.display = 'none';
+    document.querySelector('#editProjectModal').style.display = 'none';
 }
 
 function closeModalOnBackdrop(e) {

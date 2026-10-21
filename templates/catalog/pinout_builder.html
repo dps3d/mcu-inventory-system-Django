@@ -172,25 +172,25 @@
 {{ existing_pins|json_script:"existingPinsData" }}
 <script>
 // Available signal choices (loaded securely via json_script to prevent XSS)
-const SIGNAL_CHOICES = JSON.parse(document.getElementById('signalChoicesData').textContent);
+const SIGNAL_CHOICES = JSON.parse(document.querySelector('#signalChoicesData').textContent);
 
 // Initial state from server
-let pins = JSON.parse(document.getElementById('existingPinsData').textContent);
+let pins = JSON.parse(document.querySelector('#existingPinsData').textContent);
 
 // Switch tab between left and right pins
 function switchSideTab(side) {
-    document.getElementById('tabLeftBtn').classList.toggle('active', side === 'left');
-    document.getElementById('tabRightBtn').classList.toggle('active', side === 'right');
-    document.getElementById('leftPinsPanel').classList.toggle('active', side === 'left');
-    document.getElementById('rightPinsPanel').classList.toggle('active', side === 'right');
+    document.querySelector('#tabLeftBtn').classList.toggle('active', side === 'left');
+    document.querySelector('#tabRightBtn').classList.toggle('active', side === 'right');
+    document.querySelector('#leftPinsPanel').classList.toggle('active', side === 'left');
+    document.querySelector('#rightPinsPanel').classList.toggle('active', side === 'right');
 }
 
 // Render tables and live schematic securely without innerHTML injection of user inputs
 function renderBuilder() {
-    const leftTableBody = document.getElementById('leftPinsTableBody');
-    const rightTableBody = document.getElementById('rightPinsTableBody');
-    const liveLeft = document.getElementById('liveLeftPins');
-    const liveRight = document.getElementById('liveRightPins');
+    const leftTableBody = document.querySelector('#leftPinsTableBody');
+    const rightTableBody = document.querySelector('#rightPinsTableBody');
+    const liveLeft = document.querySelector('#liveLeftPins');
+    const liveRight = document.querySelector('#liveRightPins');
 
     leftTableBody.innerHTML = '';
     rightTableBody.innerHTML = '';
@@ -302,9 +302,9 @@ function renderBuilder() {
         }
     });
 
-    document.getElementById('leftCountDisplay').textContent = leftCount;
-    document.getElementById('rightCountDisplay').textContent = rightCount;
-    document.getElementById('liveTotalCount').textContent = `Пінів: ${pins.length}`;
+    document.querySelector('#leftCountDisplay').textContent = leftCount;
+    document.querySelector('#rightCountDisplay').textContent = rightCount;
+    document.querySelector('#liveTotalCount').textContent = `Пінів: ${pins.length}`;
 }
 
 function updatePin(index, key, value) {
@@ -403,7 +403,7 @@ function escapeHtml(str) {
 }
 
 // Save Pinout
-document.getElementById('savePinoutBtn').addEventListener('click', async () => {
+document.querySelector('#savePinoutBtn').addEventListener('click', async () => {
     // Validate
     const seenKeys = new Set();
     for (const p of pins) {
@@ -420,7 +420,7 @@ document.getElementById('savePinoutBtn').addEventListener('click', async () => {
         seenKeys.add(key);
     }
 
-    const saveBtn = document.getElementById('savePinoutBtn');
+    const saveBtn = document.querySelector('#savePinoutBtn');
     saveBtn.disabled = true;
     saveBtn.innerHTML = '<span>Збереження...</span>';
 
@@ -444,8 +444,8 @@ document.getElementById('savePinoutBtn').addEventListener('click', async () => {
         }
     } catch (err) {
         // Fallback to standard form submit
-        document.getElementById('pinsJsonInput').value = JSON.stringify(pins);
-        document.getElementById('pinoutForm').submit();
+        document.querySelector('#pinsJsonInput').value = JSON.stringify(pins);
+        document.querySelector('#pinoutForm').submit();
     }
 });
 

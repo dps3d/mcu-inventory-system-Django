@@ -6,9 +6,9 @@ if (typeof window.__lastSidebarToggle === 'undefined') {
 }
 
 function openMobileSidebar() {
-    const sidebar = document.getElementById('appSidebar');
-    const backdrop = document.getElementById('sidebarBackdrop');
-    const toggleBtn = document.getElementById('mobileMenuToggle');
+    const sidebar = document.querySelector('#appSidebar');
+    const backdrop = document.querySelector('#sidebarBackdrop');
+    const toggleBtn = document.querySelector('#mobileMenuToggle');
     if (!sidebar) return;
 
     sidebar.classList.add('is-open');
@@ -18,9 +18,9 @@ function openMobileSidebar() {
 }
 
 function closeMobileSidebar() {
-    const sidebar = document.getElementById('appSidebar');
-    const backdrop = document.getElementById('sidebarBackdrop');
-    const toggleBtn = document.getElementById('mobileMenuToggle');
+    const sidebar = document.querySelector('#appSidebar');
+    const backdrop = document.querySelector('#sidebarBackdrop');
+    const toggleBtn = document.querySelector('#mobileMenuToggle');
     if (!sidebar) return;
 
     sidebar.classList.remove('is-open');
@@ -40,7 +40,7 @@ function toggleMobileSidebar(e) {
     }
     window.__lastSidebarToggle = now;
 
-    const sidebar = document.getElementById('appSidebar');
+    const sidebar = document.querySelector('#appSidebar');
     if (!sidebar) return;
 
     if (sidebar.classList.contains('is-open')) {
@@ -55,10 +55,10 @@ window.closeMobileSidebar = closeMobileSidebar;
 window.toggleMobileSidebar = toggleMobileSidebar;
 
 function initApp() {
-    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
-    const sidebarBackdrop = document.getElementById('sidebarBackdrop');
-    const sidebar = document.getElementById('appSidebar');
+    const mobileMenuToggle = document.querySelector('#mobileMenuToggle');
+    const sidebarCloseBtn = document.querySelector('#sidebarCloseBtn');
+    const sidebarBackdrop = document.querySelector('#sidebarBackdrop');
+    const sidebar = document.querySelector('#appSidebar');
 
     if (mobileMenuToggle && !mobileMenuToggle._bound) {
         mobileMenuToggle._bound = true;
@@ -109,7 +109,7 @@ function initApp() {
     });
 
     // 2. Global Search Shortcut (Ctrl+K or Cmd+K) & Enter Navigation
-    const searchInput = document.getElementById('globalSearchInput');
+    const searchInput = document.querySelector('#globalSearchInput');
     document.addEventListener('keydown', (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
             e.preventDefault();

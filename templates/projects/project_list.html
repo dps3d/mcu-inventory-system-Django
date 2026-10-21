@@ -323,11 +323,11 @@
 
 <script>
 function openCreateProjectModal() {
-    const m = document.getElementById('createProjectModal');
+    const m = document.querySelector('#createProjectModal');
     if (m) m.style.display = 'flex';
 }
 function closeCreateProjectModal() {
-    const m = document.getElementById('createProjectModal');
+    const m = document.querySelector('#createProjectModal');
     if (m) m.style.display = 'none';
 }
 function closeModalOnBackdrop(e) {

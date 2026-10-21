@@ -761,28 +761,28 @@ function openQuickOpModal(resetState = true) {
         currentTargetFreeStock = null;
         currentTargetOnHand = null;
     }
-    document.getElementById('quickOpModal').style.display = 'flex';
+    document.querySelector('#quickOpModal').style.display = 'flex';
     updateQuickOpFeedback();
 }
 function closeQuickOpModal() {
-    document.getElementById('quickOpModal').style.display = 'none';
+    document.querySelector('#quickOpModal').style.display = 'none';
 }
 
 function openAddRowModal(boxName) {
-    document.getElementById('addRowModal').style.display = 'flex';
-    document.getElementById('rowBoxInput').value = boxName || '';
+    document.querySelector('#addRowModal').style.display = 'flex';
+    document.querySelector('#rowBoxInput').value = boxName || '';
 }
 function closeAddRowModal() {
-    document.getElementById('addRowModal').style.display = 'none';
+    document.querySelector('#addRowModal').style.display = 'none';
 }
 
 function openAddCellModal(boxName, shelfName) {
-    document.getElementById('addCellModal').style.display = 'flex';
-    document.getElementById('cellBoxInput').value = boxName || '';
-    document.getElementById('cellShelfInput').value = shelfName || '';
+    document.querySelector('#addCellModal').style.display = 'flex';
+    document.querySelector('#cellBoxInput').value = boxName || '';
+    document.querySelector('#cellShelfInput').value = shelfName || '';
 }
 function closeAddCellModal() {
-    document.getElementById('addCellModal').style.display = 'none';
+    document.querySelector('#addCellModal').style.display = 'none';
 }
 
 function closeModalOnBackdrop(event) {
@@ -801,14 +801,14 @@ document.addEventListener('keydown', function(e) {
 // Quantity Slider Sync
 function syncQtyFromSlider(val) {
     val = parseInt(val) || 1;
-    document.getElementById('opQuantityInput').value = val;
+    document.querySelector('#opQuantityInput').value = val;
     updateQtyChips(val);
 }
 
 function syncQtyFromInput(val) {
     val = parseInt(val) || 1;
     val = Math.max(1, val);
-    const slider = document.getElementById('opQuantitySlider');
+    const slider = document.querySelector('#opQuantitySlider');
     if (slider) {
         if (val > parseInt(slider.max)) {
             slider.max = Math.max(val, 250);
@@ -819,8 +819,8 @@ function syncQtyFromInput(val) {
 }
 
 function setOpQty(val) {
-    document.getElementById('opQuantityInput').value = val;
-    const slider = document.getElementById('opQuantitySlider');
+    document.querySelector('#opQuantityInput').value = val;
+    const slider = document.querySelector('#opQuantitySlider');
     if (slider) {
         if (val > parseInt(slider.max)) {
             slider.max = Math.max(val, 250);
@@ -831,7 +831,7 @@ function setOpQty(val) {
 }
 
 function stepOpQty(delta) {
-    const input = document.getElementById('opQuantityInput');
+    const input = document.querySelector('#opQuantityInput');
     let current = parseInt(input.value) || 1;
     let next = Math.max(1, current + delta);
     setOpQty(next);
@@ -850,14 +850,14 @@ function updateQtyChips(val) {
 // Row Cells Slider Sync
 function syncRowCellsFromSlider(val) {
     val = parseInt(val) || 8;
-    document.getElementById('rowCountInput').value = val;
+    document.querySelector('#rowCountInput').value = val;
     updateRowChips(val);
 }
 
 function syncRowCellsFromInput(val) {
     val = parseInt(val) || 1;
     val = Math.max(1, Math.min(50, val));
-    const slider = document.getElementById('rowCellsSlider');
+    const slider = document.querySelector('#rowCellsSlider');
     if (slider) {
         slider.value = Math.min(val, parseInt(slider.max));
     }
@@ -865,8 +865,8 @@ function syncRowCellsFromInput(val) {
 }
 
 function setRowCells(val) {
-    document.getElementById('rowCountInput').value = val;
-    const slider = document.getElementById('rowCellsSlider');
+    document.querySelector('#rowCountInput').value = val;
+    const slider = document.querySelector('#rowCellsSlider');
     if (slider) {
         slider.value = val;
     }
@@ -874,7 +874,7 @@ function setRowCells(val) {
 }
 
 function stepRowCells(delta) {
-    const input = document.getElementById('rowCountInput');
+    const input = document.querySelector('#rowCountInput');
     let current = parseInt(input.value) || 8;
     let next = Math.max(1, Math.min(50, current + delta));
     setRowCells(next);
@@ -894,10 +894,10 @@ let currentTargetFreeStock = null;
 let currentTargetOnHand = null;
 
 function updateQuickOpFeedback() {
-    const feedback = document.getElementById('opStockFeedback');
-    const opType = document.getElementById('opTypeSelect') ? document.getElementById('opTypeSelect').value : 'purchase_in';
-    const qtyInput = document.getElementById('opQuantityInput');
-    const slider = document.getElementById('opQuantitySlider');
+    const feedback = document.querySelector('#opStockFeedback');
+    const opType = document.querySelector('#opTypeSelect') ? document.querySelector('#opTypeSelect').value : 'purchase_in';
+    const qtyInput = document.querySelector('#opQuantityInput');
+    const slider = document.querySelector('#opQuantitySlider');
     const qty = parseInt(qtyInput.value) || 0;
 
     if (opType === 'adjustment') {
@@ -951,11 +951,11 @@ function updateQuickOpFeedback() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    const opTypeSelect = document.getElementById('opTypeSelect');
+    const opTypeSelect = document.querySelector('#opTypeSelect');
     if (opTypeSelect) {
         opTypeSelect.addEventListener('change', updateQuickOpFeedback);
     }
-    const opQtyInput = document.getElementById('opQuantityInput');
+    const opQtyInput = document.querySelector('#opQuantityInput');
     if (opQtyInput) {
         opQtyInput.addEventListener('input', updateQuickOpFeedback);
     }
@@ -967,10 +967,10 @@ function prefillQuickOp(componentId, locationId, opType, freeStock, onHand) {
 
     openQuickOpModal(false);
     if (componentId) {
-        const compSelect = document.getElementById('opComponentSelect');
+        const compSelect = document.querySelector('#opComponentSelect');
         if (compSelect) compSelect.value = componentId;
     }
-    const locSelect = document.getElementById('opLocationSelect');
+    const locSelect = document.querySelector('#opLocationSelect');
     if (locSelect) {
         if (locationId) {
             locSelect.value = locationId;
@@ -984,12 +984,12 @@ function prefillQuickOp(componentId, locationId, opType, freeStock, onHand) {
         }
     }
     if (opType) {
-        const typeSelect = document.getElementById('opTypeSelect');
+        const typeSelect = document.querySelector('#opTypeSelect');
         if (typeSelect) typeSelect.value = opType;
     }
 
     // Set slider max if consuming, reset if putting
-    const slider = document.getElementById('opQuantitySlider');
+    const slider = document.querySelector('#opQuantitySlider');
     if (slider) {
         if (opType === 'consumption_out' && currentTargetFreeStock !== null && currentTargetFreeStock > 0) {
             slider.max = Math.max(currentTargetFreeStock, 50);

@@ -240,13 +240,13 @@
 {% block extra_js %}
 <script>
 function openQuickOpModal() {
-    document.getElementById('quickOpModal').style.display = 'flex';
+    document.querySelector('#quickOpModal').style.display = 'flex';
 }
 function closeQuickOpModal() {
-    document.getElementById('quickOpModal').style.display = 'none';
+    document.querySelector('#quickOpModal').style.display = 'none';
 }
 function closeModalOnBackdrop(event) {
-    if (event.target === document.getElementById('quickOpModal')) {
+    if (event.target === document.querySelector('#quickOpModal')) {
         closeQuickOpModal();
     }
 }
@@ -261,14 +261,14 @@ document.addEventListener('keydown', function(e) {
 // Quantity Slider Sync
 function syncQtyFromSlider(val) {
     val = parseInt(val) || 1;
-    document.getElementById('opQuantityInput').value = val;
+    document.querySelector('#opQuantityInput').value = val;
     updateQtyChips(val);
 }
 
 function syncQtyFromInput(val) {
     val = parseInt(val) || 1;
     val = Math.max(1, val);
-    const slider = document.getElementById('opQuantitySlider');
+    const slider = document.querySelector('#opQuantitySlider');
     if (slider) {
         if (val > parseInt(slider.max)) {
             slider.max = Math.max(val, 250);
@@ -279,8 +279,8 @@ function syncQtyFromInput(val) {
 }
 
 function setOpQty(val) {
-    document.getElementById('opQuantityInput').value = val;
-    const slider = document.getElementById('opQuantitySlider');
+    document.querySelector('#opQuantityInput').value = val;
+    const slider = document.querySelector('#opQuantitySlider');
     if (slider) {
         if (val > parseInt(slider.max)) {
             slider.max = Math.max(val, 250);
@@ -291,7 +291,7 @@ function setOpQty(val) {
 }
 
 function stepOpQty(delta) {
-    const input = document.getElementById('opQuantityInput');
+    const input = document.querySelector('#opQuantityInput');
     let current = parseInt(input.value) || 1;
     let next = Math.max(1, current + delta);
     setOpQty(next);
@@ -321,11 +321,11 @@ let currentTargetFreeStock = null;
 let currentTargetOnHand = null;
 
 function updateQuickOpFeedback() {
-    const feedback = document.getElementById('opStockFeedback');
-    const compSelect = document.getElementById('opComponentSelect');
-    const opType = document.getElementById('opTypeSelect') ? document.getElementById('opTypeSelect').value : 'purchase_in';
-    const qtyInput = document.getElementById('opQuantityInput');
-    const slider = document.getElementById('opQuantitySlider');
+    const feedback = document.querySelector('#opStockFeedback');
+    const compSelect = document.querySelector('#opComponentSelect');
+    const opType = document.querySelector('#opTypeSelect') ? document.querySelector('#opTypeSelect').value : 'purchase_in';
+    const qtyInput = document.querySelector('#opQuantityInput');
+    const slider = document.querySelector('#opQuantitySlider');
     const qty = parseInt(qtyInput.value) || 0;
 
     if (opType === 'adjustment') {
@@ -394,15 +394,15 @@ function updateQuickOpFeedback() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    const opTypeSelect = document.getElementById('opTypeSelect');
+    const opTypeSelect = document.querySelector('#opTypeSelect');
     if (opTypeSelect) {
         opTypeSelect.addEventListener('change', updateQuickOpFeedback);
     }
-    const compSelect = document.getElementById('opComponentSelect');
+    const compSelect = document.querySelector('#opComponentSelect');
     if (compSelect) {
         compSelect.addEventListener('change', updateQuickOpFeedback);
     }
-    const opQtyInput = document.getElementById('opQuantityInput');
+    const opQtyInput = document.querySelector('#opQuantityInput');
     if (opQtyInput) {
         opQtyInput.addEventListener('input', updateQuickOpFeedback);
     }
@@ -413,10 +413,10 @@ function prefillQuickOp(componentId, locationId, opType, freeStock, onHand) {
     currentTargetOnHand = (onHand !== undefined && onHand !== null) ? parseInt(onHand) : null;
 
     openQuickOpModal();
-    if (componentId) document.getElementById('opComponentSelect').value = componentId;
-    if (opType) document.getElementById('opTypeSelect').value = opType;
+    if (componentId) document.querySelector('#opComponentSelect').value = componentId;
+    if (opType) document.querySelector('#opTypeSelect').value = opType;
 
-    const slider = document.getElementById('opQuantitySlider');
+    const slider = document.querySelector('#opQuantitySlider');
     if (slider && opType === 'consumption_out' && currentTargetFreeStock !== null && currentTargetFreeStock > 0) {
         slider.max = Math.max(currentTargetFreeStock, 50);
     }
