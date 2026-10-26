@@ -161,61 +161,6 @@
             </main>
         </div>
     </div>
-
-    <script>
-        if (typeof window.__lastSidebarToggle === 'undefined') {
-            window.__lastSidebarToggle = 0;
-        }
-
-        function openMobileSidebar() {
-            var sidebar = document.querySelector('#appSidebar');
-            var backdrop = document.querySelector('#sidebarBackdrop');
-            var toggleBtn = document.querySelector('#mobileMenuToggle');
-            if (!sidebar) return;
-            sidebar.classList.add('is-open');
-            if (backdrop) backdrop.classList.add('is-active');
-            document.body.classList.add('sidebar-locked');
-            if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'true');
-        }
-
-        function closeMobileSidebar() {
-            var sidebar = document.querySelector('#appSidebar');
-            var backdrop = document.querySelector('#sidebarBackdrop');
-            var toggleBtn = document.querySelector('#mobileMenuToggle');
-            if (!sidebar) return;
-            sidebar.classList.remove('is-open');
-            if (backdrop) backdrop.classList.remove('is-active');
-            document.body.classList.remove('sidebar-locked');
-            if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
-        }
-
-        function toggleMobileSidebar(e) {
-            if (e) {
-                if (typeof e.preventDefault === 'function') e.preventDefault();
-                if (typeof e.stopPropagation === 'function') e.stopPropagation();
-            }
-            var now = Date.now();
-            if (window.__lastSidebarToggle && (now - window.__lastSidebarToggle < 280)) return;
-            window.__lastSidebarToggle = now;
-
-            var sidebar = document.querySelector('#appSidebar');
-            if (!sidebar) return;
-            if (sidebar.classList.contains('is-open')) {
-                closeMobileSidebar();
-            } else {
-                openMobileSidebar();
-            }
-        }
-
-        window.openMobileSidebar = openMobileSidebar;
-        window.closeMobileSidebar = closeMobileSidebar;
-        window.toggleMobileSidebar = toggleMobileSidebar;
-
-        // Clean up when navigating back via browser bfcache
-        window.addEventListener('pageshow', function() {
-            closeMobileSidebar();
-        });
-    </script>
     <script src="{% static 'js/main.js' %}?v=20261021.1"></script>
     {% block extra_js %}{% endblock %}
 </body>
