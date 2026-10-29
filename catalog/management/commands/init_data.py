@@ -22,21 +22,38 @@ class Command(BaseCommand):
         else:
             self.stdout.write(self.style.SUCCESS(f"==> База вже містить дані ({comp_count} компонентів). Пропускаємо seeding."))
 
-        # 2. Створення адміністратора (суперкористувача), якщо ще немає жодного
-        if not User.objects.filter(is_superuser=True).exists():
-            admin_username = os.environ.get('ADMIN_USER', 'admin')
-            admin_password = os.environ.get('ADMIN_PASSWORD', 'admin12345')
-            admin_email = os.environ.get('ADMIN_EMAIL', 'admin@example.com')
+        # 2. Створення або оновлення пароля адміністратора (суперкористувача) виключно через безпечні змінні оточення
+        admin_password = os.environ.get('ADMIN_PASSWORD')
+        admin_username = os.environ.get('ADMIN_USER', 'admin')
+        admin_email = os.environ.get('ADMIN_EMAIL', 'admin@example.com')
 
-            User.objects.create_superuser(
-                username=admin_username,
-                email=admin_email,
-                password=admin_password
-            )
+        if admin_password:
+            admin_user = User.objects.filter(username=admin_username).first()
+            if admin_user:
+                admin_user.set_password(admin_password)
+                admin_user.is_superuser = True
+                admin_user.is_staff = True
+                admin_user.is_active = True
+                admin_user.save()
+                self.stdout.write(
+                    self.style.SUCCESS(
+                        f"==> Пароль суперкористувача '{admin_username}' оновлено зі змінної ADMIN_PASSWORD!"
+                    )
+                )
+            else:
+                User.objects.create_superuser(
+                    username=admin_username,
+                    email=admin_email,
+                    password=admin_password
+                )
+                self.stdout.write(
+                    self.style.SUCCESS(
+                        f"==> Створено суперкористувача '{admin_username}' зі змінної ADMIN_PASSWORD!"
+                    )
+                )
+        else:
             self.stdout.write(
-                self.style.SUCCESS(
-                    f"==> Створено суперкористувача: логін '{admin_username}', пароль '{admin_password}'"
+                self.style.NOTICE(
+                    "==> Змінна ADMIN_PASSWORD не задана в Environment. Пропускаємо створення/оновлення адміна."
                 )
             )
-        else:
-            self.stdout.write(self.style.SUCCESS("==> Суперкористувач вже існує. Пропускаємо створення."))
