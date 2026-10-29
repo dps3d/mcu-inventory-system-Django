@@ -185,96 +185,22 @@ function switchSideTab(side) {
     document.querySelector('#rightPinsPanel').classList.toggle('active', side === 'right');
 }
 
-// Render tables and live schematic securely without innerHTML injection of user inputs
-function renderBuilder() {
-    const leftTableBody = document.querySelector('#leftPinsTableBody');
-    const rightTableBody = document.querySelector('#rightPinsTableBody');
+// Render live schematic without touching table DOM so input focus is never lost
+function renderLivePreview() {
     const liveLeft = document.querySelector('#liveLeftPins');
     const liveRight = document.querySelector('#liveRightPins');
+    if (!liveLeft || !liveRight) return;
 
-    leftTableBody.innerHTML = '';
-    rightTableBody.innerHTML = '';
     liveLeft.innerHTML = '';
     liveRight.innerHTML = '';
 
     let leftCount = 0;
     let rightCount = 0;
 
-    pins.forEach((pin, index) => {
+    pins.forEach((pin) => {
         const isLeft = pin.side === 'left';
         if (isLeft) leftCount++; else rightCount++;
 
-        // 1. Table Row (DOM construction with value properties for XSS safety)
-        const tr = document.createElement('tr');
-
-        // TD 1: Pin Number
-        const tdNum = document.createElement('td');
-        const numInput = document.createElement('input');
-        numInput.type = 'number';
-        numInput.className = 'builder-num-input';
-        numInput.value = pin.pin_number;
-        numInput.min = '1';
-        numInput.max = '128';
-        numInput.addEventListener('change', (e) => updatePin(index, 'pin_number', e.target.value));
-        tdNum.appendChild(numInput);
-
-        // TD 2: Pin Label
-        const tdLabel = document.createElement('td');
-        const labelInput = document.createElement('input');
-        labelInput.type = 'text';
-        labelInput.className = 'builder-text-input';
-        labelInput.value = pin.pin_label || '';
-        labelInput.placeholder = 'VCC, PA0...';
-        labelInput.addEventListener('input', (e) => updatePin(index, 'pin_label', e.target.value));
-        tdLabel.appendChild(labelInput);
-
-        // TD 3: Signal Type Select
-        const tdSig = document.createElement('td');
-        const sigSelect = document.createElement('select');
-        sigSelect.className = `builder-select-input signal-select-${encodeURIComponent((pin.signal_type || 'gpio').toLowerCase())}`;
-        SIGNAL_CHOICES.forEach(s => {
-            const opt = document.createElement('option');
-            opt.value = s;
-            opt.textContent = s;
-            if (s === pin.signal_type) opt.selected = true;
-            sigSelect.appendChild(opt);
-        });
-        sigSelect.addEventListener('change', (e) => updatePin(index, 'signal_type', e.target.value));
-        tdSig.appendChild(sigSelect);
-
-        // TD 4: Description
-        const tdDesc = document.createElement('td');
-        const descInput = document.createElement('input');
-        descInput.type = 'text';
-        descInput.className = 'builder-text-input';
-        descInput.value = pin.description || '';
-        descInput.placeholder = 'Альтернативні функції (I2C1_SCL...)';
-        descInput.addEventListener('input', (e) => updatePin(index, 'description', e.target.value));
-        tdDesc.appendChild(descInput);
-
-        // TD 5: Delete Button
-        const tdDel = document.createElement('td');
-        const delBtn = document.createElement('button');
-        delBtn.type = 'button';
-        delBtn.className = 'pin-delete-btn';
-        delBtn.innerHTML = '&times;';
-        delBtn.title = 'Видалити пін';
-        delBtn.addEventListener('click', () => removePin(index));
-        tdDel.appendChild(delBtn);
-
-        tr.appendChild(tdNum);
-        tr.appendChild(tdLabel);
-        tr.appendChild(tdSig);
-        tr.appendChild(tdDesc);
-        tr.appendChild(tdDel);
-
-        if (isLeft) {
-            leftTableBody.appendChild(tr);
-        } else {
-            rightTableBody.appendChild(tr);
-        }
-
-        // 2. Live Schematic Pin (DOM construction using textContent to prevent script injection)
         const livePin = document.createElement('div');
         livePin.className = `interactive-pin-row ${isLeft ? 'pin-left-side' : 'pin-right-side'}`;
 
@@ -302,23 +228,134 @@ function renderBuilder() {
         }
     });
 
-    document.querySelector('#leftCountDisplay').textContent = leftCount;
-    document.querySelector('#rightCountDisplay').textContent = rightCount;
-    document.querySelector('#liveTotalCount').textContent = `Пінів: ${pins.length}`;
+    const leftCountElem = document.querySelector('#leftCountDisplay');
+    if (leftCountElem) leftCountElem.textContent = leftCount;
+    const rightCountElem = document.querySelector('#rightCountDisplay');
+    if (rightCountElem) rightCountElem.textContent = rightCount;
+    const totalCountElem = document.querySelector('#liveTotalCount');
+    if (totalCountElem) totalCountElem.textContent = `Пінів: ${pins.length}`;
+}
+
+// Render editor tables only when pins are added, removed, or preset applied
+function renderTable() {
+    const leftTableBody = document.querySelector('#leftPinsTableBody');
+    const rightTableBody = document.querySelector('#rightPinsTableBody');
+    if (!leftTableBody || !rightTableBody) return;
+
+    leftTableBody.innerHTML = '';
+    rightTableBody.innerHTML = '';
+
+    pins.forEach((pin, index) => {
+        const isLeft = pin.side === 'left';
+
+        // Table Row (DOM construction with value properties for XSS safety)
+        const tr = document.createElement('tr');
+
+        // TD 1: Pin Number
+        const tdNum = document.createElement('td');
+        const numInput = document.createElement('input');
+        numInput.type = 'number';
+        numInput.className = 'builder-num-input';
+        numInput.value = pin.pin_number;
+        numInput.min = '1';
+        numInput.max = '128';
+        numInput.addEventListener('input', (e) => {
+            pin.pin_number = parseInt(e.target.value, 10) || 1;
+            renderLivePreview();
+        });
+        tdNum.appendChild(numInput);
+
+        // TD 2: Pin Label
+        const tdLabel = document.createElement('td');
+        const labelInput = document.createElement('input');
+        labelInput.type = 'text';
+        labelInput.className = 'builder-text-input';
+        labelInput.value = pin.pin_label || '';
+        labelInput.placeholder = 'VCC, PA0...';
+        labelInput.addEventListener('input', (e) => {
+            pin.pin_label = e.target.value;
+            renderLivePreview();
+        });
+        tdLabel.appendChild(labelInput);
+
+        // TD 3: Signal Type Select
+        const tdSig = document.createElement('td');
+        const sigSelect = document.createElement('select');
+        const updateSigClass = (sigType) => {
+            sigSelect.className = `builder-select-input signal-select-${encodeURIComponent((sigType || 'gpio').toLowerCase())}`;
+        };
+        updateSigClass(pin.signal_type);
+
+        SIGNAL_CHOICES.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s;
+            opt.textContent = s;
+            if (s === pin.signal_type) opt.selected = true;
+            sigSelect.appendChild(opt);
+        });
+        sigSelect.addEventListener('change', (e) => {
+            pin.signal_type = e.target.value;
+            updateSigClass(pin.signal_type);
+            renderLivePreview();
+        });
+        tdSig.appendChild(sigSelect);
+
+        // TD 4: Description
+        const tdDesc = document.createElement('td');
+        const descInput = document.createElement('input');
+        descInput.type = 'text';
+        descInput.className = 'builder-text-input';
+        descInput.value = pin.description || '';
+        descInput.placeholder = 'Альтернативні функції (I2C1_SCL...)';
+        descInput.addEventListener('input', (e) => {
+            pin.description = e.target.value;
+        });
+        tdDesc.appendChild(descInput);
+
+        // TD 5: Delete Button
+        const tdDel = document.createElement('td');
+        const delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.className = 'pin-delete-btn';
+        delBtn.innerHTML = '&times;';
+        delBtn.title = 'Видалити пін';
+        delBtn.addEventListener('click', () => removePin(index));
+        tdDel.appendChild(delBtn);
+
+        tr.appendChild(tdNum);
+        tr.appendChild(tdLabel);
+        tr.appendChild(tdSig);
+        tr.appendChild(tdDesc);
+        tr.appendChild(tdDel);
+
+        if (isLeft) {
+            leftTableBody.appendChild(tr);
+        } else {
+            rightTableBody.appendChild(tr);
+        }
+    });
+}
+
+// Master render: updates both table inputs and live schematic
+function renderBuilder() {
+    renderTable();
+    renderLivePreview();
 }
 
 function updatePin(index, key, value) {
+    if (!pins[index]) return;
     if (key === 'pin_number') {
         pins[index][key] = parseInt(value, 10) || 1;
     } else {
         pins[index][key] = value;
     }
-    // Update live schematic
-    renderBuilder();
+    // Only update live schematic, do NOT wipe table inputs
+    renderLivePreview();
 }
 
 function addPin(side) {
-    const sidePins = pins.filter(p => p.side === side);
+    switchSideTab(side);
+
     let nextNum = 1;
     if (pins.length > 0) {
         nextNum = Math.max(...pins.map(p => p.pin_number)) + 1;
@@ -332,6 +369,16 @@ function addPin(side) {
         description: '',
     });
     renderBuilder();
+
+    // Auto-focus the newly added pin's label input for immediate typing
+    const targetBody = side === 'left' ? document.querySelector('#leftPinsTableBody') : document.querySelector('#rightPinsTableBody');
+    if (targetBody && targetBody.lastElementChild) {
+        const input = targetBody.lastElementChild.querySelector('.builder-text-input');
+        if (input) {
+            input.focus();
+            input.select();
+        }
+    }
 }
 
 function removePin(index) {
