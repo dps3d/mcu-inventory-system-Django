@@ -141,7 +141,39 @@ function initApp() {
             setTimeout(() => toast.remove(), 300);
         }, 5000);
     });
+
+    // 4. Sync theme toggle button state
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    applyTheme(currentTheme);
 }
+
+// 4. Dark/Light Theme Switching Logic
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+    const toggleBtn = document.querySelector('#themeToggleBtn');
+    if (toggleBtn) {
+        toggleBtn.title = theme === 'dark' ? 'Увімкнути світлу тему' : 'Увімкнути темну тему';
+        toggleBtn.setAttribute('aria-label', toggleBtn.title);
+    }
+}
+
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    applyTheme(nextTheme);
+    try {
+        localStorage.setItem('mcu_theme', nextTheme);
+    } catch (e) {
+        // Storage access might be restricted
+    }
+}
+
+window.applyTheme = applyTheme;
+window.toggleTheme = toggleTheme;
 
 // Ensure execution even if DOMContentLoaded has already fired
 if (document.readyState === 'loading') {
