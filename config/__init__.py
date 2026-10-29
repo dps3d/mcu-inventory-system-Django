@@ -12,3 +12,13 @@ try:
     DatabaseWrapper.check_database_version_supported = lambda self: None
 except ImportError:
     pass
+
+# TiDB Cloud DDL engine does not allow adding a column and an inline FOREIGN KEY constraint
+# referencing that same new column in a single ALTER TABLE statement (OperationalError 1072).
+# Setting sql_create_column_inline_fk to None forces Django to execute ADD COLUMN first,
+# followed by a separate ALTER TABLE ADD CONSTRAINT, which TiDB fully supports.
+try:
+    from django.db.backends.mysql.schema import DatabaseSchemaEditor
+    DatabaseSchemaEditor.sql_create_column_inline_fk = None
+except ImportError:
+    pass
