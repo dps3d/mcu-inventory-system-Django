@@ -14,22 +14,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Orders',
-            fields=[
-                ('order_id', models.AutoField(primary_key=True, serialize=False)),
-                ('tracking_number', models.CharField(blank=True, max_length=100, null=True, verbose_name='Номер ТТН / трекінгу')),
-                ('status', models.CharField(choices=[('pending', 'Очікує'), ('ordered', 'Замовлено'), ('shipped', 'Відправлено'), ('delivered', 'Доставлено'), ('cancelled', 'Скасовано')], default='pending', max_length=20, verbose_name='Статус')),
-                ('order_date', models.DateTimeField(blank=True, null=True, verbose_name='Дата замовлення')),
-                ('expected_delivery', models.DateField(blank=True, null=True, verbose_name='Очікувана доставка')),
-            ],
-            options={
-                'verbose_name': 'Замовлення',
-                'verbose_name_plural': 'Замовлення',
-                'db_table': 'orders',
-                'ordering': ['-order_date'],
-            },
-        ),
-        migrations.CreateModel(
             name='Suppliers',
             fields=[
                 ('supplier_id', models.AutoField(primary_key=True, serialize=False)),
@@ -45,6 +29,39 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
+            name='StorageLocations',
+            fields=[
+                ('location_id', models.AutoField(primary_key=True, serialize=False)),
+                ('box_number', models.CharField(max_length=50, verbose_name='Органайзер / Коробка')),
+                ('shelf', models.CharField(blank=True, max_length=50, null=True, verbose_name='Полиця / Секція')),
+                ('cell_code', models.CharField(max_length=20, verbose_name='Код комірки')),
+            ],
+            options={
+                'verbose_name': 'Комірка зберігання',
+                'verbose_name_plural': 'Комірки зберігання',
+                'db_table': 'storage_locations',
+                'ordering': ['box_number', 'shelf', 'cell_code'],
+                'unique_together': {('box_number', 'shelf', 'cell_code')},
+            },
+        ),
+        migrations.CreateModel(
+            name='Orders',
+            fields=[
+                ('order_id', models.AutoField(primary_key=True, serialize=False)),
+                ('tracking_number', models.CharField(blank=True, max_length=100, null=True, verbose_name='Номер ТТН / трекінгу')),
+                ('status', models.CharField(choices=[('pending', 'Очікує'), ('ordered', 'Замовлено'), ('shipped', 'Відправлено'), ('delivered', 'Доставлено'), ('cancelled', 'Скасовано')], default='pending', max_length=20, verbose_name='Статус')),
+                ('order_date', models.DateTimeField(blank=True, null=True, verbose_name='Дата замовлення')),
+                ('expected_delivery', models.DateField(blank=True, null=True, verbose_name='Очікувана доставка')),
+                ('supplier', models.ForeignKey(blank=True, db_column='supplier_id', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='orders', to='inventory.suppliers', verbose_name='Постачальник')),
+            ],
+            options={
+                'verbose_name': 'Замовлення',
+                'verbose_name_plural': 'Замовлення',
+                'db_table': 'orders',
+                'ordering': ['-order_date'],
+            },
+        ),
+        migrations.CreateModel(
             name='InventoryStocks',
             fields=[
                 ('stock_id', models.AutoField(primary_key=True, serialize=False)),
@@ -52,6 +69,7 @@ class Migration(migrations.Migration):
                 ('quantity_reserved', models.IntegerField(default=0, verbose_name='Зарезервовано')),
                 ('unit_price', models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True, verbose_name='Ціна за од.')),
                 ('component', models.ForeignKey(db_column='component_id', on_delete=django.db.models.deletion.PROTECT, related_name='stocks', to='catalog.components', verbose_name='Компонент')),
+                ('location', models.ForeignKey(blank=True, db_column='location_id', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='stocks', to='inventory.storagelocations', verbose_name='Комірка зберігання')),
             ],
             options={
                 'verbose_name': 'Залишок на складі',
@@ -92,31 +110,5 @@ class Migration(migrations.Migration):
                 'db_table': 'stock_transactions',
                 'ordering': ['-created_at'],
             },
-        ),
-        migrations.CreateModel(
-            name='StorageLocations',
-            fields=[
-                ('location_id', models.AutoField(primary_key=True, serialize=False)),
-                ('box_number', models.CharField(max_length=50, verbose_name='Органайзер / Коробка')),
-                ('shelf', models.CharField(blank=True, max_length=50, null=True, verbose_name='Полиця / Секція')),
-                ('cell_code', models.CharField(max_length=20, verbose_name='Код комірки')),
-            ],
-            options={
-                'verbose_name': 'Комірка зберігання',
-                'verbose_name_plural': 'Комірки зберігання',
-                'db_table': 'storage_locations',
-                'ordering': ['box_number', 'shelf', 'cell_code'],
-                'unique_together': {('box_number', 'shelf', 'cell_code')},
-            },
-        ),
-        migrations.AddField(
-            model_name='inventorystocks',
-            name='location',
-            field=models.ForeignKey(blank=True, db_column='location_id', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='stocks', to='inventory.storagelocations', verbose_name='Комірка зберігання'),
-        ),
-        migrations.AddField(
-            model_name='orders',
-            name='supplier',
-            field=models.ForeignKey(blank=True, db_column='supplier_id', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='orders', to='inventory.suppliers', verbose_name='Постачальник'),
         ),
     ]
