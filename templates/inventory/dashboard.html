@@ -761,32 +761,41 @@ function openQuickOpModal(resetState = true) {
         currentTargetFreeStock = null;
         currentTargetOnHand = null;
     }
-    document.querySelector('#quickOpModal').style.display = 'flex';
+    const modal = document.querySelector('#quickOpModal');
+    if (modal) modal.style.display = 'flex';
     updateQuickOpFeedback();
 }
 function closeQuickOpModal() {
-    document.querySelector('#quickOpModal').style.display = 'none';
+    const modal = document.querySelector('#quickOpModal');
+    if (modal) modal.style.display = 'none';
 }
 
 function openAddRowModal(boxName) {
-    document.querySelector('#addRowModal').style.display = 'flex';
-    document.querySelector('#rowBoxInput').value = boxName || '';
+    const modal = document.querySelector('#addRowModal');
+    if (modal) modal.style.display = 'flex';
+    const boxInput = document.querySelector('#rowBoxInput');
+    if (boxInput) boxInput.value = boxName || '';
 }
 function closeAddRowModal() {
-    document.querySelector('#addRowModal').style.display = 'none';
+    const modal = document.querySelector('#addRowModal');
+    if (modal) modal.style.display = 'none';
 }
 
 function openAddCellModal(boxName, shelfName) {
-    document.querySelector('#addCellModal').style.display = 'flex';
-    document.querySelector('#cellBoxInput').value = boxName || '';
-    document.querySelector('#cellShelfInput').value = shelfName || '';
+    const modal = document.querySelector('#addCellModal');
+    if (modal) modal.style.display = 'flex';
+    const boxInput = document.querySelector('#cellBoxInput');
+    if (boxInput) boxInput.value = boxName || '';
+    const shelfInput = document.querySelector('#cellShelfInput');
+    if (shelfInput) shelfInput.value = shelfName || '';
 }
 function closeAddCellModal() {
-    document.querySelector('#addCellModal').style.display = 'none';
+    const modal = document.querySelector('#addCellModal');
+    if (modal) modal.style.display = 'none';
 }
 
 function closeModalOnBackdrop(event) {
-    if (event.target.classList.contains('modal-backdrop')) {
+    if (event.target && event.target.classList && event.target.classList.contains('modal-backdrop')) {
         event.target.style.display = 'none';
     }
 }
@@ -796,6 +805,7 @@ document.addEventListener('keydown', function(e) {
         document.querySelectorAll('.modal-backdrop').forEach(function(m) {
             m.style.display = 'none';
         });
+    }
 });
 
 // Quantity Slider Sync
