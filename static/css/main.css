@@ -4814,7 +4814,7 @@ svg.tab-icon-svg {
 
 /* Card Readiness Indicator */
 .project-readiness-box {
-    background: rgba(0, 0, 0, 0.28);
+    background: #f8fafc;
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-sm);
     padding: 11px 13px;
@@ -4829,16 +4829,17 @@ svg.tab-icon-svg {
 }
 
 .readiness-title {
-    color: var(--text-muted);
-    font-size: 11.5px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 500;
 }
 
-.readiness-pct.pct-full { color: #8bb381; }
-.readiness-pct.pct-partial { color: #fdba74; }
-.readiness-pct.pct-zero { color: var(--text-muted); }
+.readiness-pct.pct-full { color: #15803d; font-weight: 700; }
+.readiness-pct.pct-partial { color: #b45309; font-weight: 700; }
+.readiness-pct.pct-zero { color: var(--text-muted); font-weight: 700; }
 
 .readiness-bar-track {
-    background: #f1f5f9;
+    background: #e2e8f0;
     height: 7px;
     border-radius: 4px;
     overflow: hidden;
@@ -4851,9 +4852,9 @@ svg.tab-icon-svg {
     transition: width 0.3s ease;
 }
 
-.readiness-bar-fill.bar-full { background: #8bb381; }
-.readiness-bar-fill.bar-partial { background: #e67e22; }
-.readiness-bar-fill.bar-zero { background: rgba(255, 255, 255, 0.15); }
+.readiness-bar-fill.bar-full { background: #16a34a; }
+.readiness-bar-fill.bar-partial { background: #d97706; }
+.readiness-bar-fill.bar-zero { background: #cbd5e1; }
 
 .readiness-meta {
     display: flex;
@@ -4864,19 +4865,22 @@ svg.tab-icon-svg {
 }
 
 .buildable-badge {
-    padding: 2px 7px;
+    padding: 2px 8px;
     border-radius: 4px;
     font-size: 11px;
+    font-weight: 600;
 }
 
 .buildable-badge.badge-can-build {
-    background: rgba(139, 179, 129, 0.15);
-    color: #9ec991;
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
 }
 
 .buildable-badge.badge-cannot-build {
-    background: rgba(214, 123, 116, 0.15);
-    color: #e58780;
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
 }
 
 .badge-dim {
@@ -5029,12 +5033,12 @@ svg.tab-icon-svg {
     width: 42px;
     height: 42px;
     border-radius: var(--radius-sm);
-    background: rgba(139, 179, 129, 0.12);
-    color: #9ec991;
+    background: #dcfce7;
+    color: #15803d;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(139, 179, 129, 0.25);
+    border: 1px solid #bbf7d0;
 }
 
 .calc-title {
@@ -5169,8 +5173,8 @@ svg.tab-icon-svg {
     line-height: 1;
 }
 
-.metric-val.val-green { color: #8bb381; }
-.metric-val.val-danger { color: #e58780; }
+.metric-val.val-green { color: #15803d; }
+.metric-val.val-danger { color: #dc2626; }
 
 .metric-unit {
     font-size: 13px;
@@ -5198,12 +5202,12 @@ svg.tab-icon-svg {
     font-family: var(--font-mono);
 }
 
-.progress-pct-val.pct-full { color: #8bb381; }
-.progress-pct-val.pct-partial { color: #fdba74; }
-.progress-pct-val.pct-zero { color: #e58780; }
+.progress-pct-val.pct-full { color: #15803d; }
+.progress-pct-val.pct-partial { color: #b45309; }
+.progress-pct-val.pct-zero { color: #dc2626; }
 
 .readiness-large-bar-track {
-    background: #f1f5f9;
+    background: #e2e8f0;
     height: 10px;
     border-radius: 5px;
     overflow: hidden;
@@ -5216,9 +5220,9 @@ svg.tab-icon-svg {
     transition: width 0.3s ease;
 }
 
-.readiness-large-bar-fill.bar-full { background: #8bb381; }
-.readiness-large-bar-fill.bar-partial { background: #e67e22; }
-.readiness-large-bar-fill.bar-zero { background: rgba(255, 255, 255, 0.15); }
+.readiness-large-bar-fill.bar-full { background: #16a34a; }
+.readiness-large-bar-fill.bar-partial { background: #d97706; }
+.readiness-large-bar-fill.bar-zero { background: #cbd5e1; }
 
 .progress-sub-info {
     display: flex;
@@ -5229,12 +5233,12 @@ svg.tab-icon-svg {
 }
 
 .text-danger-custom {
-    color: #e58780;
+    color: #dc2626;
     font-weight: 600;
 }
 
 .text-success-custom {
-    color: #9ec991;
+    color: #15803d;
     font-weight: 600;
 }
 
@@ -5487,7 +5491,7 @@ svg.tab-icon-svg {
 }
 
 .picker-item-row.item-already-in-bom {
-    border-left: 3px solid #8bb381;
+    border-left: 3px solid #16a34a;
 }
 
 .picker-item-info {
@@ -5534,8 +5538,8 @@ svg.tab-icon-svg {
 }
 
 .picker-stock-badge.stock-has {
-    background: rgba(139, 179, 129, 0.12);
-    color: #9ec991;
+    background: #dcfce7;
+    color: #15803d;
 }
 
 .picker-stock-badge.stock-none {
