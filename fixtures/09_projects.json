@@ -5,7 +5,7 @@
     "fields": {
       "name": "Автономна метеостанція (IoT Weather Station)",
       "description": "Метеостанція з сонячною панеллю та батареєю Li-Ion 18650. Вимірює температуру, вологість і атмосферний тиск, виводить показники на OLED дисплей та надсилає дані на брокер MQTT по Wi-Fi.",
-      "created_by": 1,
+      "created_by": null,
       "image_path": null,
       "image_file": "",
       "status": "in_progress",
@@ -19,7 +19,7 @@
     "fields": {
       "name": "ESP-32-TEST-PROJECT",
       "description": "Тестовий проект для верифікації резервування та списання деталей зі складу.",
-      "created_by": 1,
+      "created_by": null,
       "image_path": null,
       "image_file": "",
       "status": "planning",
@@ -33,7 +33,7 @@
     "fields": {
       "name": "Контролер розумної теплиці (Greenhouse Automation)",
       "description": "Автоматизована система мікроклімату для зимової теплиці: терморегуляція, зволоження повітря, крапельний полив та підсвічування фітолампами.",
-      "created_by": 2,
+      "created_by": null,
       "image_path": null,
       "image_file": "",
       "status": "planning",
@@ -47,7 +47,7 @@
     "fields": {
       "name": "Двоколісний балансуючий робот (Self-Balancing Robot)",
       "description": "Компактна двоколісна самобалансуюча платформа на базі RP2040, гіро-акселерометра MPU-6050 та крокових моторів NEMA17 з драйверами DRV8825.",
-      "created_by": 3,
+      "created_by": null,
       "image_path": null,
       "image_file": "",
       "status": "in_progress",
@@ -61,7 +61,7 @@
     "fields": {
       "name": "Бездротовий LoRa трекер GPS",
       "description": "Портативний енергоефективний трекер на ATmega328P та модулі Semtech SX1278. Передає координати на базову станцію на відстань до 10 км.",
-      "created_by": 1,
+      "created_by": null,
       "image_path": null,
       "image_file": "",
       "status": "completed",
